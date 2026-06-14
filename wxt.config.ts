@@ -12,6 +12,7 @@ const shouldSkipEnvValidation = process.env.WXT_SKIP_ENV_VALIDATION === "true"
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   srcDir: "src",
+  outDir: "output",
   imports: false,
   modules: ["@wxt-dev/module-react", "@wxt-dev/i18n/module"],
   manifestVersion: 3,
