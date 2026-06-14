@@ -2,7 +2,6 @@ import type { Config } from "@/types/config/config"
 import { getLocalConfig } from "@/utils/config/storage"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { removeOrShowNodeTranslation } from "@/utils/host/translate/node-manipulation"
-import { sendMessage } from "@/utils/message"
 import { registerNodeTranslationTriggerListeners } from "./node-translation-trigger"
 
 /**
@@ -23,22 +22,8 @@ export function registerNodeTranslationTriggers(): () => void {
     return config ?? DEFAULT_CONFIG
   }
 
-  let hasRequestedIframeInjection = false
-
-  const requestIframeInjectionAfterSuccessfulTopFrameNodeTranslation = () => {
-    if (hasRequestedIframeInjection || window !== window.top || signal.aborted)
-      return
-
-    hasRequestedIframeInjection = true
-    void sendMessage("injectCurrentIframesAfterTopFrameNodeTranslation", undefined)
-      .catch(() => undefined)
-  }
-
   const translateNode = async (point: Parameters<typeof removeOrShowNodeTranslation>[0], config: Config) => {
-    const didTranslate = await removeOrShowNodeTranslation(point, config)
-    if (didTranslate) {
-      requestIframeInjectionAfterSuccessfulTopFrameNodeTranslation()
-    }
+    await removeOrShowNodeTranslation(point, config)
   }
 
   const teardownTriggerListeners = registerNodeTranslationTriggerListeners({

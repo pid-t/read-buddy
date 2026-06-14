@@ -25,10 +25,6 @@ export const FeatureProviderSection = withForm({
       .filter(featureKey => FEATURE_PROVIDER_DEFS[featureKey].isProvider(providerType))
     const supportsLanguageDetection = isLLMProvider(providerType)
 
-    const customActions = isLLMProvider(providerType)
-      ? config.selectionToolbar.customActions
-      : []
-
     const getEnableCurrentProviderPatch = () => {
       const targetProvider = config.providersConfig.find(provider => provider.id === providerId)
       if (!targetProvider || targetProvider.enabled) {
@@ -40,7 +36,7 @@ export const FeatureProviderSection = withForm({
       )
     }
 
-    if (compatibleFeatures.length === 0 && customActions.length === 0 && !supportsLanguageDetection)
+    if (compatibleFeatures.length === 0 && !supportsLanguageDetection)
       return null
 
     return (
@@ -119,34 +115,6 @@ export const FeatureProviderSection = withForm({
                 </span>
               </div>
             )}
-            {customActions.map((action) => {
-              const isAssigned = action.providerId === providerId
-              return (
-                <div key={action.id} className="flex items-center gap-2">
-                  <Switch
-                    checked={isAssigned}
-                    disabled={isAssigned}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        const updatedCustomActions = config.selectionToolbar.customActions.map(currentAction =>
-                          currentAction.id === action.id ? { ...currentAction, providerId } : currentAction,
-                        )
-                        const providersConfigPatch = getEnableCurrentProviderPatch()
-                        if (providersConfigPatch) {
-                          void setConfig({
-                            providersConfig: providersConfigPatch,
-                            selectionToolbar: { ...config.selectionToolbar, customActions: updatedCustomActions },
-                          })
-                          return
-                        }
-                        void setConfig({ selectionToolbar: { ...config.selectionToolbar, customActions: updatedCustomActions } })
-                      }
-                    }}
-                  />
-                  <span className="text-sm">{action.name}</span>
-                </div>
-              )
-            })}
           </div>
         </CollapsibleContent>
       </Collapsible>

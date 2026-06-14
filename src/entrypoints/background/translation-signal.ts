@@ -1,16 +1,12 @@
 import type { LangCodeISO6393 } from "@read-frog/definitions"
-import type { FeatureUsageContext } from "@/types/analytics"
 import type { Config } from "@/types/config/config"
 import { browser, storage } from "#imports"
-import { ANALYTICS_FEATURE, ANALYTICS_SURFACE } from "@/types/analytics"
-import { createFeatureUsageContext } from "@/utils/analytics"
 import { normalizeDetectedCode } from "@/utils/config/languages"
 import { CONFIG_STORAGE_KEY, DEFAULT_DETECTED_CODE } from "@/utils/constants/config"
 import { getDetectedCodeStateKey, getTranslationStateKey } from "@/utils/constants/storage-keys"
 import { shouldEnableAutoTranslation } from "@/utils/host/translate/auto-translation"
 import { logger } from "@/utils/logger"
 import { onMessage, sendMessage } from "@/utils/message"
-import { injectHostContentIntoCurrentTabIframesAfterNodeTranslation, injectHostContentIntoTabIframes } from "./iframe-injection"
 import {
   getPageTranslationEnabled,
   getPageTranslationState,
@@ -26,9 +22,8 @@ function notifyPageTranslationStateChanged(tabId: number, enabled: boolean) {
 function requestManagerToTogglePageTranslation(
   tabId: number,
   enabled: boolean,
-  analyticsContext?: FeatureUsageContext,
 ) {
-  void sendMessage("askManagerToTogglePageTranslation", { enabled, analyticsContext }, tabId)
+  void sendMessage("askManagerToTogglePageTranslation", { enabled }, tabId)
     .catch(error => logger.warn("Failed to ask page translation manager to toggle", error))
 }
 
@@ -81,28 +76,6 @@ export function translationMessage() {
     return false
   })
 
-  onMessage("ensureIframeHostContentInjected", async (msg) => {
-    const tabId = msg.data?.tabId ?? msg.sender?.tab?.id
-    if (typeof tabId === "number") {
-      await injectHostContentIntoTabIframes(tabId)
-      return
-    }
-
-    logger.error("Invalid tabId in ensureIframeHostContentInjected", msg)
-  })
-
-  onMessage("injectCurrentIframesAfterTopFrameNodeTranslation", async (msg) => {
-    const tabId = msg.sender?.tab?.id
-    const frameId = msg.sender?.frameId
-
-    if (typeof tabId === "number" && frameId === 0) {
-      await injectHostContentIntoCurrentTabIframesAfterNodeTranslation(tabId)
-      return
-    }
-
-    logger.error("Invalid sender in injectCurrentIframesAfterTopFrameNodeTranslation", msg)
-  })
-
   onMessage("reportDetectedPageLanguage", async (msg) => {
     const tabId = msg.sender?.tab?.id
     const { url, detectedCodeOrUnd } = msg.data
@@ -120,11 +93,7 @@ export function translationMessage() {
 
       const shouldEnable = await shouldEnableAutoTranslation(url, detectedCodeOrUnd, config)
       if (shouldEnable) {
-        requestManagerToTogglePageTranslation(
-          tabId,
-          true,
-          createFeatureUsageContext(ANALYTICS_FEATURE.PAGE_TRANSLATION, ANALYTICS_SURFACE.PAGE_AUTO),
-        )
+        requestManagerToTogglePageTranslation(tabId, true)
       }
       return
     }
@@ -147,24 +116,24 @@ export function translationMessage() {
   })
 
   onMessage("tryToSetEnablePageTranslationByTabId", async (msg) => {
-    const { tabId, enabled, analyticsContext } = msg.data
+    const { tabId, enabled } = msg.data
     if (!enabled) {
       await setPageTranslationEnabled(tabId, false)
       notifyPageTranslationStateChanged(tabId, false)
     }
-    requestManagerToTogglePageTranslation(tabId, enabled, analyticsContext)
+    requestManagerToTogglePageTranslation(tabId, enabled)
   })
 
   onMessage("tryToSetEnablePageTranslationOnContentScript", async (msg) => {
     const tabId = msg.sender?.tab?.id
-    const { enabled, analyticsContext } = msg.data
+    const { enabled } = msg.data
     if (typeof tabId === "number") {
       logger.info("sending tryToSetEnablePageTranslationOnContentScript to manager", { enabled, tabId })
       if (!enabled) {
         await setPageTranslationEnabled(tabId, false)
         notifyPageTranslationStateChanged(tabId, false)
       }
-      requestManagerToTogglePageTranslation(tabId, enabled, analyticsContext)
+      requestManagerToTogglePageTranslation(tabId, enabled)
     }
     else {
       logger.error("tabId is not a number", msg)
@@ -190,10 +159,6 @@ export function translationMessage() {
 
       await setPageTranslationEnabled(tabId, enabled, url ?? msg.sender?.tab?.url)
       notifyPageTranslationStateChanged(tabId, enabled)
-
-      if (enabled && !isIframe(senderFrameId)) {
-        void injectHostContentIntoTabIframes(tabId)
-      }
     }
     else {
       logger.error("tabId is not a number", msg)

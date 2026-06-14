@@ -4,17 +4,11 @@ import Dexie from "dexie"
 import { APP_NAME } from "@/utils/constants/app"
 import AiSegmentationCache from "./tables/ai-segmentation-cache"
 import ArticleSummaryCache from "./tables/article-summary-cache"
-import BatchRequestRecord from "./tables/batch-request-record"
 import TranslationCache from "./tables/translation-cache"
 
 export default class AppDB extends Dexie {
   translationCache!: EntityTable<
     TranslationCache,
-    "key"
-  >
-
-  batchRequestRecord!: EntityTable<
-    BatchRequestRecord,
     "key"
   >
 
@@ -81,8 +75,20 @@ export default class AppDB extends Dexie {
         key,
         createdAt`,
     })
+    this.version(5).stores({
+      translationCache: `
+        key,
+        translation,
+        createdAt`,
+      batchRequestRecord: null,
+      articleSummaryCache: `
+        key,
+        createdAt`,
+      aiSegmentationCache: `
+        key,
+        createdAt`,
+    })
     this.translationCache.mapToClass(TranslationCache)
-    this.batchRequestRecord.mapToClass(BatchRequestRecord)
     this.articleSummaryCache.mapToClass(ArticleSummaryCache)
     this.aiSegmentationCache.mapToClass(AiSegmentationCache)
   }

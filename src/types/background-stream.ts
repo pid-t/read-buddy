@@ -1,6 +1,5 @@
 import type { JSONValue, StreamTextOnErrorCallback } from "ai"
 import type { Browser } from "#imports"
-import type { SelectionToolbarCustomActionOutputType } from "@/types/config/selection-toolbar"
 
 interface BaseBackgroundStreamSerializablePayload {
   providerId: string
@@ -21,7 +20,7 @@ export type BackgroundStreamTextSerializablePayload = BaseBackgroundStreamSerial
 
 export interface BackgroundStructuredObjectOutputField {
   name: string
-  type: SelectionToolbarCustomActionOutputType
+  type: "string" | "number"
 }
 
 export interface ThinkingSnapshot {

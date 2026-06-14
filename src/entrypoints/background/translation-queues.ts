@@ -4,7 +4,6 @@ import type { BatchQueueConfig, RequestQueueConfig } from "@/types/config/transl
 import type { SubtitlePromptContext, WebPagePromptContext } from "@/types/content"
 import type { PromptResolver } from "@/utils/host/translate/api/ai"
 import { isLLMProviderConfig } from "@/types/config/provider"
-import { putBatchRequestRecord } from "@/utils/batch-request-record"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { BATCH_SEPARATOR, BATCH_SEPARATOR_LINE_PATTERN } from "@/utils/constants/prompt"
 import { generateArticleSummary } from "@/utils/content/summary"
@@ -187,12 +186,10 @@ async function createTranslationQueues<TContext>(config: TranslationQueueSetupCo
     },
     getCharacters: data => data.text.length,
     executeBatch: async (dataList) => {
-      const { providerConfig } = dataList[0]
       const hash = Sha256Hex(...dataList.map(d => d.hash))
       const earliestScheduleAt = Math.min(...dataList.map(d => d.scheduleAt))
 
       const batchThunk = async (): Promise<string[]> => {
-        await putBatchRequestRecord({ originalRequestCount: dataList.length, providerConfig })
         return await executeBatchTranslation(dataList, promptResolver)
       }
 
@@ -201,7 +198,6 @@ async function createTranslationQueues<TContext>(config: TranslationQueueSetupCo
     executeIndividual: async (data) => {
       const { text, langConfig, providerConfig, hash, scheduleAt, context } = data
       const thunk = async () => {
-        await putBatchRequestRecord({ originalRequestCount: 1, providerConfig })
         return executeTranslate(text, langConfig, providerConfig, promptResolver, { context })
       }
       return requestQueue.enqueue(thunk, scheduleAt, hash)

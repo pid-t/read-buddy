@@ -1,7 +1,6 @@
 import type { LangCodeISO6393 } from "@read-frog/definitions"
-import type { Config, InputTranslationLang } from "@/types/config/config"
+import type { Config } from "@/types/config/config"
 import { isLLMProviderConfig } from "@/types/config/provider"
-import { getDetectedCodeFromStorage, getFinalSourceCode } from "@/utils/config/languages"
 import { resolveProviderConfig } from "@/utils/constants/feature-providers"
 import { detectLanguage } from "@/utils/content/language"
 import { logger } from "@/utils/logger"
@@ -134,57 +133,5 @@ export async function translateTextForPageTitle(text: string): Promise<string> {
       webContent: webPageContext?.webContent,
       webSummary: webPageContext?.webSummary,
     },
-  })
-}
-
-async function resolveInputLang(
-  lang: InputTranslationLang,
-  globalLangConfig: Config["language"],
-): Promise<LangCodeISO6393> {
-  if (lang === "sourceCode") {
-    const detectedCode = await getDetectedCodeFromStorage()
-    return getFinalSourceCode(globalLangConfig.sourceCode, detectedCode)
-  }
-  if (lang === "targetCode") {
-    return globalLangConfig.targetCode
-  }
-  return lang
-}
-
-/**
- * Input translation — uses FEATURE_PROVIDER_DEFS['inputTranslation'].
- */
-export async function translateTextForInput(
-  text: string,
-  fromLang: InputTranslationLang,
-  toLang: InputTranslationLang,
-): Promise<string> {
-  const config = await getConfigOrThrow()
-  const providerConfig = resolveProviderConfig(config, "inputTranslation")
-
-  const resolvedFromLang = await resolveInputLang(fromLang, config.language)
-  const resolvedToLang = await resolveInputLang(toLang, config.language)
-
-  if (resolvedFromLang === resolvedToLang) {
-    return ""
-  }
-
-  const webPageContext = await getWebPagePromptContext(
-    providerConfig,
-    config.translate.enableAIContentAware,
-    true,
-  )
-
-  return translateTextCore({
-    text,
-    langConfig: {
-      sourceCode: resolvedFromLang,
-      targetCode: resolvedToLang,
-      level: config.language.level,
-    },
-    extraHashTags: [`inputTranslation:${fromLang}->${toLang}`],
-    providerConfig,
-    enableAIContentAware: config.translate.enableAIContentAware,
-    webPageContext,
   })
 }

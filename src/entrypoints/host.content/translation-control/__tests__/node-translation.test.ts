@@ -6,7 +6,6 @@ import { registerNodeTranslationTriggers } from "../node-translation"
 const mocks = vi.hoisted(() => ({
   getLocalConfig: vi.fn(),
   removeOrShowNodeTranslation: vi.fn(),
-  sendMessage: vi.fn(),
 }))
 
 vi.mock("@/utils/config/storage", () => ({
@@ -15,10 +14,6 @@ vi.mock("@/utils/config/storage", () => ({
 
 vi.mock("@/utils/host/translate/node-manipulation", () => ({
   removeOrShowNodeTranslation: mocks.removeOrShowNodeTranslation,
-}))
-
-vi.mock("@/utils/message", () => ({
-  sendMessage: mocks.sendMessage,
 }))
 
 function createConfig(): Config {
@@ -56,10 +51,9 @@ describe("registerNodeTranslationTriggers", () => {
     vi.clearAllMocks()
   })
 
-  it("requests current iframe injection after a successful top-frame node translation", async () => {
+  it("runs node translation for the current pointer position", async () => {
     mocks.getLocalConfig.mockResolvedValue(createConfig())
     mocks.removeOrShowNodeTranslation.mockResolvedValue(true)
-    mocks.sendMessage.mockResolvedValue(undefined)
     teardown = registerNodeTranslationTriggers()
 
     await triggerBacktickNodeTranslation()
@@ -73,41 +67,19 @@ describe("registerNodeTranslationTriggers", () => {
           }),
         }),
       )
-      expect(mocks.sendMessage).toHaveBeenCalledWith(
-        "injectCurrentIframesAfterTopFrameNodeTranslation",
-        undefined,
-      )
     })
   })
 
-  it("does not request iframe injection when node translation finds no translatable node", async () => {
-    mocks.getLocalConfig.mockResolvedValue(createConfig())
-    mocks.removeOrShowNodeTranslation.mockResolvedValue(false)
-    teardown = registerNodeTranslationTriggers()
-
-    await triggerBacktickNodeTranslation()
-
-    await vi.waitFor(() => {
-      expect(mocks.removeOrShowNodeTranslation).toHaveBeenCalled()
-    })
-    expect(mocks.sendMessage).not.toHaveBeenCalled()
-  })
-
-  it("requests current iframe injection only once for repeated successful node translations", async () => {
+  it("continues to handle repeated node translation triggers", async () => {
     mocks.getLocalConfig.mockResolvedValue(createConfig())
     mocks.removeOrShowNodeTranslation.mockResolvedValue(true)
-    mocks.sendMessage.mockResolvedValue(undefined)
     teardown = registerNodeTranslationTriggers()
 
     await triggerBacktickNodeTranslation()
-    await vi.waitFor(() => {
-      expect(mocks.sendMessage).toHaveBeenCalledTimes(1)
-    })
-
     await triggerBacktickNodeTranslation()
+
     await vi.waitFor(() => {
       expect(mocks.removeOrShowNodeTranslation).toHaveBeenCalledTimes(2)
     })
-    expect(mocks.sendMessage).toHaveBeenCalledTimes(1)
   })
 })

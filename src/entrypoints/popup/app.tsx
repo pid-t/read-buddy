@@ -1,45 +1,28 @@
 import { Icon } from "@iconify/react"
 import { i18n } from "#imports"
-import { UserAccount } from "@/components/user-account"
 import { openOptionsPage } from "@/utils/navigation"
 import { version } from "../../../package.json"
-import { AISmartContext } from "./components/ai-smart-context"
-import { AlwaysTranslate } from "./components/always-translate"
-import BlogNotification from "./components/blog-notification"
-import { DiscordButton } from "./components/discord-button"
 import LanguageOptionsSelector from "./components/language-options-selector"
-import { MoreMenu } from "./components/more-menu"
-import Hotkey from "./components/node-translation-hotkey-selector"
-import { SiteControlToggle } from "./components/site-control-toggle"
 import TranslateButton from "./components/translate-button"
-import TranslatePromptSelector from "./components/translate-prompt-selector"
 import TranslateProviderField from "./components/translate-provider-field"
-import { TranslationHubButton } from "./components/translation-hub-button"
 import TranslationModeSelector from "./components/translation-mode-selector"
 
 function App() {
   return (
     <>
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
-        <div className="flex items-center justify-between">
-          <UserAccount />
-          <div className="flex items-center">
-            <TranslationHubButton />
-            <DiscordButton />
-            <BlogNotification />
-          </div>
+        <div className="flex items-center justify-between text-sm font-medium">
+          <span>{i18n.t("name")}</span>
+          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+            {version}
+          </span>
         </div>
         <LanguageOptionsSelector />
         <TranslateProviderField />
-        <TranslatePromptSelector />
         <div className="flex w-full items-center gap-2">
           <TranslationModeSelector />
           <TranslateButton className="min-w-0 flex-1" />
         </div>
-        <SiteControlToggle />
-        <AlwaysTranslate />
-        <Hotkey />
-        <AISmartContext />
       </div>
       <div className="flex items-center justify-between bg-neutral-200 px-2 py-1 dark:bg-neutral-800">
         <button
@@ -54,10 +37,6 @@ function App() {
             {i18n.t("popup.options")}
           </span>
         </button>
-        <span className="text-sm text-neutral-500 dark:text-neutral-400">
-          {version}
-        </span>
-        <MoreMenu />
       </div>
     </>
   )

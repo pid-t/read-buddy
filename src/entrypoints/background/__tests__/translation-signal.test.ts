@@ -12,8 +12,6 @@ const tabsOnRemovedAddListenerMock = vi.fn()
 const tabsOnActivatedAddListenerMock = vi.fn()
 const tabsQueryMock = vi.fn()
 const webNavigationOnCommittedAddListenerMock = vi.fn()
-const injectHostContentIntoTabIframesMock = vi.fn()
-const injectHostContentIntoCurrentTabIframesAfterNodeTranslationMock = vi.fn()
 const loggerErrorMock = vi.fn()
 const loggerWarnMock = vi.fn()
 const shouldEnableAutoTranslationMock = vi.fn()
@@ -34,11 +32,6 @@ vi.mock("@/utils/logger", () => ({
     error: loggerErrorMock,
     warn: loggerWarnMock,
   },
-}))
-
-vi.mock("../iframe-injection", () => ({
-  injectHostContentIntoTabIframes: injectHostContentIntoTabIframesMock,
-  injectHostContentIntoCurrentTabIframesAfterNodeTranslation: injectHostContentIntoCurrentTabIframesAfterNodeTranslationMock,
 }))
 
 function getHandler(name: string) {
@@ -103,7 +96,7 @@ describe("translationMessage", () => {
     shouldEnableAutoTranslationMock.mockResolvedValue(false)
   })
 
-  it("persists manager-enabled state and injects current iframes from the top frame", async () => {
+  it("persists manager-enabled state from the top frame", async () => {
     await setupSubject()
 
     await getHandler("setAndNotifyPageTranslationStateChangedByManager")({
@@ -116,10 +109,9 @@ describe("translationMessage", () => {
       origin: "https://example.com",
     })
     expect(sendMessageMock).toHaveBeenCalledWith("notifyTranslationStateChanged", { enabled: true }, 42)
-    expect(injectHostContentIntoTabIframesMock).toHaveBeenCalledWith(42)
   })
 
-  it("does not overwrite tab state or reinject every iframe when an iframe manager echoes enabled state", async () => {
+  it("does not overwrite tab state when an iframe manager echoes enabled state", async () => {
     await setupSubject()
     storageGetItemMock.mockResolvedValue({ enabled: true, origin: "https://example.com" })
 
@@ -130,7 +122,6 @@ describe("translationMessage", () => {
 
     expect(storageSetItemMock).not.toHaveBeenCalled()
     expect(sendMessageMock).toHaveBeenCalledWith("notifyTranslationStateChanged", { enabled: true }, 42)
-    expect(injectHostContentIntoTabIframesMock).not.toHaveBeenCalled()
   })
 
   it("ignores enabled iframe manager echoes when tab translation is not already active", async () => {
@@ -144,7 +135,6 @@ describe("translationMessage", () => {
 
     expect(storageSetItemMock).not.toHaveBeenCalled()
     expect(sendMessageMock).not.toHaveBeenCalledWith("notifyTranslationStateChanged", { enabled: true }, 42)
-    expect(injectHostContentIntoTabIframesMock).not.toHaveBeenCalled()
   })
 
   it("clears state immediately when a tab-level request disables page translation", async () => {
@@ -158,51 +148,7 @@ describe("translationMessage", () => {
     expect(sendMessageMock).toHaveBeenCalledWith("notifyTranslationStateChanged", { enabled: false }, 42)
     expect(sendMessageMock).toHaveBeenCalledWith("askManagerToTogglePageTranslation", {
       enabled: false,
-      analyticsContext: undefined,
     }, 42)
-  })
-
-  it("injects current iframes when explicitly asked for a tab", async () => {
-    await setupSubject()
-
-    await getHandler("ensureIframeHostContentInjected")({
-      data: { tabId: 42 },
-    })
-
-    expect(injectHostContentIntoTabIframesMock).toHaveBeenCalledWith(42)
-  })
-
-  it("does not inject current iframes without a valid tab id", async () => {
-    await setupSubject()
-
-    await getHandler("ensureIframeHostContentInjected")({
-      data: {},
-      sender: {},
-    })
-
-    expect(injectHostContentIntoTabIframesMock).not.toHaveBeenCalled()
-    expect(loggerErrorMock).toHaveBeenCalledWith(
-      "Invalid tabId in ensureIframeHostContentInjected",
-      expect.objectContaining({
-        data: {},
-        sender: {},
-      }),
-    )
-  })
-
-  it("injects current iframes after successful top-frame node translation", async () => {
-    await setupSubject()
-
-    await getHandler("injectCurrentIframesAfterTopFrameNodeTranslation")({
-      data: undefined,
-      sender: {
-        tab: { id: 42 },
-        frameId: 0,
-      },
-    })
-
-    expect(injectHostContentIntoCurrentTabIframesAfterNodeTranslationMock).toHaveBeenCalledWith(42)
-    expect(injectHostContentIntoTabIframesMock).not.toHaveBeenCalled()
   })
 
   it("stores detected language by sender tab and notifies when it is the active tab", async () => {
@@ -304,24 +250,7 @@ describe("translationMessage", () => {
     expect(detectedCode).toBe("cmn")
   })
 
-  it("rejects iframe senders for top-frame node translation iframe injection", async () => {
-    await setupSubject()
-
-    await getHandler("injectCurrentIframesAfterTopFrameNodeTranslation")({
-      data: undefined,
-      sender: { tab: { id: 42 }, frameId: 7 },
-    })
-
-    expect(injectHostContentIntoCurrentTabIframesAfterNodeTranslationMock).not.toHaveBeenCalled()
-    expect(loggerErrorMock).toHaveBeenCalledWith(
-      "Invalid sender in injectCurrentIframesAfterTopFrameNodeTranslation",
-      expect.objectContaining({
-        sender: { tab: { id: 42 }, frameId: 7 },
-      }),
-    )
-  })
-
-  it("waits for the top-frame manager to validate before enabling iframe injection", async () => {
+  it("waits for the top-frame manager to validate before persisting enabled state", async () => {
     await setupSubject()
 
     await getHandler("tryToSetEnablePageTranslationByTabId")({
@@ -329,10 +258,8 @@ describe("translationMessage", () => {
     })
 
     expect(storageSetItemMock).not.toHaveBeenCalled()
-    expect(injectHostContentIntoTabIframesMock).not.toHaveBeenCalled()
     expect(sendMessageMock).toHaveBeenCalledWith("askManagerToTogglePageTranslation", {
       enabled: true,
-      analyticsContext: undefined,
     }, 42)
   })
 

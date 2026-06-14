@@ -119,7 +119,6 @@ export const CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP: Record<string, string[]
   ],
   "www.youtube.com": [
     "#masthead-container *",
-    "#guide-inner-content *",
     "#metadata *",
     "#channel-name",
     ".translate-button",

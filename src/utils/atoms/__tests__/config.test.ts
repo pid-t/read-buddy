@@ -14,10 +14,7 @@ describe("mergeWithArrayOverwrite", () => {
           autoTranslateLanguages: ["eng"],
         },
       },
-      floatingButton: {
-        ...DEFAULT_CONFIG.floatingButton,
-        disabledFloatingButtonPatterns: ["gmail.com"],
-      },
+      videoSubtitles: DEFAULT_CONFIG.videoSubtitles,
     }
 
     const patch = {
@@ -29,8 +26,10 @@ describe("mergeWithArrayOverwrite", () => {
         },
         mode: "replace",
       },
-      floatingButton: {
-        disabledFloatingButtonPatterns: ["youtube.com"],
+      videoSubtitles: {
+        batchQueueConfig: {
+          maxItemsPerBatch: 8,
+        },
       },
     }
 
@@ -39,10 +38,10 @@ describe("mergeWithArrayOverwrite", () => {
     // Arrays should be completely replaced
     expect(result.translate.page.autoTranslatePatterns).toEqual(["new.com", "test.org"])
     expect(result.translate.page.autoTranslateLanguages).toEqual([])
-    expect(result.floatingButton.disabledFloatingButtonPatterns).toEqual(["youtube.com"])
+    expect(result.videoSubtitles.batchQueueConfig.maxItemsPerBatch).toBe(8)
 
     expect(result.translate.mode).toBe("replace")
-    expect(result.floatingButton.enabled).toBe(true)
+    expect(result.videoSubtitles.enabled).toBe(true)
 
     // Ensure immutability
     expect(result).not.toBe(config)

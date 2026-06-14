@@ -18,11 +18,11 @@ describe("navigation", () => {
   })
 
   it("opens the options page with a hash route", async () => {
-    await openOptionsPage({ route: "/custom-actions?actionId=action-1" })
+    await openOptionsPage({ route: "/translation" })
 
     expect(browser.tabs.create).toHaveBeenCalledWith({
       active: true,
-      url: "chrome-extension://test-extension-id/options.html#/custom-actions?actionId=action-1",
+      url: "chrome-extension://test-extension-id/options.html#/translation",
     })
   })
 })

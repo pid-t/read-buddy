@@ -6,7 +6,6 @@ const onMessageMock = vi.fn()
 const ensureInitializedConfigMock = vi.fn()
 const executeTranslateMock = vi.fn()
 const generateArticleSummaryMock = vi.fn()
-const putBatchRequestRecordMock = vi.fn()
 const articleSummaryCacheGetMock = vi.fn()
 const articleSummaryCachePutMock = vi.fn()
 const translationCacheGetMock = vi.fn()
@@ -26,10 +25,6 @@ vi.mock("@/utils/host/translate/execute-translate", () => ({
 
 vi.mock("@/utils/content/summary", () => ({
   generateArticleSummary: generateArticleSummaryMock,
-}))
-
-vi.mock("@/utils/batch-request-record", () => ({
-  putBatchRequestRecord: putBatchRequestRecordMock,
 }))
 
 vi.mock("@/utils/db/dexie/db", () => ({
@@ -103,7 +98,6 @@ describe("translation queue helpers", () => {
 
     executeTranslateMock.mockResolvedValue("translated subtitle")
     generateArticleSummaryMock.mockResolvedValue("Generated summary")
-    putBatchRequestRecordMock.mockResolvedValue(undefined)
     articleSummaryCacheGetMock.mockResolvedValue(undefined)
     articleSummaryCachePutMock.mockResolvedValue(undefined)
     translationCacheGetMock.mockResolvedValue(undefined)

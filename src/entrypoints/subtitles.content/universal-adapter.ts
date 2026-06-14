@@ -1,12 +1,9 @@
 import type { ControlsConfig, PlatformConfig } from "@/entrypoints/subtitles.content/platforms"
-import type { FeatureUsageContext } from "@/types/analytics"
 import type { SubtitlesFetcher } from "@/utils/subtitles/fetchers/types"
 import type { SubtitlesVideoContext } from "@/utils/subtitles/processor/translator"
 import type { SubtitlesFragment } from "@/utils/subtitles/types"
 import { toast } from "sonner"
 import { i18n } from "#imports"
-import { ANALYTICS_FEATURE, ANALYTICS_SURFACE } from "@/types/analytics"
-import { createFeatureUsageContext, trackFeatureUsed } from "@/utils/analytics"
 import { getProviderConfigById } from "@/utils/config/helpers"
 import { getLocalConfig } from "@/utils/config/storage"
 import { HIDE_NATIVE_CAPTIONS_STYLE_ID, NAVIGATION_HANDLER_DELAY, TRANSLATE_BUTTON_CONTAINER_ID } from "@/utils/constants/subtitles"
@@ -330,26 +327,16 @@ export class UniversalVideoAdapter {
     this.toggleSubtitlesWithSource(true, "auto")
   }
 
-  private toggleSubtitlesWithSource(enabled: boolean, source: SubtitlesToggleSource) {
-    this.handleToggleSubtitles(
-      enabled,
-      enabled
-        ? createFeatureUsageContext(
-            ANALYTICS_FEATURE.VIDEO_SUBTITLES,
-            source === "auto"
-              ? ANALYTICS_SURFACE.VIDEO_SUBTITLES_AUTO
-              : ANALYTICS_SURFACE.VIDEO_SUBTITLES,
-          )
-        : undefined,
-    )
+  private toggleSubtitlesWithSource(enabled: boolean, _source: SubtitlesToggleSource) {
+    this.handleToggleSubtitles(enabled)
   }
 
-  private handleToggleSubtitles(enabled: boolean, analyticsContext?: FeatureUsageContext) {
+  private handleToggleSubtitles(enabled: boolean) {
     if (enabled) {
       this.subtitlesScheduler?.start()
       this.subtitlesScheduler?.show()
       this.hideNativeSubtitles()
-      void this.startTranslation(analyticsContext)
+      void this.startTranslation()
     }
     else {
       this.subtitlesScheduler?.hide()
@@ -412,7 +399,7 @@ export class UniversalVideoAdapter {
     this.isNativeSubtitlesHidden = true
   }
 
-  private async startTranslation(analyticsContext?: FeatureUsageContext) {
+  private async startTranslation() {
     try {
       const currentVideoId = this.config.getVideoId?.() ?? ""
       const hasCurrentSession = this.sessionProcessedFragments.length > 0 && this.sessionVideoId === currentVideoId
@@ -432,12 +419,6 @@ export class UniversalVideoAdapter {
           this.subtitlesScheduler?.supplementSubtitles(this.sessionProcessedFragments)
           this.subtitlesScheduler?.setState("idle")
         }
-        if (analyticsContext) {
-          void trackFeatureUsed({
-            ...analyticsContext,
-            outcome: "success",
-          })
-        }
         return
       }
 
@@ -456,20 +437,8 @@ export class UniversalVideoAdapter {
       else {
         await this.processTranslatedSubtitles()
       }
-      if (analyticsContext) {
-        void trackFeatureUsed({
-          ...analyticsContext,
-          outcome: "success",
-        })
-      }
     }
     catch (error) {
-      if (analyticsContext) {
-        void trackFeatureUsed({
-          ...analyticsContext,
-          outcome: "failure",
-        })
-      }
       const errorMessage = error instanceof Error ? error.message : String(error)
 
       if (error instanceof ToastSubtitlesError) {

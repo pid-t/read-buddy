@@ -40,8 +40,6 @@ vi.mock("@/utils/logger", () => ({
 
 function buildStableConfig(): Config {
   const config = structuredClone(DEFAULT_CONFIG)
-  // In DEV mode, beta experience is enabled. Keep it true so no extra write is introduced.
-  config.betaExperience.enabled = true
   config.providersConfig = config.providersConfig.map((providerConfig) => {
     if (!isAPIProviderConfig(providerConfig)) {
       return providerConfig
@@ -106,9 +104,9 @@ describe("initializeConfig", () => {
     const config = buildStableConfig()
     const migrated = {
       ...config,
-      contextMenu: {
-        ...config.contextMenu,
-        enabled: false,
+      translate: {
+        ...config.translate,
+        mode: "translationOnly" as const,
       },
     }
 
@@ -129,6 +127,32 @@ describe("initializeConfig", () => {
     expect(setMetaMock).toHaveBeenCalledWith("local:config", {
       schemaVersion: CONFIG_SCHEMA_VERSION,
       lastModifiedAt: 888,
+    })
+  })
+
+  it("persists sanitized config when stored config contains removed branches", async () => {
+    const config = buildStableConfig()
+    const storedConfigWithRemovedBranches = {
+      ...config,
+      tts: { enabled: true },
+      selectionToolbar: { customActions: [] },
+      inputTranslation: { enabled: true },
+    }
+
+    getItemMock.mockResolvedValueOnce(storedConfigWithRemovedBranches)
+    getMetaMock.mockResolvedValueOnce({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      lastModifiedAt: 999,
+    })
+
+    const { initializeConfig } = await import("../init")
+    await initializeConfig()
+
+    expect(setItemMock).toHaveBeenCalledTimes(1)
+    expect(setItemMock).toHaveBeenCalledWith("local:config", config)
+    expect(setMetaMock).toHaveBeenCalledWith("local:config", {
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      lastModifiedAt: 999,
     })
   })
 

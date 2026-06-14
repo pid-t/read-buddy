@@ -5,9 +5,7 @@ import { z } from "zod"
 import { createExtensionClientEnvSchema, isLocalPackagesEnabled, resolveExtensionEnv } from "./src/env/shared"
 
 const WXT_API_KEY_PATTERN = /^WXT_.*API_KEY/
-const ALLOWED_BUNDLED_API_KEYS = new Set([
-  "WXT_POSTHOG_API_KEY",
-])
+const ALLOWED_BUNDLED_API_KEYS = new Set<string>()
 const useLocalPackages = isLocalPackagesEnabled(process.env)
 const shouldSkipEnvValidation = process.env.WXT_SKIP_ENV_VALIDATION === "true"
 
@@ -35,13 +33,9 @@ export default defineConfig({
     permissions: [
       "storage",
       "tabs",
-      "alarms",
       "cookies",
-      "contextMenus",
-      "identity",
       "scripting",
       "webNavigation",
-      ...(browser !== "firefox" ? ["offscreen", "sidePanel"] : []),
     ],
     host_permissions: [
       "*://*/*", // Required for scripting.executeScript in any frame

@@ -28,9 +28,9 @@ describe("config provider enabled validation", () => {
     expect(issuePaths).toContain("translate.providerId")
   })
 
-  it("fails when a custom action uses a disabled provider", () => {
+  it("fails when video subtitles use a disabled provider", () => {
     const providersConfig = DEFAULT_CONFIG.providersConfig.map((provider) => {
-      if (provider.id === "openai-default") {
+      if (provider.id === "microsoft-translate-default") {
         return { ...provider, enabled: false }
       }
       return provider
@@ -39,15 +39,12 @@ describe("config provider enabled validation", () => {
     const issuePaths = getIssuePaths({
       ...DEFAULT_CONFIG,
       providersConfig,
-      selectionToolbar: {
-        ...DEFAULT_CONFIG.selectionToolbar,
-        customActions: DEFAULT_CONFIG.selectionToolbar.customActions.map(action => ({
-          ...action,
-          providerId: "openai-default",
-        })),
+      videoSubtitles: {
+        ...DEFAULT_CONFIG.videoSubtitles,
+        providerId: "microsoft-translate-default",
       },
     })
 
-    expect(issuePaths).toContain("selectionToolbar.customActions.0.providerId")
+    expect(issuePaths).toContain("videoSubtitles.providerId")
   })
 })

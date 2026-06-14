@@ -5,7 +5,6 @@ import { buildFeatureProviderPatch } from "@/utils/constants/feature-providers"
 import {
   computeLanguageDetectionFallbackAfterDeletion,
   computeProviderFallbacksAfterDeletion,
-  computeSelectionToolbarCustomActionFallbacksAfterDeletion,
   findFeatureMissingProvider,
   resolveLanguageDetectionConfigForModeChange,
 } from "../helpers"
@@ -33,20 +32,16 @@ describe("feature providers", () => {
 
     it("builds patch for multiple feature assignments", () => {
       const patch = buildFeatureProviderPatch({
-        "translate": "microsoft-translate-default",
-        "selectionToolbar.translate": "openai-default",
+        translate: "microsoft-translate-default",
+        videoSubtitles: "openai-default",
       })
 
       expect(patch).toEqual({
         translate: {
           providerId: "microsoft-translate-default",
         },
-        selectionToolbar: {
-          features: {
-            translate: {
-              providerId: "openai-default",
-            },
-          },
+        videoSubtitles: {
+          providerId: "openai-default",
         },
       })
     })
@@ -64,17 +59,6 @@ describe("feature providers", () => {
           ...DEFAULT_CONFIG.videoSubtitles,
           providerId: "deleted-provider",
         },
-        selectionToolbar: {
-          ...DEFAULT_CONFIG.selectionToolbar,
-          features: {
-            ...DEFAULT_CONFIG.selectionToolbar.features,
-            translate: { enabled: true, providerId: "deleted-provider", shortcut: "Alt+T" },
-          },
-        },
-        inputTranslation: {
-          ...DEFAULT_CONFIG.inputTranslation,
-          providerId: "deleted-provider",
-        },
       }
 
       const remainingProviders = [
@@ -85,10 +69,8 @@ describe("feature providers", () => {
       const fallbacks = computeProviderFallbacksAfterDeletion("deleted-provider", config, remainingProviders)
 
       expect(fallbacks).toEqual({
-        "translate": "microsoft-translate-default",
-        "videoSubtitles": "microsoft-translate-default",
-        "selectionToolbar.translate": "microsoft-translate-default",
-        "inputTranslation": "microsoft-translate-default",
+        translate: "microsoft-translate-default",
+        videoSubtitles: "microsoft-translate-default",
       })
     })
 
@@ -154,102 +136,6 @@ describe("feature providers", () => {
       ]
 
       expect(findFeatureMissingProvider(remainingProviders)).toBe("translate")
-    })
-  })
-
-  describe("computeSelectionToolbarCustomActionFallbacksAfterDeletion", () => {
-    it("reassigns affected custom actions to the first enabled llm provider", () => {
-      const config = {
-        ...DEFAULT_CONFIG,
-        selectionToolbar: {
-          ...DEFAULT_CONFIG.selectionToolbar,
-          customActions: [
-            {
-              id: "action-a",
-              name: "Action A",
-              enabled: true,
-              icon: "tabler:sparkles",
-              providerId: "deleted-provider",
-              systemPrompt: "",
-              prompt: "{{selection}}",
-              outputSchema: [
-                {
-                  id: "field-a",
-                  name: "summary",
-                  type: "string" as const,
-                  description: "",
-                  speaking: false,
-                },
-              ],
-            },
-          ],
-        },
-      }
-
-      const remainingProviders = [
-        {
-          ...getProviderById("openai-default"),
-          enabled: false,
-        },
-        getProviderById("google-default"),
-      ]
-
-      const result = computeSelectionToolbarCustomActionFallbacksAfterDeletion(
-        "deleted-provider",
-        config,
-        remainingProviders,
-      )
-
-      expect(result).toEqual([
-        expect.objectContaining({
-          id: "action-a",
-          providerId: "google-default",
-        }),
-      ])
-    })
-
-    it("returns null when no enabled llm provider is available", () => {
-      const config = {
-        ...DEFAULT_CONFIG,
-        selectionToolbar: {
-          ...DEFAULT_CONFIG.selectionToolbar,
-          customActions: [
-            {
-              id: "action-a",
-              name: "Action A",
-              enabled: true,
-              icon: "tabler:sparkles",
-              providerId: "deleted-provider",
-              systemPrompt: "",
-              prompt: "{{selection}}",
-              outputSchema: [
-                {
-                  id: "field-a",
-                  name: "summary",
-                  type: "string" as const,
-                  description: "",
-                  speaking: false,
-                },
-              ],
-            },
-          ],
-        },
-      }
-
-      const remainingProviders = [
-        {
-          ...getProviderById("openai-default"),
-          enabled: false,
-        },
-      ]
-
-      const result = computeSelectionToolbarCustomActionFallbacksAfterDeletion(
-        "deleted-provider",
-        config,
-        remainingProviders,
-      )
-
-      expect(result).toBeNull()
     })
   })
 

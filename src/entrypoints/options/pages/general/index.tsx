@@ -1,6 +1,5 @@
 import { i18n } from "#imports"
 import { PageLayout } from "../../components/page-layout"
-import AppearanceSettings from "./appearance-settings"
 import FeatureProvidersConfig from "./feature-providers-config"
 import LanguageDetectionConfig from "./language-detection-config"
 import SiteControlMode from "./site-control-mode"
@@ -11,7 +10,6 @@ export function GeneralPage() {
       <FeatureProvidersConfig />
       <LanguageDetectionConfig />
       <SiteControlMode />
-      <AppearanceSettings />
     </PageLayout>
   )
 }

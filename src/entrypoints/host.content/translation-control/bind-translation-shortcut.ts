@@ -1,8 +1,6 @@
 import type { Hotkey } from "@tanstack/hotkeys"
 import type { PageTranslationManager } from "./page-translation"
 import { HotkeyManager } from "@tanstack/hotkeys"
-import { ANALYTICS_FEATURE, ANALYTICS_SURFACE } from "@/types/analytics"
-import { createFeatureUsageContext } from "@/utils/analytics"
 import { getLocalConfig } from "@/utils/config/storage"
 import { isPageTranslationShortcutEmpty, isValidConfiguredPageTranslationShortcut } from "@/utils/page-translation-shortcut"
 
@@ -28,9 +26,7 @@ export async function bindTranslationShortcutKey(pageTranslationManager: PageTra
         pageTranslationManager.stop()
       }
       else {
-        void pageTranslationManager.start(
-          createFeatureUsageContext(ANALYTICS_FEATURE.PAGE_TRANSLATION, ANALYTICS_SURFACE.SHORTCUT),
-        )
+        void pageTranslationManager.start()
       }
     },
     {

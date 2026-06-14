@@ -5,10 +5,10 @@ import { useMemo } from "react"
 import { i18n } from "#imports"
 import ProviderSelector from "@/components/llm-providers/provider-selector"
 import { Field, FieldLabel } from "@/components/ui/base-ui/field"
-import { isAPIProviderConfig, isLLMProviderConfig, isPureAPIProvider } from "@/types/config/provider"
+import { isAPIProviderConfig, isPureAPIProvider } from "@/types/config/provider"
 import { configAtom, configFieldsAtomMap, writeConfigAtom } from "@/utils/atoms/config"
 import { featureProviderConfigAtom } from "@/utils/atoms/provider"
-import { filterEnabledProvidersConfig, getProviderConfigById } from "@/utils/config/helpers"
+import { filterEnabledProvidersConfig } from "@/utils/config/helpers"
 import { buildFeatureProviderPatch, FEATURE_PROVIDER_DEFS, getFeatureLabelI18nKey } from "@/utils/constants/feature-providers"
 import { ConfigCard } from "../../components/config-card"
 import { SetApiKeyWarning } from "../../components/set-api-key-warning"
@@ -52,62 +52,6 @@ function FeatureProviderField({ featureKey }: {
   )
 }
 
-function CustomActionProviderFields() {
-  const config = useAtomValue(configAtom)
-  const setConfig = useSetAtom(writeConfigAtom)
-  const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
-
-  const llmProviders = useMemo(
-    () => filterEnabledProvidersConfig(providersConfig).filter(isLLMProviderConfig),
-    [providersConfig],
-  )
-
-  const customActions = config.selectionToolbar.customActions
-
-  if (customActions.length === 0) {
-    return null
-  }
-
-  return (
-    <>
-      <p className="text-sm font-medium text-muted-foreground">
-        {i18n.t("options.general.featureProviders.customActions")}
-      </p>
-      {customActions.map((action) => {
-        const currentProviderConfig = getProviderConfigById(providersConfig, action.providerId) ?? null
-        return (
-          <Field key={action.id}>
-            <FieldLabel nativeLabel={false} render={<div />}>
-              {action.name}
-              {needsApiKeyWarning(currentProviderConfig) && <SetApiKeyWarning />}
-            </FieldLabel>
-            <ProviderSelector
-              providers={llmProviders}
-              value={action.providerId}
-              onChange={(id) => {
-                const updatedCustomActions = config.selectionToolbar.customActions.map(item =>
-                  item.id === action.id
-                    ? { ...item, providerId: id }
-                    : item,
-                )
-
-                void setConfig({
-                  selectionToolbar: {
-                    ...config.selectionToolbar,
-                    customActions: updatedCustomActions,
-                  },
-                })
-              }}
-              className="w-full"
-              placeholder={i18n.t("options.floatingButtonAndToolbar.selectionToolbar.customActions.form.selectProvider")}
-            />
-          </Field>
-        )
-      })}
-    </>
-  )
-}
-
 export default function FeatureProvidersConfig() {
   return (
     <ConfigCard
@@ -120,9 +64,6 @@ export default function FeatureProvidersConfig() {
           featureKey="translate"
         />
         <FeatureProviderField featureKey="videoSubtitles" />
-        <FeatureProviderField featureKey="selectionToolbar.translate" />
-        <FeatureProviderField featureKey="inputTranslation" />
-        <CustomActionProviderFields />
       </div>
     </ConfigCard>
   )

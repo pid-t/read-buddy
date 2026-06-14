@@ -1,5 +1,4 @@
 import type { LangCodeISO6393 } from "@read-frog/definitions"
-import type { FeatureUsageContext, FeatureUsedEventProperties } from "@/types/analytics"
 import type {
   BackgroundGenerateTextPayload,
   BackgroundGenerateTextResponse,
@@ -7,51 +6,28 @@ import type {
 import type { Config } from "@/types/config/config"
 import type { ProviderConfig } from "@/types/config/provider"
 import type { BatchQueueConfig, RequestQueueConfig } from "@/types/config/translate"
-import type {
-  EdgeTTSHealthStatus,
-  EdgeTTSSynthesizeRequest,
-  EdgeTTSSynthesizeWireResponse,
-} from "@/types/edge-tts"
 import type { ProxyRequest, ProxyResponse } from "@/types/proxy-fetch"
-import type {
-  TTSOffscreenStopRequest,
-  TTSPlaybackStartRequest,
-  TTSPlaybackStartResponse,
-  TTSPlaybackStopRequest,
-} from "@/types/tts-playback"
-import type { EdgeTTSVoice } from "@/utils/server/edge-tts/types"
 import { defineExtensionMessaging } from "@webext-core/messaging"
 
 interface ProtocolMap {
   // navigation
   openPage: (data: { url: string, active?: boolean }) => void
   openOptionsPage: (data?: { route?: `/${string}` }) => void
-  toggleSidePanel: (data?: { source?: "content-script" | "extension-user-action" }) => Promise<{ ok: true, action: "opened" | "closed" } | { ok: false, reason: "missing-window" | "unsupported" | "toggle-failed" | "requires-extension-user-action" }>
   // config
   getInitialConfig: () => Config | null
   // translation state
   getEnablePageTranslationByTabId: (data: { tabId: number }) => boolean | undefined
   getEnablePageTranslationFromContentScript: () => Promise<boolean>
-  tryToSetEnablePageTranslationByTabId: (data: { tabId: number, enabled: boolean, analyticsContext?: FeatureUsageContext }) => void
-  tryToSetEnablePageTranslationOnContentScript: (data: { enabled: boolean, analyticsContext?: FeatureUsageContext }) => void
+  tryToSetEnablePageTranslationByTabId: (data: { tabId: number, enabled: boolean }) => void
+  tryToSetEnablePageTranslationOnContentScript: (data: { enabled: boolean }) => void
   setAndNotifyPageTranslationStateChangedByManager: (data: { enabled: boolean, url?: string }) => void
   notifyTranslationStateChanged: (data: { enabled: boolean }) => void
-  ensureIframeHostContentInjected: (data: { tabId?: number }) => void
-  injectCurrentIframesAfterTopFrameNodeTranslation: () => void
   reportDetectedPageLanguage: (data: { detectedCodeOrUnd: LangCodeISO6393 | "und", url: string }) => void
   refreshDetectedPageLanguage: () => void
   getDetectedCode: () => LangCodeISO6393
   detectedPageLanguageChanged: (data: { detectedCode: LangCodeISO6393 }) => void
   // ask host to start page translation
-  askManagerToTogglePageTranslation: (data: { enabled: boolean, analyticsContext?: FeatureUsageContext }) => void
-  openSelectionTranslationFromContextMenu: (data: { selectionText: string }) => void
-  openSelectionCustomActionFromContextMenu: (data: { actionId: string, selectionText: string }) => void
-  // analytics
-  trackFeatureUsedEvent: (data: FeatureUsedEventProperties) => void
-  // user guide
-  pinStateChanged: (data: { isPinned: boolean }) => void
-  getPinState: () => boolean
-  returnPinState: (data: { isPinned: boolean }) => void
+  askManagerToTogglePageTranslation: (data: { enabled: boolean }) => void
   // request
   enqueueTranslateRequest: (data: { text: string, langConfig: Config["language"], providerConfig: ProviderConfig, scheduleAt: number, hash: string, webTitle?: string | null, webDescription?: string | null, webContent?: string | null, webSummary?: string | null }) => Promise<string>
   getOrGenerateWebPageSummary: (data: { webTitle: string, webContent: string, providerConfig: ProviderConfig }) => Promise<string | null>
@@ -72,17 +48,6 @@ interface ProtocolMap {
   // cache management
   clearAllTranslationRelatedCache: () => Promise<void>
   clearAiSegmentationCache: () => Promise<void>
-  // edge tts
-  edgeTtsSynthesize: (data: EdgeTTSSynthesizeRequest) => Promise<EdgeTTSSynthesizeWireResponse>
-  edgeTtsListVoices: () => Promise<EdgeTTSVoice[]>
-  edgeTtsHealthCheck: () => Promise<EdgeTTSHealthStatus>
-  // tts playback
-  ttsPlaybackEnsureOffscreen: () => Promise<{ ok: true }>
-  ttsPlaybackStart: (data: TTSPlaybackStartRequest) => Promise<TTSPlaybackStartResponse>
-  ttsPlaybackStop: (data: TTSPlaybackStopRequest) => Promise<{ ok: true }>
-  // offscreen internal
-  ttsOffscreenPlay: (data: TTSPlaybackStartRequest) => Promise<TTSPlaybackStartResponse>
-  ttsOffscreenStop: (data: TTSOffscreenStopRequest) => Promise<{ ok: true }>
 }
 
 export const { sendMessage, onMessage }
