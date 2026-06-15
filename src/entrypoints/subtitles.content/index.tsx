@@ -1,6 +1,7 @@
 import "@/utils/zod-config"
 import { defineContentScript } from "#imports"
 import { getLocalConfig } from "@/utils/config/storage"
+import { applyI18nLocale } from "@/utils/i18n"
 
 declare global {
   interface Window {
@@ -18,6 +19,7 @@ export default defineContentScript({
     window.__READ_FROG_SUBTITLES_INJECTED__ = true
 
     const config = await getLocalConfig()
+    await applyI18nLocale(config?.uiLocale)
     if (!config?.videoSubtitles?.enabled) {
       window.__READ_FROG_SUBTITLES_INJECTED__ = false
       return

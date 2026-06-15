@@ -191,6 +191,10 @@ options:
       testing: Test ediliyor...
   general:
     title: Genel
+    uiLocale:
+      title: Arayüz dili
+      description: Seçenekler sayfasında kullanılacak dili seçin.
+      label: Arayüz dili
     appearance:
       title: Görünüm
       theme: Tema

@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from "react"
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react"
-import { i18n } from "#imports"
+import { i18n } from "@/utils/i18n"
 import { StyleView } from "./style"
 
 export type ViewId = "main" | "style"

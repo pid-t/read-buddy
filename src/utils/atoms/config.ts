@@ -146,6 +146,7 @@ configAtom.onMount = (setAtom: (newValue: Config) => void) => {
 // };
 
 type Keys = keyof Config
+type ConfigFieldPatch<K extends Keys> = Config[K] extends object ? Partial<Config[K]> : Config[K]
 
 export function getConfigFieldAtom<K extends Keys>(key: K) {
   // If you don't mind "re-rendering when other fields are changed"
@@ -154,7 +155,7 @@ export function getConfigFieldAtom<K extends Keys>(key: K) {
 
   return atom(
     get => get(sliceAtom),
-    (_get, set, newVal: Partial<Config[K]>) =>
+    (_get, set, newVal: ConfigFieldPatch<K>) =>
       set(writeConfigAtom, { [key]: newVal }),
   )
 }

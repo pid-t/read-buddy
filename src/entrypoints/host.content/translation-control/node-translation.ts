@@ -2,6 +2,7 @@ import type { Config } from "@/types/config/config"
 import { getLocalConfig } from "@/utils/config/storage"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { removeOrShowNodeTranslation } from "@/utils/host/translate/node-manipulation"
+import { applyI18nLocale } from "@/utils/i18n"
 import { registerNodeTranslationTriggerListeners } from "./node-translation-trigger"
 
 /**
@@ -19,7 +20,9 @@ export function registerNodeTranslationTriggers(): () => void {
     const config = await getLocalConfig()
     if (signal.aborted)
       return null
-    return config ?? DEFAULT_CONFIG
+    const resolvedConfig = config ?? DEFAULT_CONFIG
+    await applyI18nLocale(resolvedConfig.uiLocale)
+    return resolvedConfig
   }
 
   const translateNode = async (point: Parameters<typeof removeOrShowNodeTranslation>[0], config: Config) => {

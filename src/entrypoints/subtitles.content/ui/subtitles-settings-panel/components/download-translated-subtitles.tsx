@@ -1,6 +1,6 @@
 import { IconDownload, IconLanguage, IconLoader2 } from "@tabler/icons-react"
-import { i18n } from "#imports"
 import { Button } from "@/components/ui/base-ui/button"
+import { i18n } from "@/utils/i18n"
 import { SubtitlesSettingsItem } from "./subtitles-settings-item"
 import { useDownloadTranslatedSubtitles } from "./use-download-translated-subtitles"
 

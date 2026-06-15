@@ -6,6 +6,7 @@ import { languageDetectionConfigSchema } from "./language-detection"
 import { isLLMProvider, NON_API_TRANSLATE_PROVIDERS_MAP, providersConfigSchema } from "./provider"
 import { videoSubtitlesSchema } from "./subtitles"
 import { translateConfigSchema } from "./translate"
+import { uiLocaleSchema } from "./ui-locale"
 // Language schema
 const languageSchema = z.object({
   sourceCode: langCodeISO6393Schema.or(z.literal("auto")),
@@ -22,6 +23,7 @@ const siteControlSchema = z.object({
 
 // Complete config schema
 export const configSchema = z.object({
+  uiLocale: uiLocaleSchema.optional(),
   language: languageSchema,
   providersConfig: providersConfigSchema,
   translate: translateConfigSchema,

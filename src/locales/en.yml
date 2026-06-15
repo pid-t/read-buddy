@@ -192,6 +192,10 @@ options:
       testing: Testing...
   general:
     title: General
+    uiLocale:
+      title: Interface Language
+      description: Choose the language used on the options page.
+      label: Interface language
     appearance:
       title: Appearance
       theme: Theme

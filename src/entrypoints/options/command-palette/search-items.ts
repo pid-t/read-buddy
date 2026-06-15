@@ -29,6 +29,13 @@ const CONFIG_SEARCH_ITEMS = [
 export const SEARCH_ITEMS: SearchItem[] = [
   // General page
   {
+    sectionId: "ui-locale",
+    route: "/",
+    titleKey: "options.general.uiLocale.title" as I18nKey,
+    descriptionKey: "options.general.uiLocale.description" as I18nKey,
+    pageKey: "options.general.title",
+  },
+  {
     sectionId: "feature-providers",
     route: "/",
     titleKey: "options.general.featureProviders.title",

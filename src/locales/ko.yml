@@ -191,6 +191,10 @@ options:
       testing: 테스트 중...
   general:
     title: 일반
+    uiLocale:
+      title: 인터페이스 언어
+      description: 옵션 페이지에서 사용할 언어를 선택합니다.
+      label: 인터페이스 언어
     appearance:
       title: 외관
       theme: 테마

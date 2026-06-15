@@ -191,6 +191,10 @@ options:
       testing: テスト中...
   general:
     title: 一般
+    uiLocale:
+      title: インターフェース言語
+      description: オプションページで使用する言語を選択します。
+      label: インターフェース言語
     appearance:
       title: 外観
       theme: テーマ

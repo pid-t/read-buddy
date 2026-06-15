@@ -191,6 +191,10 @@ options:
       testing: Đang kiểm tra...
   general:
     title: Chung
+    uiLocale:
+      title: Ngôn ngữ giao diện
+      description: Chọn ngôn ngữ dùng trên trang tùy chọn.
+      label: Ngôn ngữ giao diện
     appearance:
       title: Giao diện
       theme: Chủ đề

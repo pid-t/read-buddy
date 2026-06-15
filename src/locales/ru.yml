@@ -191,6 +191,10 @@ options:
       testing: Тестирование...
   general:
     title: Общие
+    uiLocale:
+      title: Язык интерфейса
+      description: Выберите язык страницы настроек.
+      label: Язык интерфейса
     appearance:
       title: Внешний вид
       theme: Тема

@@ -13,6 +13,7 @@ import { configAtom } from "@/utils/atoms/config"
 import { baseThemeModeAtom } from "@/utils/atoms/theme"
 import { getLocalConfig } from "@/utils/config/storage"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
+import { applyI18nLocale } from "@/utils/i18n"
 import { sendMessage } from "@/utils/message"
 import { renderPersistentReactRoot } from "@/utils/react-root"
 import { getLocalThemeMode } from "@/utils/theme"
@@ -55,6 +56,8 @@ async function initApp() {
     }),
   ])
   const config = configValue ?? DEFAULT_CONFIG
+
+  await applyI18nLocale(config.uiLocale)
 
   const tabId = activeTab[0].id
 

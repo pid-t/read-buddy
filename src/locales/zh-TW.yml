@@ -191,6 +191,10 @@ options:
       testing: 測試中…
   general:
     title: 通用
+    uiLocale:
+      title: 介面語言
+      description: 選擇選項頁面使用的語言。
+      label: 介面語言
     appearance:
       title: 外觀
       theme: 主題

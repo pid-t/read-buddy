@@ -1,6 +1,7 @@
 import "@/utils/zod-config"
 import { defineContentScript } from "#imports"
 import { getLocalConfig } from "@/utils/config/storage"
+import { applyI18nLocale } from "@/utils/i18n"
 import { clearEffectiveSiteControlUrl, getEffectiveSiteControlUrl, isSiteEnabled } from "@/utils/site-control"
 
 declare global {
@@ -19,6 +20,7 @@ export default defineContentScript({
     window.__READ_FROG_HOST_INJECTED__ = true
 
     const initialConfig = await getLocalConfig()
+    await applyI18nLocale(initialConfig?.uiLocale)
     const siteControlUrl = getEffectiveSiteControlUrl(window.location.href)
 
     if (!isSiteEnabled(siteControlUrl, initialConfig)) {

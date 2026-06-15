@@ -192,6 +192,10 @@ options:
       testing: Probando...
   general:
     title: General
+    uiLocale:
+      title: Idioma de la interfaz
+      description: Elige el idioma usado en la página de opciones.
+      label: Idioma de la interfaz
     appearance:
       title: Apariencia
       theme: Tema
