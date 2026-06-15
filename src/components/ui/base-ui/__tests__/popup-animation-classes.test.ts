@@ -16,7 +16,6 @@ describe("shared popup animation classes", () => {
       readSource("../select.tsx"),
       readSource("../combobox.tsx"),
       readSource("../popover.tsx"),
-      readSource("../dropdown-menu.tsx"),
       readSource("../tooltip.tsx"),
       readSource("../dialog.tsx"),
       readSource("../alert-dialog.tsx"),

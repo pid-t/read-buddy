@@ -1,6 +1,6 @@
-name: 陪讀蛙
-extName: 陪讀蛙 - 翻譯與學習
-extDescription: 陪讀蛙是一款開放原始碼的瀏覽器擴充功能，幫助你在任何網站上深入學習語言。
+name: 伴读
+extName: 伴读 - 翻譯與學習
+extDescription: 伴读是一款開放原始碼的瀏覽器擴充功能，幫助你在任何網站上深入學習語言。
 uninstallSurveyUrl: https://tally.so/r/3E9XDL
 dataTypes:
   string: 文字
@@ -10,7 +10,7 @@ contextMenu:
   translateSelection: 翻譯「%s」
   showOriginal: 顯示原文
 sidePanel:
-  firefoxUserActionHint: 在 Firefox 中，請從瀏覽器側邊欄開啟陪讀蛙。
+  firefoxUserActionHint: 在 Firefox 中，請從瀏覽器側邊欄開啟伴读。
   firefoxUserActionHelpText: 查看 Firefox 側邊欄說明
   firefoxUserActionHelpUrl: https://support.mozilla.org/zh-TW/kb/use-sidebar-access-tools-and-vertical-tabs
 popup:
@@ -41,7 +41,7 @@ popup:
   discord:
     tooltip: 加入 Discord 與開發者討論，搶先體驗新功能
   blog:
-    notification: 陪讀蛙更新動態
+    notification: 伴读更新動態
   aiSmartContext: AI 智慧上下文
   aiSmartContextDescription: 結合網頁上下文提升翻譯效果。需要設定 LLM 翻譯服務提供者。
   more:
@@ -281,7 +281,7 @@ options:
     floatingButton:
       globalToggle:
         title: 啟用懸浮按鈕
-        description: 在網頁上顯示懸浮按鈕，快速存取陪讀蛙功能
+        description: 在網頁上顯示懸浮按鈕，快速存取伴读功能
       closeMenu:
         disableForSite: 停用此網站
         disableGlobally: 全域停用
@@ -638,7 +638,7 @@ options:
       fallback: 備用
       selectPlaceholder: 請選擇一個語音
       preview: 試聽
-      previewSample: Read Frog 向你問好！這是朗讀功能的語音。
+      previewSample: 伴读 向你問好！這是朗讀功能的語音。
     languageVoice:
       label: 語言語音
       reset: 重設為預設
@@ -664,11 +664,11 @@ options:
     title: 設定
     about:
       title: 關於
-      description: Read Frog 於 2025 年 4 月誕生
-      mission: Read Frog 致力於在 AI 時代擴大高品質教育機會的平等可及性，透過更低成本地提供盡可能接近真人教師的學習體驗，涵蓋語言學習、醫學以及其他知識密集型領域。
+      description: 伴读 於 2025 年 4 月誕生
+      mission: 伴读 致力於在 AI 時代擴大高品質教育機會的平等可及性，透過更低成本地提供盡可能接近真人教師的學習體驗，涵蓋語言學習、醫學以及其他知識密集型領域。
       analytics:
         title: 幫助改進使用者體驗
-        tooltip: 開啟後，Read Frog 會傳送匿名的產品使用訊號，用於驗證功能是否穩定、優化效能與互動細節，並幫助我們決定接下來優先投入的方向。
+        tooltip: 開啟後，伴读 會傳送匿名的產品使用訊號，用於驗證功能是否穩定、優化效能與互動細節，並幫助我們決定接下來優先投入的方向。
     sync:
       title: 手動設定同步
       description: 手動匯入和匯出你的設定
@@ -677,7 +677,7 @@ options:
       importSuccess: 設定匯入成功
       exportSuccess: 設定匯出成功
       importError: 匯入失敗
-      versionTooNew: 匯入的設定版本較新，請升級 Read Frog 到最新版本
+      versionTooNew: 匯入的設定版本較新，請升級 伴读 到最新版本
       migrationError: 遷移失敗
       validationError: 設定驗證失敗
       exportOptions:
@@ -919,8 +919,8 @@ action:
   saveToNotebaseMissingNotebaseDescription: 舊筆記庫不存在，或目前帳號無法開啟。可以建立新的筆記庫並儲存目前結果，或到 Custom AI Actions 連接既有筆記庫。
   saveToNotebaseAccountUnavailableDescription: 目前登入帳號和下方已連接帳號不同。選擇建立並儲存會替換先前的連線設定和欄位映射；也可以到 Custom AI Actions 連接既有筆記庫。
   saveToNotebasePendingLogin: 登入後繼續儲存
-  saveToNotebasePendingLoginDescription: 登入完成後，Read Frog 會自動建立筆記庫並儲存目前結果。
-  saveToNotebasePendingConnectedLoginDescription: 登入完成後，Read Frog 會優先儲存到已連接的筆記庫；如果目前帳號無法使用它，會建立新的筆記庫並儲存目前結果。
+  saveToNotebasePendingLoginDescription: 登入完成後，伴读 會自動建立筆記庫並儲存目前結果。
+  saveToNotebasePendingConnectedLoginDescription: 登入完成後，伴读 會優先儲存到已連接的筆記庫；如果目前帳號無法使用它，會建立新的筆記庫並儲存目前結果。
   openCustomActions: 開啟 Custom AI Actions
   openNotebase: 開啟筆記庫
   contextDetailsTitleLabel: 標題
@@ -943,7 +943,7 @@ subtitles:
     downloadTranslatedComplete: 翻譯字幕已下載
     downloadSource: 下載原始字幕
   state:
-    loading: Read Frog 字幕載入中
+    loading: 伴读 字幕載入中
     error: 發生錯誤
   errors:
     http429: 429 YouTube 字幕介面請求次數過多，請稍後再試

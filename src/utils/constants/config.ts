@@ -10,7 +10,7 @@ export const CONFIG_STORAGE_KEY = "config"
 
 export const THEME_STORAGE_KEY = "theme"
 export const DEFAULT_DETECTED_CODE = "eng" as const
-export const CONFIG_SCHEMA_VERSION = 79
+export const CONFIG_SCHEMA_VERSION = 80
 
 export const DEFAULT_CONFIG: Config = {
   language: {
@@ -28,7 +28,7 @@ export const DEFAULT_CONFIG: Config = {
     },
     page: {
       range: "all",
-      autoTranslatePatterns: ["news.ycombinator.com"],
+      autoTranslatePatterns: [],
       neverAutoTranslatePatterns: [],
       autoTranslateLanguages: [],
       shortcut: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,

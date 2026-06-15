@@ -1,5 +1,5 @@
 import { useAtomValue, useSetAtom } from "jotai"
-import logo from "@/assets/icons/read-frog.png"
+import logo from "@/assets/icons/read-frog-transparent.png"
 import { TRANSLATE_BUTTON_CLASS } from "@/utils/constants/subtitles"
 import { cn } from "@/utils/styles/utils"
 import {
@@ -36,7 +36,7 @@ export function SubtitlesTranslateButton() {
         src={logo}
         alt="Subtitle Toggle"
         className={cn(
-          "w-8 h-8 transition-all duration-200 object-contain block",
+          "w-7 h-7 p-1 rounded-[9px] bg-white/85 ring-1 ring-black/5 shadow-sm transition-all duration-200 object-contain block",
           isVisible ? "opacity-100 saturate-110" : "opacity-75 saturate-90",
           panelOpen && "scale-[1.02]",
         )}

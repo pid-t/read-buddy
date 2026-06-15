@@ -1,6 +1,6 @@
-name: Read Frog
-extName: Read Frog - Переводи и учись
-extDescription: Read Frog — расширение браузера с открытым исходным кодом, которое поможет вам глубоко изучать языки на любом веб-сайте.
+name: ReadBuddy
+extName: ReadBuddy - Переводи и учись
+extDescription: ReadBuddy — расширение браузера с открытым исходным кодом, которое поможет вам глубоко изучать языки на любом веб-сайте.
 uninstallSurveyUrl: https://tally.so/r/nPK6Ob
 dataTypes:
   string: Текст
@@ -10,7 +10,7 @@ contextMenu:
   translateSelection: Перевести "%s"
   showOriginal: Показать оригинал
 sidePanel:
-  firefoxUserActionHint: В Firefox откройте Read Frog из боковой панели браузера.
+  firefoxUserActionHint: В Firefox откройте ReadBuddy из боковой панели браузера.
   firefoxUserActionHelpText: Как открыть боковую панель Firefox
   firefoxUserActionHelpUrl: https://support.mozilla.org/ru/kb/ispolzovanije-bokovoi-paneli-dostup-instrumenty-i-vertikalnyje-vkladki
 popup:
@@ -41,7 +41,7 @@ popup:
   discord:
     tooltip: Присоединяйтесь к Discord, чтобы связаться с разработчиками и получить ранний доступ к новым функциям
   blog:
-    notification: Что нового в Read Frog
+    notification: Что нового в ReadBuddy
   aiSmartContext: Умный контекст ИИ
   aiSmartContextDescription: Использует контекст веб-страницы для улучшения качества перевода. Требуется LLM-провайдер перевода.
   more:
@@ -281,7 +281,7 @@ options:
     floatingButton:
       globalToggle:
         title: Включить плавающую кнопку
-        description: Отображать плавающую кнопку на веб-страницах для быстрого доступа к функциям Read Frog
+        description: Отображать плавающую кнопку на веб-страницах для быстрого доступа к функциям ReadBuddy
       closeMenu:
         disableForSite: Отключить для этого сайта
         disableGlobally: Отключить глобально
@@ -638,7 +638,7 @@ options:
       fallback: Резервный
       selectPlaceholder: Выберите голос
       preview: Предпросмотр
-      previewSample: Привет от Read Frog! Так я буду звучать при чтении вслух.
+      previewSample: Привет от ReadBuddy! Так я буду звучать при чтении вслух.
     languageVoice:
       label: Голос для языка
       reset: Сбросить на значение по умолчанию
@@ -664,11 +664,11 @@ options:
     title: Конфигурация
     about:
       title: О приложении
-      description: Read Frog появился в апреле 2025 года
-      mission: Read Frog стремится расширить равный доступ к качественному образованию в эпоху ИИ, делая обучение, максимально похожее на занятия с настоящим преподавателем, доступным по цене в языках, медицине и других знанияемких областях.
+      description: ReadBuddy появился в апреле 2025 года
+      mission: ReadBuddy стремится расширить равный доступ к качественному образованию в эпоху ИИ, делая обучение, максимально похожее на занятия с настоящим преподавателем, доступным по цене в языках, медицине и других знанияемких областях.
       analytics:
         title: Помочь улучшить пользовательский опыт
-        tooltip: Когда параметр включен, Read Frog отправляет анонимные сигналы об использовании продукта, чтобы мы могли проверять надежность функций, улучшать производительность и UX-детали, а также понимать, что развивать дальше в первую очередь.
+        tooltip: Когда параметр включен, ReadBuddy отправляет анонимные сигналы об использовании продукта, чтобы мы могли проверять надежность функций, улучшать производительность и UX-детали, а также понимать, что развивать дальше в первую очередь.
     sync:
       title: Ручная синхронизация конфигурации
       description: Ручной импорт и экспорт настроек конфигурации
@@ -677,7 +677,7 @@ options:
       importSuccess: Конфигурация успешно импортирована
       exportSuccess: Конфигурация успешно экспортирована
       importError: Ошибка импорта
-      versionTooNew: Версия импортированной конфигурации новее, пожалуйста, обновите Read Frog до последней версии
+      versionTooNew: Версия импортированной конфигурации новее, пожалуйста, обновите ReadBuddy до последней версии
       migrationError: Ошибка миграции
       validationError: Ошибка валидации конфигурации
       exportOptions:
@@ -914,13 +914,13 @@ action:
   saveToNotebaseConnectExisting: Подключить существующую Notebase
   saveToNotebaseGoConfigure: Настроить
   saveToNotebaseLoginConnectedTitle: Войти и сохранить?
-  saveToNotebaseLoginConnectedDescription: Этот Custom Action подключён к аккаунту ниже. После входа Read Frog сохранит в существующую Notebase, если это возможно, или создаст новую Notebase для текущего аккаунта.
+  saveToNotebaseLoginConnectedDescription: Этот Custom Action подключён к аккаунту ниже. После входа ReadBuddy сохранит в существующую Notebase, если это возможно, или создаст новую Notebase для текущего аккаунта.
   saveToNotebaseConnectionUnavailableTitle: Подключение Notebase недоступно
   saveToNotebaseMissingNotebaseDescription: Старая Notebase больше не существует или недоступна этому аккаунту. Создайте новую Notebase и сохраните результат либо подключите существующую Notebase в Custom AI Actions.
   saveToNotebaseAccountUnavailableDescription: Текущий аккаунт не совпадает с подключённым аккаунтом ниже. Создание и сохранение заменит прежнее подключение и сопоставления полей. Также можно подключить существующую Notebase в Custom AI Actions.
   saveToNotebasePendingLogin: Войдите, чтобы завершить сохранение
-  saveToNotebasePendingLoginDescription: После входа Read Frog автоматически создаст Notebase и сохранит этот результат.
-  saveToNotebasePendingConnectedLoginDescription: После входа Read Frog сохранит в подключённую Notebase, если это возможно. Если аккаунт не может её использовать, будет создана новая Notebase.
+  saveToNotebasePendingLoginDescription: После входа ReadBuddy автоматически создаст Notebase и сохранит этот результат.
+  saveToNotebasePendingConnectedLoginDescription: После входа ReadBuddy сохранит в подключённую Notebase, если это возможно. Если аккаунт не может её использовать, будет создана новая Notebase.
   openCustomActions: Открыть Custom AI Actions
   openNotebase: Открыть Notebase
   contextDetailsTitleLabel: Заголовок
@@ -943,7 +943,7 @@ subtitles:
     downloadTranslatedComplete: Переведённые субтитры скачаны
     downloadSource: Скачать исходные субтитры
   state:
-    loading: Read Frog загрузка субтитров
+    loading: ReadBuddy загрузка субтитров
     error: Произошла ошибка
   errors:
     http429: 429 Слишком много запросов к API YouTube субтитров, пожалуйста, попробуйте снова позже
