@@ -1,14 +1,15 @@
 import type { ComponentType, ReactNode } from "react"
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react"
-import { i18n } from "@/utils/i18n"
 import { StyleView } from "./style"
 
 export type ViewId = "main" | "style"
 export const ROOT_VIEW = "main" satisfies ViewId
 
+export type SubtitlesSettingsTitleKey = "options.videoSubtitles.style.title"
+
 export interface SubpageConfig {
   id: Exclude<ViewId, "main">
-  title: string
+  titleKey: SubtitlesSettingsTitleKey
   icon: ReactNode
   component: ComponentType
   hidden?: boolean
@@ -17,7 +18,7 @@ export interface SubpageConfig {
 export const SUBPAGES: SubpageConfig[] = [
   {
     id: "style",
-    title: i18n.t("options.videoSubtitles.style.title"),
+    titleKey: "options.videoSubtitles.style.title",
     icon: <IconAdjustmentsHorizontal className="size-4" />,
     component: StyleView,
   },

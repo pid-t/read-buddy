@@ -1,4 +1,5 @@
 import type { ViewId } from "."
+import { i18n } from "@/utils/i18n"
 import { VISIBLE_SUBPAGES } from "."
 import { DownloadSourceSubtitles } from "../components/download-source-subtitles"
 import { DownloadTranslatedSubtitles } from "../components/download-translated-subtitles"
@@ -17,7 +18,7 @@ export function MainMenu({ onNavigate }: { onNavigate: (id: ViewId) => void }) {
           <SubpageMenuEntry
             key={page.id}
             icon={page.icon}
-            label={page.title}
+            label={i18n.t(page.titleKey)}
             onClick={() => onNavigate(page.id)}
           />
         ))}

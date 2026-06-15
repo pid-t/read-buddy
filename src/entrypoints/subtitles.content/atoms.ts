@@ -20,6 +20,8 @@ export const subtitlesSettingsPanelOpenAtom = atom<boolean>(false)
 
 export const subtitlesSettingsPanelViewAtom = atom<ViewId>(ROOT_VIEW)
 
+export const subtitlesUiLocaleVersionAtom = atom(0)
+
 export const TranslatedDownloadPhase = {
   Idle: "idle",
   Preparing: "preparing",

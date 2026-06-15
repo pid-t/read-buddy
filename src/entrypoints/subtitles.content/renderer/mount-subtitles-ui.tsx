@@ -1,5 +1,6 @@
 import type { SubtitlesProvidersAdapter } from "../ui/subtitles-ui-context"
 import type { PlatformConfig } from "@/entrypoints/subtitles.content/platforms"
+import type { Config } from "@/types/config/config"
 import ReactDOM from "react-dom/client"
 import { Toaster } from "sonner"
 import themeCSS from "@/assets/styles/theme.css?inline"
@@ -17,10 +18,11 @@ const SUBTITLES_UI_HOST_ID = "read-frog-subtitles-ui-host"
 interface MountSubtitlesUIOptions {
   adapter: SubtitlesProvidersAdapter
   config: Pick<PlatformConfig, "selectors">
+  initialConfig?: Config
 }
 
 export async function mountSubtitlesUI(
-  { adapter, config }: MountSubtitlesUIOptions,
+  { adapter, config, initialConfig }: MountSubtitlesUIOptions,
 ): Promise<void> {
   const videoContainer = await waitForElement(config.selectors.playerContainer)
   if (!videoContainer)
@@ -86,7 +88,7 @@ export async function mountSubtitlesUI(
 
   const app = (
     <ShadowWrapperContext value={reactContainer}>
-      <SubtitlesProviders adapter={adapter}>
+      <SubtitlesProviders adapter={adapter} initialConfig={initialConfig}>
         <SubtitlesContainer />
         <Toaster richColors className="z-2147483647 notranslate" />
       </SubtitlesProviders>

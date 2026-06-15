@@ -1,3 +1,4 @@
+import type { Config } from "@/types/config/config"
 import { YOUTUBE_EMBED_PATH_PATTERN, YOUTUBE_NAVIGATE_FINISH_EVENT, YOUTUBE_WATCH_URL_PATTERN } from "@/utils/constants/subtitles"
 import { createYoutubeSubtitlesAdapter } from "./platforms/youtube"
 import { createYoutubeCaptionTrackListener } from "./platforms/youtube/caption-track-listener"
@@ -12,7 +13,7 @@ function isYoutubeEmbed(): boolean {
   return YOUTUBE_EMBED_PATH_PATTERN.test(window.location.pathname)
 }
 
-export function initYoutubeSubtitles() {
+export function initYoutubeSubtitles(initialConfig?: Config) {
   let initialized = false
   let adapter: ReturnType<typeof createYoutubeSubtitlesAdapter> | null = null
 
@@ -32,7 +33,7 @@ export function initYoutubeSubtitles() {
       return
     }
 
-    await mountSubtitlesUI({ adapter, config })
+    await mountSubtitlesUI({ adapter, config, initialConfig })
 
     if (initialized) {
       return

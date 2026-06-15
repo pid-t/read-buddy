@@ -1,6 +1,7 @@
 import { useAtomValue } from "jotai"
 import { use } from "react"
 import { subtitlesDisplayAtom, subtitlesShowContentAtom, subtitlesShowStateAtom } from "../atoms"
+import { I18nLocaleSync } from "./i18n-locale-sync"
 import { StateMessage } from "./state-message"
 import { SubtitlesSettingsPanel } from "./subtitles-settings-panel"
 import { SubtitlesUIContext } from "./subtitles-ui-context"
@@ -14,6 +15,8 @@ export function SubtitlesContainer() {
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-visible">
+      <I18nLocaleSync />
+
       <div className="absolute inset-0 z-10 overflow-visible">
         {isVisible && (
           <>

@@ -1,7 +1,11 @@
 import type { ControlsConfig } from "@/entrypoints/subtitles.content/platforms"
 import type { UniversalVideoAdapter } from "@/entrypoints/subtitles.content/universal-adapter"
+import type { Config } from "@/types/config/config"
 import { Provider as JotaiProvider } from "jotai"
-import { createContext, use } from "react"
+import { createContext, use, useEffect } from "react"
+import { configAtom } from "@/utils/atoms/config"
+import { getLocalConfig } from "@/utils/config/storage"
+import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { subtitlesStore } from "../atoms"
 
 interface SubtitlesUIContextValue {
@@ -30,10 +34,33 @@ export type SubtitlesProvidersAdapter = Pick<
 export function SubtitlesProviders({
   adapter,
   children,
+  initialConfig,
 }: {
   adapter: SubtitlesProvidersAdapter
   children: React.ReactNode
+  initialConfig?: Config
 }) {
+  if (initialConfig) {
+    subtitlesStore.set(configAtom, initialConfig)
+  }
+
+  useEffect(() => {
+    if (initialConfig) {
+      return
+    }
+
+    let cancelled = false
+    void getLocalConfig().then((config) => {
+      if (!cancelled) {
+        subtitlesStore.set(configAtom, config ?? DEFAULT_CONFIG)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [initialConfig])
+
   return (
     <JotaiProvider store={subtitlesStore}>
       <SubtitlesUIContext
