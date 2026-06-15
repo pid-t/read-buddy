@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react"
+import readFrogLogo from "@/assets/icons/read-frog.png"
 import { i18n } from "@/utils/i18n"
 import { openOptionsPage } from "@/utils/navigation"
 import { version } from "../../../package.json"
@@ -10,18 +11,21 @@ import TranslationModeSelector from "./components/translation-mode-selector"
 function App() {
   return (
     <>
-      <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
+      <div className="bg-background flex flex-col gap-4 px-5 pt-5 pb-4">
         <div className="flex items-center justify-between text-sm font-medium">
-          <span>{i18n.t("name")}</span>
+          <span className="flex min-w-0 items-center gap-2">
+            <img src={readFrogLogo} alt="" className="size-5 shrink-0" />
+            <span className="truncate">{i18n.t("name")}</span>
+          </span>
           <span className="text-xs text-neutral-500 dark:text-neutral-400">
             {version}
           </span>
         </div>
         <LanguageOptionsSelector />
         <TranslateProviderField />
-        <div className="flex w-full items-center gap-2">
+        <div className="grid w-full grid-cols-[48px_minmax(0,1fr)] gap-3">
           <TranslationModeSelector />
-          <TranslateButton className="min-w-0 flex-1" />
+          <TranslateButton className="min-w-0" />
         </div>
       </div>
       <div className="flex items-center justify-between bg-neutral-200 px-2 py-1 dark:bg-neutral-800">

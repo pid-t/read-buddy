@@ -45,7 +45,7 @@ function HydrateAtoms({
 
 async function initApp() {
   const root = document.getElementById("root")!
-  root.className = "text-base antialiased w-[320px] bg-background"
+  root.className = "text-base antialiased w-[400px] bg-background"
 
   const [configValue, themeMode, activeTab] = await Promise.all([
     getLocalConfig(),

@@ -16,13 +16,18 @@ import { PROVIDER_ITEMS } from "@/utils/constants/providers"
 import { i18n } from "@/utils/i18n"
 import { useTheme } from "../providers/theme-provider"
 
+type ProviderSelectContentProps = Pick<
+  ComponentProps<typeof SelectContent>,
+  "align" | "collisionAvoidance" | "container" | "positionerClassName" | "side" | "sideOffset"
+>
+
 interface ProviderSelectorProps {
   providers: ProviderConfig[]
   value: string
   onChange: (id: string) => void
   placeholder?: string
   className?: string
-  selectContentProps?: Pick<ComponentProps<typeof SelectContent>, "container" | "positionerClassName">
+  selectContentProps?: ProviderSelectContentProps
 }
 
 export default function ProviderSelector({
@@ -78,7 +83,7 @@ function TranslateGroupedSelect({
   onChange: (id: string) => void
   placeholder?: string
   className?: string
-  selectContentProps?: Pick<ComponentProps<typeof SelectContent>, "container" | "positionerClassName">
+  selectContentProps?: ProviderSelectContentProps
   theme: Theme
 }) {
   const llmProviders = providers.filter(isLLMProviderConfig)
@@ -101,11 +106,11 @@ function TranslateGroupedSelect({
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="min-w-fit" {...selectContentProps}>
+      <SelectContent className="min-w-fit py-1" {...selectContentProps}>
         <SelectGroup>
           <SelectLabel>{i18n.t("translateService.aiTranslator")}</SelectLabel>
           {llmProviders.map(provider => (
-            <SelectItem key={provider.id} value={provider}>
+            <SelectItem key={provider.id} value={provider} className="min-h-9 py-2 pr-8 pl-2.5">
               <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />
             </SelectItem>
           ))}
@@ -113,7 +118,7 @@ function TranslateGroupedSelect({
         <SelectGroup>
           <SelectLabel>{i18n.t("translateService.normalTranslator")}</SelectLabel>
           {pureTranslateProviders.map(provider => (
-            <SelectItem key={provider.id} value={provider}>
+            <SelectItem key={provider.id} value={provider} className="min-h-9 py-2 pr-8 pl-2.5">
               <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />
             </SelectItem>
           ))}
@@ -137,7 +142,7 @@ function FlatSelect({
   onChange: (id: string) => void
   placeholder?: string
   className?: string
-  selectContentProps?: Pick<ComponentProps<typeof SelectContent>, "container" | "positionerClassName">
+  selectContentProps?: ProviderSelectContentProps
   theme: Theme
 }) {
   return (
@@ -158,10 +163,10 @@ function FlatSelect({
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="min-w-fit" {...selectContentProps}>
+      <SelectContent className="min-w-fit py-1" {...selectContentProps}>
         <SelectGroup>
           {providers.map(provider => (
-            <SelectItem key={provider.id} value={provider}>
+            <SelectItem key={provider.id} value={provider} className="min-h-9 py-2 pr-8 pl-2.5">
               <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />
             </SelectItem>
           ))}

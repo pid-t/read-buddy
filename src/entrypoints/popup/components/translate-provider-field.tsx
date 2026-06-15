@@ -17,7 +17,7 @@ export default function TranslateProviderField() {
   }, [providersConfig])
 
   return (
-    <div className="flex items-center justify-between gap-2">
+    <div className="grid grid-cols-[minmax(0,1fr)_148px] items-center gap-3">
       <span className="text-[13px] font-medium flex items-center gap-1.5">
         {i18n.t("translateService.title")}
         <HelpTooltip>
@@ -28,7 +28,17 @@ export default function TranslateProviderField() {
         providers={providers}
         value={translateConfig.providerId}
         onChange={id => void setTranslateConfig({ providerId: id })}
-        className="h-7! w-31 cursor-pointer pr-1.5 pl-2.5"
+        className="h-8! w-full cursor-pointer pr-1.5 pl-2.5"
+        selectContentProps={{
+          align: "end",
+          collisionAvoidance: {
+            side: "shift",
+            align: "shift",
+            fallbackAxisSide: "none",
+          },
+          side: "bottom",
+          sideOffset: 6,
+        }}
       />
     </div>
   )
