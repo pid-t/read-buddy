@@ -5,12 +5,12 @@ export function ConfigCard(
   { id?: string, title: React.ReactNode, description: React.ReactNode, children: React.ReactNode, className?: string, titleClassName?: string },
 ) {
   return (
-    <section id={id} className={cn("py-6 flex lg:flex-row flex-col lg:gap-x-[50px] xl:gap-x-[100px] gap-y-6", className)}>
-      <div className="lg:basis-2/5 shrink-0">
-        <h2 className={cn("text-lg font-bold mb-1", titleClassName)}>{title}</h2>
+    <section id={id} className={cn("py-6 grid gap-6 lg:grid-cols-[280px_1fr] lg:gap-x-8", className)}>
+      <div className="min-w-0">
+        <h3 className={cn("text-base font-semibold mb-1 text-balance text-foreground", titleClassName)}>{title}</h3>
         <div className="text-sm text-muted-foreground">{description}</div>
       </div>
-      <div className="lg:basis-3/5 min-w-0">
+      <div className="min-w-0 max-w-2xl">
         {children}
       </div>
     </section>

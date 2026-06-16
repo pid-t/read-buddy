@@ -583,6 +583,11 @@ options:
         description: 在浏览器右键菜单中添加翻译选项，快速翻译页面或所选文本
   translation:
     title: 翻译
+    groups:
+      behavior: 翻译行为
+      displayAndQuality: 显示与品质
+      automationAndRules: 自动化与规则
+      performanceAndCache: 性能与缓存
     requestQueueConfig:
       title: 翻译速率
       firstOnDescription: 调整翻译请求的处理速度，使用
@@ -779,12 +784,15 @@ options:
       description: 周期内批量翻译节省的请求百分比
       originalRequestCount: 原始请求数量
       batchRequestCount: 批量请求数量
+  system:
+    title: 系统
+
   config:
     title: 配置
     about:
       title: 关于
-      description: 伴读 出生于 2025 年 4 月
-      mission: 伴读 致力于在 AI 时代扩大高质量教育机会的平等可及性，通过更低成本地提供尽可能接近真人教师的学习体验，覆盖语言学习、医学以及其他知识密集型领域。
+      description: 出生于2026年6月
+      mission: "是一个开源沉浸式翻译的插件，fork 自 [Read Frog](https://github.com/mengxi-ream/read-frog)，并在其基础上做了精简和定制修改"
       analytics:
         title: 帮助改进用户体验
         tooltip: 开启后，伴读 会发送匿名的产品使用信号，用于验证功能是否稳定、优化性能与交互细节，并帮助我们决定接下来优先投入的方向。

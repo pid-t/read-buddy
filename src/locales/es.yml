@@ -583,6 +583,11 @@ options:
         description: Añade opciones de traducción al menú contextual del navegador para traducir rápidamente páginas y selecciones
   translation:
     title: Traducción
+    groups:
+      behavior: Comportamiento de traducción
+      displayAndQuality: Visualización y calidad
+      automationAndRules: Automatización y reglas
+      performanceAndCache: Rendimiento y caché
     requestQueueConfig:
       title: Tasa de traducción
       firstOnDescription: Ajusta la velocidad de procesamiento de las solicitudes de traducción usando el
@@ -779,12 +784,15 @@ options:
       description: Porcentaje de solicitudes ahorradas por traducción por lotes en el periodo
       originalRequestCount: Recuento de solicitudes originales
       batchRequestCount: Recuento de solicitudes por lotes
+  system:
+    title: Sistema
+
   config:
     title: Configuración
     about:
       title: Acerca de
-      description: ReadBuddy nació en abril de 2025
-      mission: ReadBuddy busca ampliar el acceso igualitario a educación de alta calidad en la era de la AI haciendo asequibles experiencias de aprendizaje que se sientan más cercanas a un profesor real, en el aprendizaje de idiomas, medicina y otros campos intensivos en conocimiento.
+      description: Fundado en junio de 2026
+      mission: "Una extensión de traducción inmersiva de código abierto, bifurcada de [Read Frog](https://github.com/mengxi-ream/read-frog), con simplificaciones y modificaciones personalizadas sobre su base."
       analytics:
         title: Ayuda a mejorar la experiencia de usuario
         tooltip: Cuando está activado, ReadBuddy envía señales anónimas de uso del producto para que podamos verificar la fiabilidad de las funciones, mejorar el rendimiento y el acabado de la UX, y priorizar trabajos futuros.

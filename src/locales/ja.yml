@@ -468,6 +468,11 @@ options:
         description: ブラウザの右クリックメニューに翻訳オプションを追加し、ページや選択テキストを素早く翻訳
   translation:
     title: 翻訳
+    groups:
+      behavior: 翻訳の動作
+      displayAndQuality: 表示と品質
+      automationAndRules: 自動化とルール
+      performanceAndCache: パフォーマンスとキャッシュ
     requestQueueConfig:
       title: 翻訳速度
       firstOnDescription: 翻訳リクエストの処理速度を調整し、
@@ -664,12 +669,15 @@ options:
       description: 期間内にバッチ翻訳で節約されたリクエストの割合
       originalRequestCount: 元のリクエスト数
       batchRequestCount: バッチリクエスト数
+  system:
+    title: システム
+
   config:
     title: 設定
     about:
       title: ReadBuddy について
-      description: ReadBuddy は 2025 年 4 月に生まれました
-      mission: ReadBuddy は、AI 時代における質の高い教育機会への平等なアクセスを広げるため、語学学習、医学、その他の知識集約型分野で、実際の教師に近い学習体験を手頃な価格で提供することを目指しています。
+      description: 2026年6月に誕生
+      mission: "[Read Frog](https://github.com/mengxi-ream/read-frog) をフォークし、簡略化とカスタマイズを加えたオープンソースのイマーシブ翻訳拡張機能です。"
       analytics:
         title: ユーザー体験の改善に協力する
         tooltip: 有効にすると、ReadBuddy は匿名の利用シグナルを送信し、機能の安定性確認、性能や UX の改善、今後優先すべき機能の判断に役立てます。

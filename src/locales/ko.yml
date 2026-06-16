@@ -468,6 +468,11 @@ options:
         description: 브라우저 우클릭 메뉴에 번역 옵션을 추가하여 페이지나 선택한 텍스트를 빠르게 번역
   translation:
     title: 번역
+    groups:
+      behavior: 번역 동작
+      displayAndQuality: 표시 및 품질
+      automationAndRules: 자동화 및 규칙
+      performanceAndCache: 성능 및 캐시
     requestQueueConfig:
       title: 번역 속도
       firstOnDescription: 번역 요청 처리 속도 조정 및
@@ -664,12 +669,15 @@ options:
       description: 기간 내 일괄 번역으로 절약된 요청 비율
       originalRequestCount: 원래 요청 수
       batchRequestCount: 일괄 요청 수
+  system:
+    title: 시스템
+
   config:
     title: 설정
     about:
       title: 소개
-      description: ReadBuddy는 2025년 4월에 태어났습니다
-      mission: ReadBuddy는 언어 학습, 의학 등 지식 집약적 분야에서 AI 시대의 고품질 교육 기회에 더 평등하게 접근할 수 있도록, 실제 교사에 가까운 학습 경험을 더 낮은 비용으로 제공하는 것을 목표로 합니다.
+      description: 2026년 6월 출시
+      mission: "[Read Frog](https://github.com/mengxi-ream/read-frog)를 포크하고 이를 기반으로 단순화 및 맞춤 수정을 적용한 오픈소스 몰입형 번역 확장 프로그램입니다."
       analytics:
         title: 사용자 경험 개선에 기여
         tooltip: 켜면 ReadBuddy가 익명 사용 신호를 전송하여 기능 안정성을 검증하고, 성능과 UX 디테일을 개선하며, 앞으로 무엇을 우선적으로 만들지 결정하는 데 활용합니다.

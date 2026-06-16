@@ -583,6 +583,11 @@ options:
         description: Add translate options to the browser right-click menu for quick page and selection translation
   translation:
     title: Translation
+    groups:
+      behavior: Translation Behavior
+      displayAndQuality: Display & Quality
+      automationAndRules: Automation & Rules
+      performanceAndCache: Performance & Cache
     requestQueueConfig:
       title: Translation Rate
       firstOnDescription: Adjust the processing speed of translation requests using the
@@ -779,12 +784,15 @@ options:
       description: Percentage of requests saved by batch translation in the period
       originalRequestCount: Original Request Count
       batchRequestCount: Batch Request Count
+  system:
+    title: System
+
   config:
     title: Config
     about:
       title: About
-      description: ReadBuddy was born in April 2025
-      mission: ReadBuddy aims to expand equal access to high-quality education in the AI era by making learning experiences that feel closer to a real teacher affordable across language learning, medicine, and other knowledge-heavy fields.
+      description: Born in June 2026
+      mission: "An open-source immersive translation extension, forked from [Read Frog](https://github.com/mengxi-ream/read-frog), with simplifications and custom modifications on top of it."
       analytics:
         title: Help improve user experience
         tooltip: When enabled, ReadBuddy sends anonymous product usage signals so we can verify feature reliability, improve performance and UX polish, and prioritize future work.

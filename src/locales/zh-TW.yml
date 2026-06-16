@@ -468,6 +468,11 @@ options:
         description: 在瀏覽器右鍵選單中新增翻譯選項，快速翻譯頁面或選取的文字
   translation:
     title: 翻譯
+    groups:
+      behavior: 翻譯行為
+      displayAndQuality: 顯示與品質
+      automationAndRules: 自動化與規則
+      performanceAndCache: 效能與快取
     requestQueueConfig:
       title: 翻譯速率
       firstOnDescription: 調整翻譯請求的處理速度，使用
@@ -664,12 +669,15 @@ options:
       description: 統計期間內，批次翻譯節省的請求百分比
       originalRequestCount: 原始請求數量
       batchRequestCount: 批次請求數量
+  system:
+    title: 系統
+
   config:
     title: 設定
     about:
       title: 關於
-      description: 伴读 於 2025 年 4 月誕生
-      mission: 伴读 致力於在 AI 時代擴大高品質教育機會的平等可及性，透過更低成本地提供盡可能接近真人教師的學習體驗，涵蓋語言學習、醫學以及其他知識密集型領域。
+      description: 出生於2026年6月
+      mission: "是一個開源沉浸式翻譯的插件，fork 自 [Read Frog](https://github.com/mengxi-ream/read-frog)，並在其基礎上做了精簡和定制修改"
       analytics:
         title: 幫助改進使用者體驗
         tooltip: 開啟後，伴读 會傳送匿名的產品使用訊號，用於驗證功能是否穩定、優化效能與互動細節，並幫助我們決定接下來優先投入的方向。

@@ -468,6 +468,11 @@ options:
         description: Sayfa veya seçili metni hızlıca çevirmek için tarayıcı sağ tıklama menüsüne çeviri seçenekleri ekle
   translation:
     title: Çeviri
+    groups:
+      behavior: Çeviri Davranışı
+      displayAndQuality: Görünüm ve Kalite
+      automationAndRules: Otomasyon ve Kurallar
+      performanceAndCache: Performans ve Önbellek
     requestQueueConfig:
       title: Çeviri Hızı
       firstOnDescription: Çeviri isteklerinin işleme hızını
@@ -664,12 +669,15 @@ options:
       description: Dönem içinde toplu çeviri ile kaydedilen istek yüzdesi
       originalRequestCount: Orijinal İstek Sayısı
       batchRequestCount: Toplu İstek Sayısı
+  system:
+    title: Sistem
+
   config:
     title: Yapılandırma
     about:
       title: Hakkında
-      description: ReadBuddy Nisan 2025'te doğdu
-      mission: ReadBuddy, yapay zeka çağında yüksek kaliteli eğitime daha eşit erişimi genişletmek için, dil öğrenimi, tıp ve bilgi yoğun diğer alanlarda gerçek bir öğretmene daha yakın hissettiren öğrenme deneyimlerini daha ulaşılabilir maliyetlerle sunmayı hedefler.
+      description: Haziran 2026'da kuruldu
+      mission: "[Read Frog](https://github.com/mengxi-ream/read-frog)'den çatallanmış, üzerinde basitleştirmeler ve özel değişiklikler yapılmış açık kaynaklı sürükleyici çeviri eklentisi."
       analytics:
         title: Kullanıcı deneyimini geliştirmemize yardımcı ol
         tooltip: Açık olduğunda ReadBuddy, özelliklerin güvenilir çalıştığını doğrulamak, performansı ve UX ayrıntılarını iyileştirmek ve sıradaki önceliklerimizi belirlemek için anonim kullanım sinyalleri gönderir.

@@ -468,6 +468,11 @@ options:
         description: Thêm các tùy chọn dịch vào menu chuột phải của trình duyệt để dịch nhanh trang hoặc văn bản đã chọn
   translation:
     title: Dịch thuật
+    groups:
+      behavior: Hành vi dịch
+      displayAndQuality: Hiển thị và chất lượng
+      automationAndRules: Tự động hóa và quy tắc
+      performanceAndCache: Hiệu suất và bộ nhớ đệm
     requestQueueConfig:
       title: Tốc độ dịch
       firstOnDescription: Điều chỉnh tốc độ xử lý yêu cầu dịch bằng
@@ -664,12 +669,15 @@ options:
       description: Tỷ lệ phần trăm yêu cầu đã tiết kiệm bằng dịch theo lô trong khoảng thời gian
       originalRequestCount: Số yêu cầu ban đầu
       batchRequestCount: Số yêu cầu theo lô
+  system:
+    title: Hệ thống
+
   config:
     title: Cấu hình
     about:
       title: Giới thiệu
-      description: ReadBuddy ra đời vào tháng 4 năm 2025
-      mission: ReadBuddy hướng tới việc mở rộng cơ hội tiếp cận bình đẳng với giáo dục chất lượng cao trong thời đại AI bằng cách mang lại trải nghiệm học tập gần với cảm giác được giáo viên thật hướng dẫn, nhưng với chi phí hợp lý hơn trong học ngôn ngữ, y học và các lĩnh vực giàu tri thức khác.
+      description: Được thành lập vào tháng 6 năm 2026
+      mission: "Một tiện ích mở rộng dịch thuật đắm chìm mã nguồn mở, được fork từ [Read Frog](https://github.com/mengxi-ream/read-frog) và đã được đơn giản hóa và tùy chỉnh trên cơ sở đó."
       analytics:
         title: Giúp cải thiện trải nghiệm người dùng
         tooltip: Khi bật, ReadBuddy sẽ gửi các tín hiệu sử dụng ẩn danh để xác minh tính ổn định của tính năng, tối ưu hiệu năng và độ tinh chỉnh UX, đồng thời giúp chúng tôi ưu tiên những gì cần xây tiếp theo.

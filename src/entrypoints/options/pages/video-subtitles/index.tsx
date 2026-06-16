@@ -10,14 +10,12 @@ import { SubtitlesStyleSettings } from "./subtitles-style-settings"
 export function VideoSubtitlesPage() {
   return (
     <PageLayout title={i18n.t("options.videoSubtitles.title")}>
-      <div className="*:border-b [&>*:last-child]:border-b-0">
-        <SubtitlesConfig />
-        <SubtitlesStyleSettings />
-        <SubtitlesCustomPrompts />
-        <SubtitlesRequestRate />
-        <SubtitlesRequestBatch />
-        <ClearAiSegmentationCache />
-      </div>
+      <SubtitlesConfig />
+      <SubtitlesStyleSettings />
+      <SubtitlesCustomPrompts />
+      <SubtitlesRequestRate />
+      <SubtitlesRequestBatch />
+      <ClearAiSegmentationCache />
     </PageLayout>
   )
 }

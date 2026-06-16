@@ -22,7 +22,7 @@ const CONFIG_SEARCH_ITEMS = [
     route: "/config",
     titleKey: "options.config.resetConfig.title",
     descriptionKey: "options.config.resetConfig.description",
-    pageKey: "options.config.title",
+    pageKey: "options.system.title",
   },
 ] satisfies SearchItemDefinition[]
 

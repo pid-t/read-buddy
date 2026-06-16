@@ -49,7 +49,7 @@ export function SettingsNav() {
           <SidebarMenuItem>
             <SidebarMenuButton render={<Link to="/config" />} isActive={pathname === "/config"}>
               <Icon icon="tabler:settings" />
-              <span>{i18n.t("options.config.title")}</span>
+              <span>{i18n.t("options.system.title")}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

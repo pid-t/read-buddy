@@ -19,7 +19,6 @@ import { FEATURE_KEYS, FEATURE_PROVIDER_DEFS, getFeatureLabelI18nKey } from "@/u
 import { API_PROVIDER_ITEMS } from "@/utils/constants/providers"
 import { i18n } from "@/utils/i18n"
 import { cn } from "@/utils/styles/utils"
-import { ConfigCard } from "../../components/config-card"
 import { EntityEditorLayout } from "../../components/entity-editor-layout"
 import { EntityListRail } from "../../components/entity-list-rail"
 import AddProviderDialog from "./add-provider-dialog"
@@ -30,14 +29,7 @@ export function ProvidersConfig() {
   const selectedProviderId = useAtomValue(selectedProviderIdAtom)
 
   return (
-    <ConfigCard
-      id="api-providers"
-      title={i18n.t("options.apiProviders.title")}
-      description={i18n.t("options.apiProviders.description")}
-      className="lg:flex-col"
-    >
-      <EntityEditorLayout list={<ProviderCardList />} editor={<ProviderConfigForm key={selectedProviderId} />} />
-    </ConfigCard>
+    <EntityEditorLayout list={<ProviderCardList />} editor={<ProviderConfigForm key={selectedProviderId} />} />
   )
 }
 
