@@ -65,25 +65,22 @@ export function addInlineTranslation(ownerDoc: Document, translatedWrapperNode: 
   const spaceNode = ownerDoc.createElement("span")
   spaceNode.textContent = "  "
   translatedWrapperNode.appendChild(spaceNode)
-  translatedNode.className = `${NOTRANSLATE_CLASS} ${INLINE_CONTENT_CLASS}`
+  translatedNode.classList.add(NOTRANSLATE_CLASS, INLINE_CONTENT_CLASS)
 }
 
 export function addBlockTranslation(ownerDoc: Document, translatedWrapperNode: HTMLElement, translatedNode: HTMLElement): void {
   const brNode = ownerDoc.createElement("br")
   translatedWrapperNode.appendChild(brNode)
-  translatedNode.className = `${NOTRANSLATE_CLASS} ${BLOCK_CONTENT_CLASS}`
+  translatedNode.classList.add(NOTRANSLATE_CLASS, BLOCK_CONTENT_CLASS)
 }
 
-export async function insertTranslatedNodeIntoWrapper(
+export function appendPositionedTranslationNode(
   translatedWrapperNode: HTMLElement,
   targetNode: TransNode,
-  translatedText: string,
-  translationNodeStyle: TranslationNodeStyleConfig,
+  translatedNode: HTMLElement,
   forceBlockTranslation: boolean = false,
-): Promise<void> {
-  // Use the wrapper's owner document
+): boolean {
   const ownerDoc = getOwnerDocument(translatedWrapperNode)
-  const translatedNode = ownerDoc.createElement("span")
   const forceInlineTranslation = isForceInlineTranslation(targetNode)
   const customForceBlock = isHTMLElement(targetNode) && isCustomForceBlockTranslation(targetNode)
 
@@ -105,11 +102,28 @@ export async function insertTranslatedNodeIntoWrapper(
   }
   else {
     // not inline or block, maybe notranslate
-    return
+    return false
   }
 
-  translatedNode.textContent = translatedText
   translatedWrapperNode.appendChild(translatedNode)
+  return true
+}
+
+export async function insertTranslatedNodeIntoWrapper(
+  translatedWrapperNode: HTMLElement,
+  targetNode: TransNode,
+  translatedText: string,
+  translationNodeStyle: TranslationNodeStyleConfig,
+  forceBlockTranslation: boolean = false,
+): Promise<void> {
+  // Use the wrapper's owner document
+  const ownerDoc = getOwnerDocument(translatedWrapperNode)
+  const translatedNode = ownerDoc.createElement("span")
+
+  if (!appendPositionedTranslationNode(translatedWrapperNode, targetNode, translatedNode, forceBlockTranslation))
+    return
+
+  translatedNode.textContent = translatedText
   await decorateTranslationNode(translatedNode, translationNodeStyle)
 
   if (translatedNode.classList.contains(BLOCK_CONTENT_CLASS) && shouldWrapInsideFloatFlow(targetNode)) {

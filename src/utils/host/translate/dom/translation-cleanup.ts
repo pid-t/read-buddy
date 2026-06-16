@@ -12,8 +12,8 @@ export function removeShadowHostInTranslatedWrapper(wrapper: HTMLElement): void 
     removeReactShadowHost(translationShadowHost)
   }
 
-  // Remove lightweight spinners
-  const spinner = wrapper.querySelector(".read-frog-spinner")
+  // Remove lightweight loading indicators.
+  const spinner = wrapper.querySelector(".read-frog-loading-skeleton")
   if (spinner) {
     batchDOMOperation(() => spinner.remove())
   }

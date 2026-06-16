@@ -30,4 +30,14 @@ describe("dEFAULT_CONFIG", () => {
       }),
     )
   })
+
+  it("uses the default translation node style for newly installed config", async () => {
+    const { DEFAULT_CONFIG } = await import("../config")
+
+    expect(DEFAULT_CONFIG.translate.translationNodeStyle).toEqual({
+      preset: "default",
+      isCustom: false,
+      customCSS: null,
+    })
+  })
 })

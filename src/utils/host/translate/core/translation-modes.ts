@@ -17,6 +17,7 @@ import { insertTranslatedNodeIntoWrapper } from "../dom/translation-insertion"
 import { findPreviousTranslatedWrapperInside } from "../dom/translation-wrapper"
 import { shouldFilterSmallParagraph } from "../filter-small-paragraph"
 import { prepareTranslationText } from "../text-preparation"
+import { translateTextForPage } from "../translate-variants"
 import { setTranslationDirAndLang } from "../translation-attributes"
 import { createSpinnerInside, getTranslatedTextAndRemoveSpinner } from "../ui/spinner"
 import { isNumericContent } from "../ui/translation-utils"
@@ -100,7 +101,7 @@ export async function translateNodesBilingualMode(
     translatedWrapperNode.setAttribute(TRANSLATION_MODE_ATTRIBUTE, "bilingual" satisfies TranslationMode)
     translatedWrapperNode.setAttribute(WALKED_ATTRIBUTE, walkId)
     setTranslationDirAndLang(translatedWrapperNode, config)
-    const spinner = createSpinnerInside(translatedWrapperNode)
+    const spinner = createSpinnerInside(translatedWrapperNode, targetNode, forceBlockTranslation)
 
     // Batch DOM insertion to reduce layout thrashing
     const insertOperation = () => {
@@ -116,7 +117,7 @@ export async function translateNodesBilingualMode(
     }
     batchDOMOperation(insertOperation)
 
-    const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode)
+    const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode, translateTextForPage)
 
     const translatedText = getDisplayTranslation(textContent, realTranslatedText)
 
@@ -270,7 +271,7 @@ export async function translateNodeTranslationOnlyMode(
     translatedWrapperNode.setAttribute(WALKED_ATTRIBUTE, walkId)
     translatedWrapperNode.style.display = "contents"
     setTranslationDirAndLang(translatedWrapperNode, config)
-    const spinner = createSpinnerInside(translatedWrapperNode)
+    const spinner = createSpinnerInside(translatedWrapperNode, targetNode)
 
     // Batch DOM insertion to reduce layout thrashing
     const insertOperation = () => {
@@ -286,7 +287,7 @@ export async function translateNodeTranslationOnlyMode(
     }
     batchDOMOperation(insertOperation)
 
-    const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode)
+    const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode, translateTextForPage)
     const translatedText = realTranslatedText ? getDisplayTranslation(textContent, realTranslatedText) : realTranslatedText
 
     if (!translatedText) {
