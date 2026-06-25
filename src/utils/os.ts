@@ -44,8 +44,3 @@ export function formatHotkeyParts(hotkey: string): string[] {
 
   return formattedHotkey.split(separator).map(part => part.trim()).filter(Boolean)
 }
-
-export function getCommandPaletteShortcutHint(): string {
-  const os = detectOS()
-  return (os === "MacOS" || os === "iOS") ? "⌘K" : "Ctrl+K"
-}

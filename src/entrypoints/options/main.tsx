@@ -21,7 +21,6 @@ import { queryClient } from "@/utils/tanstack-query"
 import { applyTheme, getLocalThemeMode, isDarkMode } from "@/utils/theme"
 import App from "./app"
 import { AppSidebar } from "./app-sidebar"
-import { SettingsSearch } from "./command-palette/settings-search"
 import "@/assets/styles/theme.css"
 import "./style.css"
 
@@ -67,7 +66,6 @@ async function initApp() {
                       <AppSidebar />
                       <App />
                       {/* HelpButton temporarily hidden */}
-                      <SettingsSearch />
                     </RecoveryBoundary>
                   </TooltipProvider>
                 </ThemeProvider>

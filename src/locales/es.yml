@@ -71,9 +71,6 @@ errorRecovery:
     confirm: Restablecer
     cancel: Cancelar
 options:
-  commandPalette:
-    placeholder: Buscar configuración...
-    noResults: No se encontró configuración
   sidebar:
     settings: Configuración
     tools: Herramientas
