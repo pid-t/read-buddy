@@ -75,6 +75,7 @@ options:
     settings: Ayarlar
     tools: Araçlar
     product: Ürün
+    toggle: Kenar çubuğunu aç/kapat
   tools:
     translationHub: Çeviri Merkezi
   setAPIKeyWarning:

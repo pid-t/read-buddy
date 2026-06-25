@@ -75,6 +75,7 @@ options:
     settings: Cài đặt
     tools: Công cụ
     product: Sản phẩm
+    toggle: Bật/tắt thanh bên
   tools:
     translationHub: Trung tâm Dịch thuật
   setAPIKeyWarning:

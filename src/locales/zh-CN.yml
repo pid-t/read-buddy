@@ -75,6 +75,7 @@ options:
     settings: 设置
     tools: 工具
     product: 产品
+    toggle: 切换侧边栏
   tools:
     translationHub: 翻译中心
   setAPIKeyWarning:

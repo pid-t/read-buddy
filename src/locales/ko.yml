@@ -75,6 +75,7 @@ options:
     settings: 설정
     tools: 도구
     product: 제품
+    toggle: 사이드바 전환
   tools:
     translationHub: 번역 허브
   setAPIKeyWarning:

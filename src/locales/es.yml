@@ -75,6 +75,7 @@ options:
     settings: Configuración
     tools: Herramientas
     product: Producto
+    toggle: Alternar barra lateral
   tools:
     translationHub: Centro de traducción
   setAPIKeyWarning:

@@ -75,6 +75,7 @@ options:
     settings: Settings
     tools: Tools
     product: Product
+    toggle: Toggle sidebar
   tools:
     translationHub: Translation Hub
   setAPIKeyWarning:

@@ -12,6 +12,11 @@ import { i18n } from "@/utils/i18n"
 
 export function SettingsNav() {
   const { pathname } = useLocation()
+  const generalTitle = i18n.t("options.general.title")
+  const apiProvidersTitle = i18n.t("options.apiProviders.title")
+  const translationTitle = i18n.t("options.translation.title")
+  const videoSubtitlesTitle = i18n.t("options.videoSubtitles.title")
+  const systemTitle = i18n.t("options.system.title")
 
   return (
     <SidebarGroup>
@@ -19,37 +24,37 @@ export function SettingsNav() {
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link to="/" />} isActive={pathname === "/"}>
+            <SidebarMenuButton render={<Link to="/" />} isActive={pathname === "/"} tooltip={generalTitle}>
               <Icon icon="tabler:adjustments-horizontal" />
-              <span>{i18n.t("options.general.title")}</span>
+              <span>{generalTitle}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link to="/api-providers" />} isActive={pathname === "/api-providers"}>
+            <SidebarMenuButton render={<Link to="/api-providers" />} isActive={pathname === "/api-providers"} tooltip={apiProvidersTitle}>
               <Icon icon="tabler:api" />
-              <span>{i18n.t("options.apiProviders.title")}</span>
+              <span>{apiProvidersTitle}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link to="/translation" />} isActive={pathname === "/translation"}>
+            <SidebarMenuButton render={<Link to="/translation" />} isActive={pathname === "/translation"} tooltip={translationTitle}>
               <Icon icon="ri:translate" />
-              <span>{i18n.t("options.translation.title")}</span>
+              <span>{translationTitle}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link to="/video-subtitles" />} isActive={pathname === "/video-subtitles"}>
+            <SidebarMenuButton render={<Link to="/video-subtitles" />} isActive={pathname === "/video-subtitles"} tooltip={videoSubtitlesTitle}>
               <Icon icon="tabler:subtitles" />
-              <span>{i18n.t("options.videoSubtitles.title")}</span>
+              <span>{videoSubtitlesTitle}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link to="/config" />} isActive={pathname === "/config"}>
+            <SidebarMenuButton render={<Link to="/config" />} isActive={pathname === "/config"} tooltip={systemTitle}>
               <Icon icon="tabler:settings" />
-              <span>{i18n.t("options.system.title")}</span>
+              <span>{systemTitle}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

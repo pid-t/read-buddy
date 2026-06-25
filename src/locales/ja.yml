@@ -75,6 +75,7 @@ options:
     settings: 設定
     tools: ツール
     product: 製品
+    toggle: サイドバーを切り替え
   tools:
     translationHub: 翻訳ハブ
   setAPIKeyWarning:

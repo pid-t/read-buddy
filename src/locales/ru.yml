@@ -75,6 +75,7 @@ options:
     settings: Настройки
     tools: Инструменты
     product: Продукт
+    toggle: Переключить боковую панель
   tools:
     translationHub: Центр переводов
   setAPIKeyWarning:

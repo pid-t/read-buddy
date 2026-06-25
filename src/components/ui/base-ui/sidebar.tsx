@@ -254,6 +254,7 @@ function Sidebar({
 
 function SidebarTrigger({
   className,
+  children,
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
@@ -273,7 +274,7 @@ function SidebarTrigger({
       {...props}
     >
       {open ? <IconLayoutSidebarRightExpand /> : <IconLayoutSidebarLeftExpand />}
-      <span className="sr-only">Toggle Sidebar</span>
+      {children ?? <span className="sr-only">Toggle Sidebar</span>}
     </Button>
   )
 }
