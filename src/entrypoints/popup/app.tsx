@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react"
-import readFrogLogo from "@/assets/icons/read-frog.png"
+import readBuddyLogo from "@/assets/icons/read-buddy.png"
 import { i18n } from "@/utils/i18n"
 import { openOptionsPage } from "@/utils/navigation"
 import { version } from "../../../package.json"
@@ -14,7 +14,7 @@ function App() {
       <div className="bg-background flex flex-col gap-4 px-5 pt-5 pb-4">
         <div className="flex items-center justify-between text-sm font-medium">
           <span className="flex min-w-0 items-center gap-2">
-            <img src={readFrogLogo} alt="" className="size-5 shrink-0" />
+            <img src={readBuddyLogo} alt="" className="size-5 shrink-0" />
             <span className="truncate">{i18n.t("name")}</span>
           </span>
           <span className="text-xs text-neutral-500 dark:text-neutral-400">

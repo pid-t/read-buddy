@@ -3,14 +3,14 @@ import * as React from "react"
 import { Toaster } from "sonner"
 
 import { browser } from "#imports"
-import frogIcon from "@/assets/icons/read-frog.png?url&no-inline"
+import readBuddyIcon from "@/assets/icons/read-buddy.png?url&no-inline"
 import { APP_NAME } from "@/utils/constants/app"
 
-const frogIconUrl = new URL(frogIcon, browser.runtime.getURL("/")).href
+const readBuddyIconUrl = new URL(readBuddyIcon, browser.runtime.getURL("/")).href
 
-const frogIconElement = (
+const readBuddyIconElement = (
   <img
-    src={frogIconUrl}
+    src={readBuddyIconUrl}
     alt="🐸"
     style={{
       maxWidth: "100%",
@@ -28,11 +28,11 @@ function FrogToast({ position = "bottom-left", toastOptions, ...props }: React.C
       position={position}
       richColors
       icons={{
-        warning: frogIconElement,
-        success: frogIconElement,
-        error: frogIconElement,
-        info: frogIconElement,
-        loading: frogIconElement,
+        warning: readBuddyIconElement,
+        success: readBuddyIconElement,
+        error: readBuddyIconElement,
+        info: readBuddyIconElement,
+        loading: readBuddyIconElement,
       }}
       toastOptions={{
         ...toastOptions,
