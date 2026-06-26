@@ -28,10 +28,10 @@ function App() {
           <TranslateButton className="min-w-0" />
         </div>
       </div>
-      <div className="flex items-center justify-between bg-neutral-200 px-2 py-1 dark:bg-neutral-800">
+      <div className="flex items-center justify-between bg-muted px-2 py-1">
         <button
           type="button"
-          className="flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 hover:bg-neutral-300 dark:hover:bg-neutral-700"
+          className="flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground"
           onClick={() => {
             void openOptionsPage()
           }}
