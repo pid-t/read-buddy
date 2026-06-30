@@ -1,27 +1,12 @@
 name: ReadBuddy
 extName: "ReadBuddy - Translate & Learn"
 extDescription: ReadBuddy is an open source browser extension designed to help you learn languages deeply from any website.
-uninstallSurveyUrl: https://tally.so/r/nPK6Ob
-dataTypes:
-  string: Text
-  number: Number
-contextMenu:
-  translate: Translate
-  translateSelection: Translate "%s"
-  showOriginal: Show Original
-sidePanel:
-  firefoxUserActionHint: In Firefox, open ReadBuddy from the browser sidebar.
-  firefoxUserActionHelpText: Learn how to open the Firefox sidebar
-  firefoxUserActionHelpUrl: https://support.mozilla.org/en-US/kb/use-sidebar-access-tools-and-vertical-tabs
 popup:
-  theme: Theme
   autoLang: Auto
   sourceLang: Source
   targetLang: Target
   translate: Translate
   showOriginal: Show Original
-  enabledFloatingButton: Enable floating button
-  enabledSelectionToolbar: Enable selection toolbar
   alwaysTranslate: Always translate this site
   addToWhitelist: Enable extension on this site
   addToBlacklist: Disable extension on this site
@@ -36,23 +21,8 @@ popup:
       translationOnly:
         current: Currently translation only
         action: Click to switch to bilingual
-  hub:
-    tooltip: Translate text with multiple models simultaneously
-  discord:
-    tooltip: Join Discord to connect with developers and get early access to new features
-  blog:
-    notification: What's new in ReadBuddy
   aiSmartContext: AI Smart Context
   aiSmartContextDescription: Uses webpage context to improve translation quality. Requires LLM translation provider.
-  more:
-    title: More
-    translationHub: Translation Hub
-    joinDiscord: Join Discord
-    joinWechat: Join WeChat Group
-    starGithub: Star on Github
-    rateUs: Rate Us
-    ebook: Third-party E-book Reader
-    tutorial: Tutorial
 errorRecovery:
   title: Something went wrong
   description: Recovery mode is active. You can export your current settings as a backup, then reset settings and try again.
@@ -73,18 +43,10 @@ errorRecovery:
 options:
   sidebar:
     settings: Settings
-    tools: Tools
-    product: Product
     toggle: Toggle sidebar
-  tools:
-    translationHub: Translation Hub
   setAPIKeyWarning:
     please: Please set API Key on
     page: page
-  betaExperience:
-    title: Beta Experience
-    description: Enable experimental features and early access to new functionality. These features may be unstable or incomplete.
-    enabled: Enable Beta Experience
   apiProviders:
     title: API Providers
     description: Configure API providers for translation and vocabulary insight. We have 20+ built-in providers and support any OpenAI-compatible API provider.
@@ -107,7 +69,6 @@ options:
       fields:
         name: Name
         description: Description
-        apiKey: API Key
         baseURL: Base URL
         optional: Optional
       duplicate: Duplicate
@@ -120,12 +81,8 @@ options:
       atLeastOneLLMProvider: At least one LLM translation provider is required.
       providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used by $2 feature(s).'
       duplicateProviderName: 'Duplicate provider name "$1"'
-      defaultProvider:
-        translate: Set as default translate provider
       models:
         translate:
-          title: Translate Model
-          customTitle: Translate Custom Model
           placeholder: Select a model
         fetchModels: Fetch available models
         fetchError: Failed to fetch models
@@ -194,21 +151,11 @@ options:
       title: Interface Language
       description: Choose the language used on the options page.
       label: Interface language
-    appearance:
-      title: Appearance
-      theme: Theme
-      system: System
-      light: Light
-      dark: Dark
     featureProviders:
       title: Feature Providers
       description: Choose which provider to use for each feature
-      customActions: Custom AI Actions
       features:
         translate: Page Translation
-        selectionToolbar_translate: Selection Toolbar Translation
-        tts: Text to Speech
-        inputTranslation: Input Translation
         videoSubtitles: Video Subtitles
     translationConfig:
       model:
@@ -238,7 +185,6 @@ options:
         basicRecommend: Recommend enabling LLM
         llmEnabled: LLM detection enabled
   siteControl:
-    title: Site Control
     mode:
       title: Extension Activation Mode
       description: Use blacklist mode to disable the extension on specific sites, or whitelist mode to limit it to specific sites only.
@@ -247,338 +193,6 @@ options:
     patterns:
       enterUrlPattern: Enter URL pattern (e.g., example.com)
       urlPattern: URL Pattern
-  overlayTools:
-    title: Overlay Tools
-    floatingButton:
-      title: Floating Button
-    selectionToolbar:
-      title: Selection Toolbar
-    contextMenu:
-      title: Context Menu
-    inputTranslation:
-      title: Input Translation
-  inputTranslation:
-    provider:
-      title: Translation Provider
-      description: Choose which translation provider to use for input translation
-      label: Provider
-    toggle:
-      title: Enable Triple-Space Translation
-      description: Press spacebar 3 times quickly in any input field to translate its content
-    languages:
-      title: Translation Languages
-      description: Choose source and target languages for input translation
-      sourceCode: Page Source Language
-      targetCode: Translation Target Language
-      enableCycle: Swap direction each time
-    threshold:
-      title: Trigger Threshold
-      description: Time interval between space presses to trigger translation
-      label: Threshold (ms)
-      hint: Time in milliseconds between consecutive space presses (100-1000ms)
-      error: Value must be between $1 and $2
-  floatingButtonAndToolbar:
-    title: Floating Button & Toolbar
-    floatingButtonDemoImageAlt: Floating Button Demo
-    selectionToolbarDemoImageAlt: Selection Toolbar Demo
-    floatingButton:
-      globalToggle:
-        title: Enable Floating Button
-        description: Display the floating button on web pages for quick access to ReadBuddy features
-      closeMenu:
-        disableForSite: Disable for this site
-        disableGlobally: Disable globally
-      disabledSites:
-        title: Floating Button Disabled Sites
-        description: Configure websites where the floating button should be disabled
-        enterUrlPattern: Enter URL pattern
-        urlPattern: URL Pattern
-      clickAction:
-        title: Click Action
-        description: Choose the action when clicking the floating button
-        panel: Open Side Panel
-        translate: Toggle Page Translation
-      side:
-        title: Button Side
-        description: Choose which side of the page the floating button is docked to
-        left: Left
-        right: Right
-    selectionToolbar:
-      globalToggle:
-        title: Enable Selection Toolbar
-        description: Display the toolbar when selecting text on web pages for quick translation, speech, and AI actions
-      opacity:
-        title: Opacity
-        description: Adjust the opacity of the selection toolbar and the expanded window opened from it
-      featureToggles:
-        title: Feature Toggles
-        description: Choose which built-in features to show in the selection toolbar
-        translate: Translate
-        speak: Speak
-      shortcut:
-        title: Selection Translation Shortcut
-        description: Customize the shortcut key for translating selected text
-      closeMenu:
-        disableForSite: Disable for this site
-        disableGlobally: Disable globally
-      disabledSites:
-        title: Selection Toolbar Disabled Sites
-        description: Configure websites where the selection toolbar should be disabled
-        enterUrlPattern: Enter URL pattern
-        urlPattern: URL Pattern
-      errors:
-        customActionFailed: Custom Action Failed
-        customActionFailedFallback: Custom action request failed
-        actionUnavailable: Selected action is unavailable
-        missingSelection: No selected text available
-        providerDisabled: Selected provider is disabled
-        providerUnavailable: Selected provider is unavailable
-      features:
-        provider: Provider
-        selectProvider: Select a provider
-        noProviderAvailable: No available provider
-        useProviderDefaultModel: Use provider default model
-        useCustomModel: Use custom model
-        customModel: Custom model
-        model: Model
-        modelNotAvailableForNonLLM: Model settings are only available for LLM providers
-        translate:
-          title: Selection Translation
-          description: Configure provider and model for the selection toolbar translation feature
-      customActions:
-        title: Custom AI Actions
-        description: Add your own structured AI actions for selected text
-        add: Add AI Action
-        edit: Edit AI Action
-        empty: No custom AI actions yet
-        noEnabledLlmProvider: Enable at least one LLM provider before creating custom AI actions
-        table:
-          name: Name
-          provider: Provider
-          fields: Fields
-          actions: Actions
-        form:
-          name: Name
-          icon: Icon
-          iconField:
-            chooseAriaLabel: Choose icon
-            chooseTitle: Choose an icon
-            inputPlaceholder: Enter an icon name
-            helpAriaLabel: More icon help
-            helpTitle: Can't find the icon you want?
-            helpStepBrowsePrefix: "Browse icons on "
-            helpStepBrowseSuffix: ""
-            helpStepCopyPrefix: "Copy the icon name, for example "
-            helpStepCopySuffix: ", then paste it into the field."
-          provider: Provider (requires structured output support)
-          selectProvider: Select a provider
-          systemPrompt: System Prompt
-          prompt: Prompt
-          outputSchema: Output Schema
-          addField: Add Field
-          fieldName: Field Name
-          fieldType: Field Type
-          fieldDescription: Description
-          fieldDescriptionPlaceholder: Describe what this field should contain...
-          fieldSpeaking: Enable speaking
-          actions: Actions
-          cancel: Cancel
-          save: Save
-          defaultFieldName: Result
-          fieldNamePlaceholder: Field Name
-          autoFieldPrefix: Field
-          addFieldDialog:
-            title: Add Output Field
-          editFieldDialog:
-            title: Edit Output Field
-            save: Save
-          deleteFieldDialog:
-            title: Delete Output Field?
-            description: This output field will be removed.
-            confirm: Delete
-            cancel: Cancel
-          notebase:
-            title: Notebase Connection
-            description: Save this action's structured results to a remote notebase.
-            loginRequiredTitle: Log in to configure Notebase
-            loginRequiredDescription: Sign in on readfrog.app before choosing a notebase or editing mappings.
-            loginRequiredConnectedDescription: This connection was created by the account below. If you log in as the same account, field mappings will be restored. If you log in as another account, the previous mappings will be cleared when you create or connect a Notebase.
-            loginAction: Log in
-            connectedAccountLabel: Connected account
-            currentAccountLabel: Current account
-            unknownConnectedAccount: Unknown account
-            tableLabel: Notebase
-            tablePlaceholder: Select a notebase
-            tableClearOption: Disconnect notebase
-            clearConnectionAction: Clear connection
-            refreshAction: Refresh
-            emptyTitle: No notebases yet
-            emptyDescription: Create a notebase on readfrog.app, then come back here to map fields.
-            openNotebaseAction: Open Notebase
-            betaLockedTitle: This account is not in the Notebase beta
-            betaLockedDescription: You can keep this action configured, but choosing notebases and syncing results is limited to selected beta accounts for now.
-            accountMismatchTitle: Notebase connection belongs to another account
-            accountMismatchDescription: This connection is tied to the connected account below. Clear it, or choose a Notebase available to the current account.
-            tableUnavailableTitle: Selected notebase is no longer available
-            tableUnavailableDescription: This Notebase no longer exists or cannot be opened. Clear the connection or choose another Notebase.
-            tableUnavailableOption: unavailable
-            schemaErrorTitle: Failed to load notebase schema
-            schemaErrorDescription: Try refreshing the schema again in a moment.
-            schemaLoading: Loading notebase schema...
-            mappingsLabel: Field Mappings
-            mappingsEmpty: No mappings yet. Add one when you are ready to save fields.
-            addMappingAction: Add Mapping
-            removeMappingAction: Remove mapping
-            localFieldLabel: Action field
-            localFieldPlaceholder: Select an action field
-            remoteFieldLabel: Notebase field
-            remoteFieldPlaceholder: Select a notebase field
-            columnUnavailableOption: removed
-            invalidMappingsTitle: Some mappings need attention
-            invalidMappingsDescription: Invalid mappings are preserved. Fix them before saving to Notebase.
-            mappingMissingLocal: The mapped action field no longer exists.
-            mappingMissingRemote: The mapped notebase field no longer exists.
-            mappingMissingSchema: Refresh the notebase schema to validate this mapping.
-            mappingIncompatible: The field types no longer match.
-          tokens:
-            selection: Selected text content
-            paragraphs: Intersecting paragraph text joined with blank lines, truncated to the first 2000 characters when sent to custom AI actions
-            targetLanguage: "User's target language"
-            webTitle: Webpage title
-            webContent: Webpage content extracted from the current page, truncated to the first 2000 characters
-          delete: Delete
-          deleteDialog:
-            title: Delete Custom Action?
-            description: This action cannot be undone.
-            confirm: Delete
-            cancel: Cancel
-        templates:
-          dialogTitle: Choose a Template
-          dialogDescription: Select a template to quickly create a new AI action, or start from scratch.
-          dictionary:
-            name: Dictionary
-            description: Look up words with definitions, phonetics, and paragraph translations
-            systemPrompt: |-
-              You are a dictionary assistant for language learners.
-
-              ## Goal
-              Given a term and its surrounding paragraphs, produce a concise dictionary entry that matches the required output object.
-
-              ## Rules
-              1. Focus on the meaning that best matches the provided paragraphs.
-              2. Normalize Term to its base/canonical form.
-              3. Keep Definition precise and learner-friendly.
-              4. Keep Paragraphs exactly as provided in the prompt.
-              5. Phonetic must use the standard notation for the term's language (e.g., IPA for English, pinyin for Mandarin, romaji for Japanese).
-              6. Part of Speech in English (noun, verb, adjective, etc.).
-              7. Difficulty must be a CEFR level (A1, A2, B1, B2, C1, or C2).
-              8. If a field is unknown, return an empty string instead of guessing.
-              9. Respond in {{targetLanguage}} for all textual fields unless source-form text is required for clarity.
-
-              ## Examples
-
-              ### Example 1
-              Input: Selection="blossoms", Paragraphs="The ephemeral beauty of cherry blossoms reminds us to cherish each moment.", Target language=Chinese
-
-              Output:
-              - Term: blossom
-              - Phonetic: /ˈblɒs.əm/
-              - Part of Speech: noun
-              - Paragraphs: The ephemeral beauty of cherry blossoms reminds us to cherish each moment.
-              - Definition: 花；花朵（尤指果树的花）
-              - Paragraphs Translation: 樱花短暂的美丽提醒我们珍惜每一刻。
-              - Difficulty: B2
-
-              ### Example 2
-              Input: Selection="感動", Paragraphs="この映画はつまらないと思ったけど、最後は感動した。", Target language=English
-
-              Output:
-              - Term: 感動
-              - Phonetic: kandou
-              - Part of Speech: noun
-              - Paragraphs: この映画はつまらないと思ったけど、最後は感動した。
-              - Definition: Being deeply moved; emotional touch
-              - Paragraphs Translation: I thought this movie was boring, but the ending was moving.
-              - Difficulty: B1
-            prompt: |-
-              ## Input
-              Selection: {{selection}}
-              Paragraphs: {{paragraphs}}
-              Target language: {{targetLanguage}}
-            fieldTerm: Term
-            fieldTermDescription: Base/canonical lemma of the selected term.
-            fieldPhonetic: Phonetic
-            fieldPhoneticDescription: Standard phonetic transcription for the term's language (e.g., IPA for English, pinyin for Mandarin, romaji for Japanese).
-            fieldPartOfSpeech: Part of Speech
-            fieldPartOfSpeechDescription: Grammatical category (e.g., noun, verb, adjective).
-            fieldParagraphs: Paragraphs
-            fieldParagraphsDescription: The paragraphs from the prompt above. Do not rewrite them.
-            fieldDefinition: Definition
-            fieldDefinitionDescription: One concise definition for the contextual sense.
-            fieldParagraphsTranslation: Paragraphs Translation
-            fieldParagraphsTranslationDescription: The translation of the paragraphs.
-            fieldDifficulty: Difficulty
-            fieldDifficultyDescription: Estimated CEFR difficulty level A1, A2, B1, B2, C1, or C2.
-          improveWriting:
-            name: Improve Writing
-            description: Analyze writing errors and suggest improvements
-            systemPrompt: |-
-              You are a writing assistant for language learners.
-
-              ## Goal
-              Given selected text and its surrounding paragraphs, analyze writing issues and produce an improved version.
-
-              ## Language Policy (critical)
-              1. Detect the original language of Selection as {{originLanguage}}.
-              2. The "Error Analysis" field must be written in {{targetLanguage}}.
-              3. The "Improved Version" field must stay in {{originLanguage}}.
-              4. Never translate "Improved Version" into {{targetLanguage}} unless {{originLanguage}} is already {{targetLanguage}}.
-
-              ## Writing Rules
-              1. Identify grammar, spelling, punctuation, and word choice errors.
-              2. Keep edits natural and preserve the author's intent and tone.
-              3. If there are no major errors, state that clearly in "Error Analysis" and return a lightly polished "Improved Version".
-              4. Keep "Improved Version" concise and directly usable.
-
-              ## Examples
-              Example A:
-              - Selection: "He go to school yesterday, and he don't finish his homework."
-              - Detected {{originLanguage}}: English
-              - {{targetLanguage}}: Chinese
-              - Error Analysis (Chinese — {{targetLanguage}}): 存在主谓一致和时态错误：go 应改为 went，don't 应改为 didn't，finish 应改为 finish 的过去时语境搭配。
-              - Improved Version (English — {{originLanguage}}): He went to school yesterday, and he didn't finish his homework.
-
-              Example B:
-              - Selection: "昨日私は友達に会いて、一緒に映画を見るました。"
-              - Detected {{originLanguage}}: Japanese
-              - {{targetLanguage}}: English
-              - Error Analysis (English — {{targetLanguage}}): There are verb conjugation errors: "会いて" should be "会って" (te-form of 会う), and "見るました" should be "見ました" (past tense of 見る in masu-form).
-              - Improved Version (Japanese — {{originLanguage}}): 昨日私は友達に会って、一緒に映画を見ました。
-            prompt: |-
-              ## Input
-              Selection: {{selection}}
-              Paragraphs: {{paragraphs}}
-              Target language: {{targetLanguage}}
-            fieldErrorAnalysis: Error Analysis
-            fieldErrorAnalysisDescription: Explain grammar, spelling, punctuation, and word-choice issues in {{targetLanguage}}.
-            fieldImprovedVersion: Improved Version
-            fieldImprovedVersionDescription: Corrected and improved version of the selected text in its original language.
-          blank:
-            name: Blank
-            description: Start from scratch with an empty action
-        errors:
-          nameRequired: Name is required
-          duplicateName: 'Duplicate action name "$1"'
-          invalidIcon: Invalid Iconify icon string
-          providerRequired: Please select an enabled LLM provider
-          outputSchemaRequired: Add at least one output field
-          fieldKeyRequired: Field name is required
-          duplicateFieldKey: Field names must be unique
-    contextMenu:
-      title: Context Menu
-      translate:
-        title: Enable Context Menu Translate
-        description: Add translate options to the browser right-click menu for quick page and selection translation
   translation:
     title: Translation
     groups:
@@ -605,7 +219,6 @@ options:
       maxItemsPerBatch:
         title: Maximum Paragraph Count
         description: Maximum number of paragraphs for each batch translation to control the content volume of each translation
-      statisticsLink: Saved approximately $1 cost in the past 7 days
     autoTranslateWebsite:
       title: Auto Translate Based on Website
       description: Always translate this website
@@ -731,162 +344,29 @@ options:
       title: Auto Translate Based on Language
       description: Automatically translate page content when specific languages are detected
       selectLanguages: Select languages
-      detection:
-        label: Language Detection
-        basic: Basic
-        llm: LLM
-        description: Basic detection is fast and free. LLM detection is more accurate but adds latency and API costs. Requires configured auto-translate languages.
     skipLanguages:
       title: Auto Skip Based on Language
       description: Automatically skip paragraph translation when specific languages are detected
       targetLanguageSkip: Skip target language
       targetLanguageSkipDescription: Before translating, detect whether the paragraph is already in the target language. Matching text is skipped without sending a request. Turning this off does not change the later safeguard that hides unchanged translation output.
       selectLanguages: Select languages
-      detection:
-        label: Language Detection
-        basic: Basic
-        llm: LLM
-        description: Basic detection is fast and free. LLM detection is more accurate but adds latency and API costs.
     aiContentAware:
       title: AI Smart Context Translation
       description: Enhance translation quality by providing webpage context to the AI
       enable: Enable AI Smart Context Translation
       enableDescription: AI uses webpage summary to improve translation accuracy. Requires LLM provider. Adds latency when starting to translate a page and increases API costs.
-  tts:
-    title: Text to Speech
-    description: Use Edge TTS voice settings for the Speak button.
-    voice:
-      label: Voice
-      fallback: Fallback
-      selectPlaceholder: Select a voice
-      preview: Preview
-      previewSample: Hello from ReadBuddy! This is how I will sound when reading aloud.
-    languageVoice:
-      label: Language Voice
-      reset: Reset to Default
-      description: Select a language and assign a voice used when TTS detects that language.
-    rate:
-      label: Rate (%)
-      hint: Accepts integer values between -100 and 100
-    pitch:
-      label: Pitch (Hz)
-      hint: Accepts integer values between -100 and 100
-    volume:
-      label: Volume (%)
-      hint: Accepts integer values between -100 and 100
-    betaDisabled: Enable Beta Experience to customize text-to-speech settings.
-  statistics:
-    title: Statistics
-    batchRequest:
-      title: Batch Translation Requests Saved
-      description: Percentage of requests saved by batch translation in the period
-      originalRequestCount: Original Request Count
-      batchRequestCount: Batch Request Count
   system:
     title: System
 
   config:
-    title: Config
     about:
       title: About
       description: Born in June 2026
       mission: "An open-source immersive translation extension, forked from [Read Frog](https://github.com/mengxi-ream/read-frog), with simplifications and custom modifications on top of it."
-      analytics:
-        title: Help improve user experience
-        tooltip: When enabled, ReadBuddy sends anonymous product usage signals so we can verify feature reliability, improve performance and UX polish, and prioritize future work.
     sync:
-      title: Manual Config Sync
-      description: Manually import and export your configuration settings
-      import: Import Config
-      export: Export Config
-      importSuccess: Config imported successfully
       exportSuccess: Config exported successfully
-      importError: Import failed
       versionTooNew: The imported config version is newer, please upgrade ReadBuddy to the latest version
-      migrationError: Migration failed
       validationError: Config validation failed
-      exportOptions:
-        title: Select Export Options
-        description: Please choose whether to include API Keys in the exported config. Including API Keys may leak sensitive information, so it's recommended to use only in secure environments.
-        includeAPIKeys: Include API Keys
-        excludeAPIKeys: Exclude API Keys
-        cancel: Cancel
-      viewConfig:
-        expand: Expand Config
-        collapse: Collapse Config
-      googleDrive:
-        title: Google Drive Cloud Sync
-        description: Downloads config when remote is newer, uploads config when local is newer
-        sync: Sync to Google Drive
-        syncing: Syncing...
-        syncSuccess:
-          uploaded: Local config uploaded to cloud
-          downloaded: Remote config applied
-          sameChanges: Same changes on both sides, synced
-          noChange: Already in sync
-          unresolved: Conflicts resolved and synced
-        syncError: Sync failed, please try again
-        metadataCorrupted: Sync metadata corrupted, remote config applied
-        lastSyncTime: Last sync at
-        logout: Logout
-        logoutSuccess: Logged out from Google account
-        unresolved:
-          title: Configuration Sync Resolution
-          description: Local and remote configurations differ. Please choose which version to keep for each field.
-          resolved: Resolved
-          unresolved: Unresolved
-          localValue: Local Value
-          remoteValue: Remote Value
-          useLocal: Use Local
-          useRemote: Use Remote
-          useAllLocal: Use All Local
-          useAllRemote: Use All Remote
-          reset: Reset Selection
-          progress: Resolved $1/$2 changes
-          confirm: Confirm Sync
-          cancel: Cancel
-          hasUnresolvedInChildren: ⚠ Contains unresolved changes
-          item: item
-          items: items
-          unresolvedPrompt: "[Unresolved - Please select]"
-          localLatest: Local Latest
-          remoteLatest: Remote Latest
-          bothChanged: Both changed
-          localChanged: Local changed
-          remoteChanged: Remote changed
-          configValid: Config is valid
-          configInvalid: Config is invalid
-          resolveToContinue: Resolve conflicts to continue
-          validationAlert:
-            title: The merged config has validation errors.
-            description: "Adjust the differences below to fix:"
-          moreErrors: ...and $1 more errors
-    backup:
-      title: Config Backup
-      description: Automatic backups are created every hour if the config is changed. You can restore previous configurations here. (Maximum $1 backups)
-      loading: Loading backups...
-      backupNow: Backup now
-      backupSuccess: Backup created successfully
-      restoreSuccess: Config restored successfully
-      empty:
-        title: No backups available yet
-        description: Backups are created automatically every hour if the config is changed.
-      item:
-        extensionVersion: "Extension version:"
-        schemaVersion: "Schema version:"
-        restore: Restore
-        export: Export
-        delete: Delete
-      restore:
-        title: Restore config backup?
-        description: Your current config will be automatically backed up if it is different from the latest backup. The oldest backup may be removed if the number of backups exceeds the limit.
-        cancel: Cancel
-        confirm: Restore
-      delete:
-        title: Delete backup?
-        description: Are you sure you want to delete this backup? This action cannot be undone.
-        cancel: Cancel
-        confirm: Delete
     resetConfig:
       title: Reset Config
       description: Reset all config to default value
@@ -899,10 +379,6 @@ options:
   videoSubtitles:
     title: Video Subtitles
     description: Currently only supports YouTube video subtitles
-    provider:
-      title: Translation Provider
-      description: Choose which translation provider to use for video subtitle translation
-      label: Provider
     enable: Enable Video Subtitles
     enableDescription: When enabled, a translation button will appear in the YouTube player controls. Click it to start translating subtitles.
     autoStart: Auto-Enable Subtitles
@@ -923,7 +399,6 @@ options:
       generalSettings: General
       mainSubtitle: Main Subtitle
       translationSubtitle: Translation Subtitle
-      containerStyle: Background
       fontFamily: Font
       fontScale: Font Scale
       color: Color
@@ -931,7 +406,6 @@ options:
       backgroundOpacity: Background Opacity
       reset: Reset to Default
     aiSegmentation:
-      title: AI Smart Segmentation
       enable: Enable AI Smart Segmentation
       enableDescription: Use AI to intelligently segment subtitles for better readability. Timeline is determined by AI, which may occasionally cause timing misalignment. Requires LLM translate provider.
       clearCache: Clear Cache
@@ -970,94 +444,20 @@ options:
           webTitle: Webpage title
           webDescription: Webpage description from page metadata
           videoSummary: Video summary (requires AI Smart Context)
-  whatsNew:
-    title: What's New
-  survey:
-    title: Notebase Early Access
-  rateUs:
-    title: Rate Us
-side:
-  sourceLang: Source Language
-  targetLang: Target Language
-  fileExport: File Export
 translateService:
   title: Translation Service
   description: For translate the webpage only
   normalTranslator: Normal Translator
   aiTranslator: AI Translator
-  selectServices: Select services
-  translationProviders: Translation Providers
-  configureAPI: Configure API
 translatePrompt:
   title: AI Translation Style
   description: Select a Prompt to use during translation. Add or modify custom Prompts on the options page.
-languageLevel: Your Source Lang Level
-languageLevels:
-  beginner: Beginner
-  intermediate: Intermediate
-  advanced: Advanced
 noAPIKeyConfig:
   warning: If you want to use AI models, please set API key on the options page first
-  warningWithLink:
-    youMust: You must
-    setTheAPIKey: set the API key
-    firstOnThe: first on the
-    optionsPage: options
-    page: page
 languageDetection:
   llmFailed: LLM language detection failed, fell back to basic detection
 translation:
   sameLanguage: Source and target languages must be different
-  autoModeSameLanguage: Detected language '$1' is the same as target language
-speak:
-  fetchingAudio: Generating audio...
-  playingAudio: Playing audio...
-  failedToGenerateSpeech: Failed to generate speech
-  noTextSelected: No text selected
-  openaiNotConfigured: OpenAI provider is not configured or enabled
-  openaiApiKeyNotConfigured: OpenAI API key is not configured
-action:
-  copy: Copy
-  copied: Copied
-  regenerate: Regenerate
-  viewContextDetails: Context
-  saveToNotebase: Save to Notebase
-  saveToNotebaseSaving: Saving...
-  saveToNotebaseSuccess: Saved to Notebase
-  saveToNotebaseFailed: Failed to save to Notebase
-  saveToNotebaseLoginRequired: Log in on readfrog.app to save to Notebase
-  saveToNotebaseBetaRequired: This account is not enrolled in the Notebase beta yet
-  saveToNotebaseTableUnavailable: The selected Notebase is no longer available
-  saveToNotebaseConnectionInvalid: This Notebase connection is out of date. Refresh it in Custom AI Actions and fix the mappings.
-  saveToNotebaseNoMappings: Add at least one valid mapping before saving
-  saveToNotebaseCreateTitle: Create a Notebase?
-  saveToNotebaseCreateDescription: Create a new Notebase with columns matching this Custom Action, then save this result as the first note.
-  saveToNotebaseCreateAndSave: Create and save
-  saveToNotebaseCreateAndSaveShort: Create and save
-  saveToNotebaseLoginAndCreate: Log in and auto-create
-  saveToNotebaseLoginAndSave: Log in and save
-  saveToNotebaseConnectExisting: Connect existing Notebase
-  saveToNotebaseGoConfigure: Configure
-  saveToNotebaseLoginConnectedTitle: Log in to save?
-  saveToNotebaseLoginConnectedDescription: This Custom Action is connected to the account below. After login, ReadBuddy will save to the existing Notebase when possible, or create a new Notebase for the logged-in account.
-  saveToNotebaseConnectionUnavailableTitle: Notebase connection unavailable
-  saveToNotebaseMissingNotebaseDescription: The old Notebase no longer exists or cannot be opened by this account. Create a new Notebase and save this result, or connect an existing Notebase in Custom AI Actions.
-  saveToNotebaseAccountUnavailableDescription: The logged-in account does not match the connected account below. Creating and saving will replace the previous connection and field mappings. You can also connect an existing Notebase in Custom AI Actions.
-  saveToNotebasePendingLogin: Log in to finish saving
-  saveToNotebasePendingLoginDescription: After login, ReadBuddy will create the Notebase and save this result automatically.
-  saveToNotebasePendingConnectedLoginDescription: After login, ReadBuddy will save to the connected Notebase when possible. If this account cannot use it, ReadBuddy will create a new Notebase and save this result.
-  openCustomActions: Open Custom AI Actions
-  openNotebase: Open Notebase
-  contextDetailsTitleLabel: Title
-  contextDetailsParagraphsLabel: Paragraphs
-  translation: Translation
-  speak: Speak
-  playing: Playing
-thinking:
-  label: Thinking
-  complete: Thinking complete
-  expand: Expand thinking
-  collapse: Collapse thinking
 shortcutKeySelector:
   placeholder: Please enter the shortcut
 subtitles:
@@ -1076,10 +476,7 @@ subtitles:
     http403: 403 Youtube caption access denied
     http500: 500 Youtube server error
     httpUnknown: HTTP error $1
-    invalidResponse: Invalid Youtube subtitle response format
-    networkError: Network error occurred when fetching captions
     fetchSubTimeout: Fetching youtube captions timed out
-    buttonNotFound: Subtitle button not found
     noSubtitlesFound: No subtitles available for this video
     videoNotFound: Video element not found
     controlsBarNotFound: Controls bar not found
@@ -1099,22 +496,6 @@ hotkey:
 translationHub:
   searchLanguages: Search languages...
   noLanguagesFound: No languages found
-  exchangeLanguages: Exchange languages
-  title: Multi-API Text Translation
-  noServicesSelected: No Translation Services Selected
-  noServicesDescription: Select translation services above to see translation cards here.
-  inputPlaceholder: Enter text to translate...
-  translate: Translate
-  copiedToClipboard: Translation copied to clipboard!
-  copyTranslation: Copy translation
-  expandCard: Expand card
-  collapseCard: Collapse card
-  expandAllCards: Expand all
-  collapseAllCards: Collapse all
-  deleteCard: Delete card
-  translationFailed: Translation Failed
-  translationFailedFallback: Translation failed
-  retryTranslation: Retry translation
 languages:
   eng: English
   cmn: Simplified Chinese

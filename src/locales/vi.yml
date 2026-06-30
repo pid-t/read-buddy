@@ -1,27 +1,12 @@
 name: ReadBuddy
 extName: ReadBuddy - Dịch và học
 extDescription: ReadBuddy là tiện ích mở rộng trình duyệt mã nguồn mở được thiết kế để giúp bạn học ngôn ngữ sâu từ bất kỳ trang web nào.
-uninstallSurveyUrl: https://tally.so/r/nPK6Ob
-dataTypes:
-  string: Văn bản
-  number: Số
-contextMenu:
-  translate: Dịch
-  translateSelection: Dịch "%s"
-  showOriginal: Hiển thị bản gốc
-sidePanel:
-  firefoxUserActionHint: Trong Firefox, hãy mở ReadBuddy từ thanh bên của trình duyệt.
-  firefoxUserActionHelpText: Xem cách mở thanh bên Firefox
-  firefoxUserActionHelpUrl: https://support.mozilla.org/vi/kb/use-sidebar-access-tools-and-vertical-tabs
 popup:
-  theme: Chủ đề
   autoLang: Tự động
   sourceLang: Nguồn
   targetLang: Đích
   translate: Dịch
   showOriginal: Hiển thị bản gốc
-  enabledFloatingButton: Bật nút nổi
-  enabledSelectionToolbar: Bật thanh công cụ chọn văn bản
   alwaysTranslate: Luôn dịch trang web này
   addToWhitelist: Bật tiện ích trên trang web này
   addToBlacklist: Tắt tiện ích trên trang web này
@@ -36,23 +21,8 @@ popup:
       translationOnly:
         current: Hiện tại chỉ bản dịch
         action: Nhấp để chuyển sang song ngữ
-  hub:
-    tooltip: Dịch văn bản với nhiều mô hình đồng thời
-  discord:
-    tooltip: Tham gia Discord để kết nối với các nhà phát triển và truy cập sớm các tính năng mới
-  blog:
-    notification: Có gì mới trong ReadBuddy
   aiSmartContext: Ngữ cảnh thông minh AI
   aiSmartContextDescription: Sử dụng ngữ cảnh trang web để cải thiện chất lượng dịch. Yêu cầu nhà cung cấp dịch LLM.
-  more:
-    title: Thêm
-    translationHub: Trung tâm Dịch thuật
-    joinDiscord: Tham gia Discord
-    joinWechat: Tham gia nhóm WeChat
-    starGithub: Đánh dấu sao trên Github
-    rateUs: Đánh giá chúng tôi
-    ebook: Trình đọc sách điện tử bên thứ ba
-    tutorial: Hướng dẫn
 errorRecovery:
   title: Đã xảy ra sự cố
   description: Chế độ khôi phục đang hoạt động. Bạn có thể xuất cài đặt hiện tại để sao lưu, sau đó đặt lại cài đặt và thử lại.
@@ -73,18 +43,10 @@ errorRecovery:
 options:
   sidebar:
     settings: Cài đặt
-    tools: Công cụ
-    product: Sản phẩm
     toggle: Bật/tắt thanh bên
-  tools:
-    translationHub: Trung tâm Dịch thuật
   setAPIKeyWarning:
     please: Vui lòng đặt API Key trên trang
     page: cài đặt
-  betaExperience:
-    title: Trải nghiệm Beta
-    description: Bật các tính năng thử nghiệm và truy cập sớm các chức năng mới. Các tính năng này có thể không ổn định hoặc chưa hoàn chỉnh.
-    enabled: Bật trải nghiệm Beta
   apiProviders:
     title: Nhà cung cấp API
     description: Cấu hình các nhà cung cấp API cho chức năng dịch và phân tích từ vựng tại đây. Chúng tôi có hơn 20 nhà cung cấp tích hợp sẵn và hỗ trợ mọi API tương thích OpenAI.
@@ -107,7 +69,6 @@ options:
       fields:
         name: Tên
         description: Mô tả
-        apiKey: API Key
         baseURL: Base URL
         optional: Tùy chọn
       duplicate: Sao chép
@@ -118,13 +79,10 @@ options:
         confirm: Xóa
         cancel: Hủy
       atLeastOneLLMProvider: Cần ít nhất một nhà cung cấp dịch LLM.
+      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used by $2 feature(s).'
       duplicateProviderName: 'Tên nhà cung cấp trùng lặp "$1"'
-      defaultProvider:
-        translate: Đặt làm nhà cung cấp dịch mặc định
       models:
         translate:
-          title: Mô hình dịch
-          customTitle: Mô hình dịch tùy chỉnh
           placeholder: Chọn mô hình
         fetchModels: Lấy các mô hình có sẵn
         fetchError: Không thể lấy mô hình
@@ -193,21 +151,11 @@ options:
       title: Ngôn ngữ giao diện
       description: Chọn ngôn ngữ dùng trên trang tùy chọn.
       label: Ngôn ngữ giao diện
-    appearance:
-      title: Giao diện
-      theme: Chủ đề
-      system: Hệ thống
-      light: Sáng
-      dark: Tối
     featureProviders:
       title: Nhà cung cấp tính năng
       description: Chọn nhà cung cấp sử dụng cho mỗi tính năng
-      customActions: Hành động AI tùy chỉnh
       features:
         translate: Dịch trang
-        selectionToolbar_translate: Dịch thanh công cụ chọn
-        tts: Chuyển văn bản thành giọng nói
-        inputTranslation: Dịch đầu vào
         videoSubtitles: Phụ đề video
     translationConfig:
       model:
@@ -237,7 +185,6 @@ options:
         basicRecommend: Khuyến nghị bật LLM
         llmEnabled: Phát hiện LLM đã bật
   siteControl:
-    title: Kiểm soát trang web
     mode:
       title: Chế độ kích hoạt tiện ích mở rộng
       description: Sử dụng chế độ danh sách đen để tắt tiện ích trên các trang web cụ thể, hoặc chế độ danh sách trắng để giới hạn chỉ các trang web cụ thể.
@@ -246,224 +193,6 @@ options:
     patterns:
       enterUrlPattern: Nhập mẫu URL (ví dụ example.com)
       urlPattern: Mẫu URL
-  overlayTools:
-    title: Công cụ nổi
-    floatingButton:
-      title: Nút nổi
-    selectionToolbar:
-      title: Thanh công cụ chọn
-    contextMenu:
-      title: Menu ngữ cảnh
-    inputTranslation:
-      title: Dịch đầu vào
-  inputTranslation:
-    provider:
-      title: Nhà cung cấp dịch
-      description: Chọn nhà cung cấp dịch để sử dụng cho dịch đầu vào
-      label: Nhà cung cấp
-    toggle:
-      title: Bật dịch ba lần nhấn phím cách
-      description: Nhấn phím cách nhanh 3 lần trong bất kỳ trường nhập nào để dịch nội dung
-    languages:
-      title: Ngôn ngữ dịch
-      description: Chọn ngôn ngữ nguồn và đích cho dịch đầu vào
-      sourceCode: Ngôn ngữ nguồn trang
-      targetCode: Ngôn ngữ đích trang
-      enableCycle: Đổi hướng mỗi lần
-    threshold:
-      title: Ngưỡng kích hoạt
-      description: Khoảng thời gian giữa các lần nhấn phím cách
-      label: Ngưỡng (ms)
-      hint: Thời gian tính bằng mili giây giữa các lần nhấn phím cách liên tiếp (100-1000ms)
-      error: Giá trị phải từ $1 đến $2
-  floatingButtonAndToolbar:
-    title: Nút nổi & Thanh công cụ
-    floatingButtonDemoImageAlt: Demo nút nổi
-    selectionToolbarDemoImageAlt: Demo thanh công cụ chọn văn bản
-    floatingButton:
-      globalToggle:
-        title: Bật nút nổi
-        description: Hiển thị nút nổi trên các trang web để truy cập nhanh các tính năng ReadBuddy
-      closeMenu:
-        disableForSite: Tắt cho trang web này
-        disableGlobally: Tắt toàn cục
-      disabledSites:
-        title: Các trang web đã tắt nút nổi
-        description: Cấu hình các trang web mà nút nổi nên bị tắt
-        enterUrlPattern: Nhập mẫu URL
-        urlPattern: Mẫu URL
-      clickAction:
-        title: Hành động khi nhấn
-        description: Chọn hành động khi nhấn vào nút nổi
-        panel: Mở bảng điều khiển bên
-        translate: Bật/tắt dịch trang
-      side:
-        title: Vị trí nút
-        description: Chọn cạnh của trang để ghim nút nổi
-        left: Bên trái
-        right: Bên phải
-    selectionToolbar:
-      globalToggle:
-        title: Bật thanh công cụ chọn văn bản
-        description: Hiển thị thanh công cụ khi chọn văn bản trên trang web để dịch nhanh, đọc to và dùng các hành động AI
-      opacity:
-        title: Độ mờ
-        description: Điều chỉnh độ mờ của thanh công cụ chọn văn bản và cửa sổ mở rộng mở từ đó
-      featureToggles:
-        title: Bật/tắt tính năng
-        description: Chọn các tính năng tích hợp để hiển thị trên thanh công cụ chọn văn bản
-        translate: Dịch
-        speak: Đọc
-      shortcut:
-        title: Selection Translation Shortcut
-        description: Customize the shortcut key for translating selected text
-      closeMenu:
-        disableForSite: Tắt cho trang web này
-        disableGlobally: Tắt toàn cục
-      disabledSites:
-        title: Các trang web đã tắt thanh công cụ chọn văn bản
-        description: Cấu hình các trang web mà thanh công cụ chọn văn bản nên bị tắt
-        enterUrlPattern: Nhập mẫu URL
-        urlPattern: Mẫu URL
-      errors:
-        customActionFailed: Hành động tuỳ chỉnh thất bại
-        customActionFailedFallback: Yêu cầu hành động tuỳ chỉnh thất bại
-        actionUnavailable: Hành động đã chọn không khả dụng
-        missingSelection: Không có văn bản được chọn
-        providerDisabled: Nhà cung cấp đã chọn bị tắt
-        providerUnavailable: Nhà cung cấp đã chọn không khả dụng
-      features:
-        provider: Nhà cung cấp
-        selectProvider: Chọn nhà cung cấp
-        noProviderAvailable: Không có nhà cung cấp khả dụng
-        useProviderDefaultModel: Dùng model mặc định của nhà cung cấp
-        useCustomModel: Dùng model tùy chỉnh
-        customModel: Model tùy chỉnh
-        model: Model
-        modelNotAvailableForNonLLM: Cài đặt model chỉ khả dụng với nhà cung cấp LLM
-        translate:
-          title: Dịch văn bản chọn
-          description: Cấu hình nhà cung cấp và model cho tính năng dịch của selection toolbar
-      customActions:
-        title: Hành động AI tùy chỉnh
-        description: Thêm các hành động AI có cấu trúc của riêng bạn cho văn bản được chọn
-        add: Thêm hành động AI
-        edit: Chỉnh sửa hành động AI
-        empty: Chưa có hành động AI tùy chỉnh
-        noEnabledLlmProvider: Hãy bật ít nhất một nhà cung cấp LLM trước khi tạo hành động AI tùy chỉnh
-        table:
-          name: Tên
-          provider: Nhà cung cấp
-          fields: Trường
-          actions: Thao tác
-        form:
-          name: Tên
-          icon: Biểu tượng
-          iconField:
-            chooseAriaLabel: Chọn biểu tượng
-            chooseTitle: Chọn một biểu tượng
-            inputPlaceholder: Nhập tên biểu tượng
-            helpAriaLabel: Trợ giúp thêm về biểu tượng
-            helpTitle: Không tìm thấy biểu tượng bạn muốn?
-            helpStepBrowsePrefix: Duyệt biểu tượng trên
-            helpStepBrowseSuffix: ""
-            helpStepCopyPrefix: "Sao chép tên biểu tượng, ví dụ "
-            helpStepCopySuffix: ", rồi dán vào ô nhập liệu."
-          provider: Nhà cung cấp (yêu cầu hỗ trợ đầu ra có cấu trúc)
-          selectProvider: Chọn nhà cung cấp
-          systemPrompt: System Prompt
-          prompt: Prompt
-          outputSchema: Schema đầu ra
-          addField: Thêm trường
-          fieldName: Tên trường
-          fieldType: Loại trường
-          fieldDescription: Mô tả
-          fieldDescriptionPlaceholder: Mô tả nội dung mà trường này nên chứa...
-          fieldSpeaking: Bật đọc thành tiếng
-          actions: Thao tác
-          cancel: Hủy
-          save: Lưu
-          defaultFieldName: kết quả
-          fieldNamePlaceholder: tên_trường
-          autoFieldPrefix: trường
-          addFieldDialog:
-            title: Thêm trường đầu ra
-          editFieldDialog:
-            title: Chỉnh sửa trường đầu ra
-            save: Lưu
-          deleteFieldDialog:
-            title: Xóa trường đầu ra?
-            description: Trường đầu ra này sẽ bị xóa.
-            confirm: Xóa
-            cancel: Hủy
-          notebase:
-            title: Kết nối Notebase
-            description: Lưu kết quả có cấu trúc của hành động này vào Notebase từ xa.
-            loginRequiredTitle: Đăng nhập để cấu hình Notebase
-            loginRequiredDescription: Hãy đăng nhập trên readfrog.app trước khi chọn notebase hoặc chỉnh sửa ánh xạ.
-            loginRequiredConnectedDescription: Kết nối này được tạo bởi tài khoản bên dưới. Nếu đăng nhập bằng cùng tài khoản, ánh xạ trường sẽ được khôi phục. Nếu đăng nhập bằng tài khoản khác, các ánh xạ cũ sẽ bị xóa khi bạn tạo hoặc kết nối Notebase.
-            loginAction: Đăng nhập
-            connectedAccountLabel: Tài khoản đã kết nối
-            currentAccountLabel: Tài khoản hiện tại
-            unknownConnectedAccount: Tài khoản không xác định
-            tableLabel: Notebase
-            tablePlaceholder: Chọn một notebase
-            tableClearOption: Không kết nối notebase
-            clearConnectionAction: Xóa kết nối
-            refreshAction: Làm mới
-            emptyTitle: Chưa có Notebase nào
-            emptyDescription: Hãy tạo một notebase trên readfrog.app rồi quay lại đây để ánh xạ các trường.
-            openNotebaseAction: Mở Notebase
-            betaLockedTitle: Tài khoản này chưa nằm trong beta Notebase
-            betaLockedDescription: Bạn vẫn có thể giữ cấu hình action hiện tại, nhưng việc chọn Notebase và đồng bộ kết quả hiện chỉ mở cho một số tài khoản beta.
-            accountMismatchTitle: Kết nối Notebase thuộc tài khoản khác
-            accountMismatchDescription: Kết nối này gắn với tài khoản bên dưới. Hãy xóa kết nối hoặc chọn một Notebase mà tài khoản hiện tại có thể truy cập.
-            tableUnavailableTitle: Notebase đã chọn không còn khả dụng
-            tableUnavailableDescription: Notebase này không còn tồn tại hoặc không mở được. Hãy xóa kết nối hoặc chọn một Notebase khác.
-            tableUnavailableOption: không khả dụng
-            schemaErrorTitle: Không tải được schema notebase
-            schemaErrorDescription: Hãy thử làm mới lại sau ít phút nữa.
-            schemaLoading: Đang tải schema notebase...
-            mappingsLabel: Ánh xạ trường
-            mappingsEmpty: Chưa có ánh xạ nào. Hãy thêm một ánh xạ khi bạn sẵn sàng lưu các trường.
-            addMappingAction: Thêm ánh xạ
-            removeMappingAction: Xóa ánh xạ
-            localFieldLabel: Trường của hành động
-            localFieldPlaceholder: Chọn một trường của hành động
-            remoteFieldLabel: Trường Notebase
-            remoteFieldPlaceholder: Chọn một trường notebase
-            columnUnavailableOption: đã xóa
-            invalidMappingsTitle: Một số ánh xạ cần được xử lý
-            invalidMappingsDescription: Các ánh xạ không hợp lệ vẫn được giữ lại. Hãy sửa chúng trước khi lưu vào Notebase.
-            mappingMissingLocal: Trường của hành động đã ánh xạ không còn tồn tại.
-            mappingMissingRemote: Trường notebase đã ánh xạ không còn tồn tại.
-            mappingMissingSchema: Hãy làm mới schema notebase để xác thực ánh xạ này.
-            mappingIncompatible: Kiểu trường không còn khớp nữa.
-          tokens:
-            selection: Nội dung văn bản đã chọn
-            paragraphs: Nội dung các đoạn giao với vùng chọn, được nối bằng dòng trống, sẽ bị cắt còn 2000 ký tự đầu khi gửi vào hành động AI tùy chỉnh
-            targetLanguage: Ngôn ngữ đích của người dùng
-            webTitle: Tiêu đề trang web
-            webContent: Nội dung trang web được trích xuất từ trang hiện tại (bị cắt còn 2000 ký tự đầu)
-          delete: Xóa
-          deleteDialog:
-            title: Xóa hành động tùy chỉnh?
-            description: Hành động này không thể hoàn tác.
-            confirm: Xóa
-            cancel: Hủy
-        errors:
-          nameRequired: Tên là bắt buộc
-          duplicateName: 'Tên hành động trùng lặp "$1"'
-          invalidIcon: Chuỗi biểu tượng Iconify không hợp lệ
-          providerRequired: Vui lòng chọn một nhà cung cấp LLM đã bật
-          outputSchemaRequired: Thêm ít nhất một trường đầu ra
-          fieldKeyRequired: Tên trường là bắt buộc
-          duplicateFieldKey: Tên trường phải là duy nhất
-    contextMenu:
-      title: Menu ngữ cảnh
-      translate:
-        title: Bật dịch menu ngữ cảnh
-        description: Thêm các tùy chọn dịch vào menu chuột phải của trình duyệt để dịch nhanh trang hoặc văn bản đã chọn
   translation:
     title: Dịch thuật
     groups:
@@ -490,7 +219,6 @@ options:
       maxItemsPerBatch:
         title: Số đoạn văn tối đa
         description: Số đoạn văn tối đa cho mỗi bản dịch lô để kiểm soát khối lượng nội dung của mỗi bản dịch
-      statisticsLink: Đã tiết kiệm khoảng $1 chi phí trong 7 ngày qua
     autoTranslateWebsite:
       title: Tự động dịch theo trang web
       description: Luôn dịch trang web này
@@ -616,162 +344,29 @@ options:
       title: Tự động dịch theo ngôn ngữ
       description: Tự động dịch nội dung trang khi phát hiện các ngôn ngữ cụ thể
       selectLanguages: Chọn ngôn ngữ
-      detection:
-        label: Phát hiện ngôn ngữ
-        basic: Cơ bản
-        llm: LLM
-        description: Phát hiện cơ bản nhanh và miễn phí. Phát hiện LLM chính xác hơn nhưng thêm độ trễ và chi phí API. Yêu cầu các ngôn ngữ tự động dịch đã cấu hình.
     skipLanguages:
       title: Tự động bỏ qua theo ngôn ngữ
       description: Tự động bỏ qua dịch đoạn văn khi phát hiện các ngôn ngữ cụ thể
       targetLanguageSkip: Bỏ qua ngôn ngữ đích
       targetLanguageSkipDescription: Trước khi dịch, phát hiện đoạn văn đã ở ngôn ngữ đích hay chưa. Văn bản khớp sẽ bị bỏ qua mà không gửi yêu cầu. Tắt tùy chọn này không thay đổi lớp bảo vệ sau đó, nơi kết quả dịch không thay đổi vẫn bị ẩn.
       selectLanguages: Chọn ngôn ngữ
-      detection:
-        label: Phát hiện ngôn ngữ
-        basic: Cơ bản
-        llm: LLM
-        description: Phát hiện cơ bản nhanh và miễn phí. Phát hiện LLM chính xác hơn nhưng thêm độ trễ và chi phí API.
     aiContentAware:
       title: Dịch ngữ cảnh thông minh AI
       description: Nâng cao chất lượng dịch bằng cách cung cấp ngữ cảnh trang web cho AI
       enable: Bật dịch ngữ cảnh thông minh AI
       enableDescription: AI sử dụng tóm tắt trang web để cải thiện độ chính xác dịch. Yêu cầu nhà cung cấp LLM. Thêm độ trễ khi bắt đầu dịch trang và tăng chi phí API.
-  tts:
-    title: Chuyển văn bản thành giọng nói
-    description: Tùy chỉnh nút Đọc với cài đặt giọng nói Edge TTS.
-    voice:
-      label: Giọng nói
-      fallback: Dự phòng
-      selectPlaceholder: Chọn giọng nói
-      preview: Xem trước
-      previewSample: Xin chào từ ReadBuddy! Đây là cách tôi sẽ phát âm khi đọc to.
-    languageVoice:
-      label: Giọng nói theo ngôn ngữ
-      reset: Đặt lại mặc định
-      description: Chọn một ngôn ngữ và gán giọng nói sẽ được dùng khi TTS phát hiện ngôn ngữ đó.
-    rate:
-      label: Tốc độ (%)
-      hint: Chấp nhận giá trị số nguyên từ -100 đến 100
-    pitch:
-      label: Cao độ (Hz)
-      hint: Chấp nhận giá trị số nguyên từ -100 đến 100
-    volume:
-      label: Âm lượng (%)
-      hint: Chấp nhận giá trị số nguyên từ -100 đến 100
-    betaDisabled: Bật Trải nghiệm Beta để tùy chỉnh cài đặt chuyển văn bản thành giọng nói.
-  statistics:
-    title: Thống kê
-    batchRequest:
-      title: Đã tiết kiệm yêu cầu dịch theo lô
-      description: Tỷ lệ phần trăm yêu cầu đã tiết kiệm bằng dịch theo lô trong khoảng thời gian
-      originalRequestCount: Số yêu cầu ban đầu
-      batchRequestCount: Số yêu cầu theo lô
   system:
     title: Hệ thống
 
   config:
-    title: Cấu hình
     about:
       title: Giới thiệu
       description: Được thành lập vào tháng 6 năm 2026
       mission: "Một tiện ích mở rộng dịch thuật đắm chìm mã nguồn mở, được fork từ [Read Frog](https://github.com/mengxi-ream/read-frog) và đã được đơn giản hóa và tùy chỉnh trên cơ sở đó."
-      analytics:
-        title: Giúp cải thiện trải nghiệm người dùng
-        tooltip: Khi bật, ReadBuddy sẽ gửi các tín hiệu sử dụng ẩn danh để xác minh tính ổn định của tính năng, tối ưu hiệu năng và độ tinh chỉnh UX, đồng thời giúp chúng tôi ưu tiên những gì cần xây tiếp theo.
     sync:
-      title: Đồng bộ cấu hình thủ công
-      description: Nhập và xuất cài đặt cấu hình thủ công
-      import: Nhập cấu hình
-      export: Xuất cấu hình
-      importSuccess: Nhập cấu hình thành công
       exportSuccess: Xuất cấu hình thành công
-      importError: Nhập thất bại
       versionTooNew: Phiên bản cấu hình đã nhập mới hơn, vui lòng nâng cấp ReadBuddy lên phiên bản mới nhất
-      migrationError: Di chuyển thất bại
       validationError: Xác thực cấu hình thất bại
-      exportOptions:
-        title: Chọn tùy chọn xuất
-        description: Vui lòng chọn có bao gồm API Keys trong cấu hình xuất hay không. Bao gồm API Keys có thể làm rò rỉ thông tin nhạy cảm, vì vậy khuyến nghị chỉ sử dụng trong môi trường an toàn.
-        includeAPIKeys: Bao gồm API Keys
-        excludeAPIKeys: Loại trừ API Keys
-        cancel: Hủy
-      viewConfig:
-        expand: Mở rộng cấu hình
-        collapse: Thu gọn cấu hình
-      googleDrive:
-        title: Đồng bộ đám mây Google Drive
-        description: Tải xuống khi bản từ xa mới hơn, tải lên khi bản cục bộ mới hơn
-        sync: Đồng bộ với Google Drive
-        syncing: Đang đồng bộ...
-        syncSuccess:
-          uploaded: Đã tải cấu hình lên đám mây
-          downloaded: Đã áp dụng cấu hình từ xa
-          sameChanges: Thay đổi cục bộ và từ xa giống nhau, đã đồng bộ
-          noChange: Đã đồng bộ
-          unresolved: Đã giải quyết xung đột và đồng bộ
-        syncError: Đồng bộ thất bại, vui lòng thử lại
-        metadataCorrupted: Siêu dữ liệu đồng bộ bị hỏng, đã áp dụng cấu hình từ xa
-        lastSyncTime: Đồng bộ lần cuối lúc
-        logout: Đăng xuất
-        logoutSuccess: Đã đăng xuất khỏi tài khoản Google
-        unresolved:
-          title: Giải quyết đồng bộ cấu hình
-          description: Cấu hình cục bộ và từ xa khác nhau. Vui lòng chọn phiên bản nào để giữ cho mỗi trường.
-          resolved: Đã giải quyết
-          unresolved: Chưa giải quyết
-          localValue: Giá trị cục bộ
-          remoteValue: Giá trị từ xa
-          useLocal: Dùng cục bộ
-          useRemote: Dùng từ xa
-          useAllLocal: Dùng tất cả cục bộ
-          useAllRemote: Dùng tất cả từ xa
-          reset: Đặt lại lựa chọn
-          progress: Đã giải quyết $1/$2 thay đổi
-          confirm: Xác nhận đồng bộ
-          cancel: Hủy
-          hasUnresolvedInChildren: ⚠ Chứa thay đổi chưa giải quyết
-          item: mục
-          items: mục
-          unresolvedPrompt: "[Chưa giải quyết - Vui lòng chọn]"
-          localLatest: Cục bộ mới nhất
-          remoteLatest: Từ xa mới nhất
-          bothChanged: Cả hai đã thay đổi
-          localChanged: Cục bộ đã thay đổi
-          remoteChanged: Từ xa đã thay đổi
-          configValid: Cấu hình hợp lệ
-          configInvalid: Cấu hình không hợp lệ
-          resolveToContinue: Giải quyết xung đột để tiếp tục
-          validationAlert:
-            title: Cấu hình đã hợp nhất có lỗi xác thực
-            description: "Điều chỉnh các khác biệt bên dưới để sửa:"
-          moreErrors: ...và $1 lỗi nữa
-    backup:
-      title: Sao lưu cấu hình
-      description: Các bản sao lưu tự động được tạo mỗi giờ nếu cấu hình thay đổi. Bạn có thể khôi phục các cấu hình trước đó tại đây. (Tối đa $1 bản sao lưu)
-      loading: Đang tải bản sao lưu...
-      backupNow: Sao lưu ngay
-      backupSuccess: Tạo bản sao lưu thành công
-      restoreSuccess: Khôi phục cấu hình thành công
-      empty:
-        title: Chưa có bản sao lưu nào
-        description: Các bản sao lưu được tạo tự động mỗi giờ nếu cấu hình thay đổi.
-      item:
-        extensionVersion: "Phiên bản tiện ích:"
-        schemaVersion: "Phiên bản schema:"
-        restore: Khôi phục
-        export: Xuất
-        delete: Xóa
-      restore:
-        title: Khôi phục bản sao lưu cấu hình?
-        description: Cấu hình hiện tại của bạn sẽ được tự động sao lưu nếu nó khác với bản sao lưu mới nhất. Bản sao lưu cũ nhất có thể bị xóa nếu số lượng bản sao lưu vượt quá giới hạn.
-        cancel: Hủy
-        confirm: Khôi phục
-      delete:
-        title: Xóa bản sao lưu?
-        description: Bạn có chắc chắn muốn xóa bản sao lưu này? Hành động này không thể hoàn tác.
-        cancel: Hủy
-        confirm: Xóa
     resetConfig:
       title: Đặt lại cấu hình
       description: Đặt lại tất cả cấu hình về giá trị mặc định
@@ -784,10 +379,6 @@ options:
   videoSubtitles:
     title: Phụ đề video
     description: Hiện chỉ hỗ trợ phụ đề video YouTube
-    provider:
-      title: Nhà cung cấp dịch thuật
-      description: Chọn nhà cung cấp dịch thuật để sử dụng cho phụ đề video
-      label: Nhà cung cấp
     enable: Bật phụ đề video
     enableDescription: Khi bật, nút dịch sẽ xuất hiện trong thanh điều khiển YouTube. Nhấp để bắt đầu dịch phụ đề.
     autoStart: Tự động bật phụ đề
@@ -808,7 +399,6 @@ options:
       generalSettings: Cài đặt chung
       mainSubtitle: Phụ đề chính
       translationSubtitle: Phụ đề dịch
-      containerStyle: Nền
       fontFamily: Phông chữ
       fontScale: Cỡ chữ
       color: Màu sắc
@@ -816,7 +406,6 @@ options:
       backgroundOpacity: Độ trong suốt nền
       reset: Đặt lại về mặc định
     aiSegmentation:
-      title: AI Phân đoạn thông minh
       enable: Bật AI Phân đoạn thông minh
       enableDescription: Sử dụng AI để phân đoạn phụ đề thông minh nhằm cải thiện khả năng đọc. Dòng thời gian do AI xác định, có thể đôi khi gây lệch thời gian. Yêu cầu nhà cung cấp dịch LLM.
       clearCache: Xóa bộ nhớ đệm
@@ -855,94 +444,20 @@ options:
           webTitle: Tiêu đề trang web
           webDescription: Mô tả trang web từ siêu dữ liệu trang
           videoSummary: Tóm tắt video (yêu cầu Ngữ cảnh thông minh AI)
-  whatsNew:
-    title: Có gì mới
-  survey:
-    title: Trải nghiệm sớm Notebase
-  rateUs:
-    title: Đánh giá chúng tôi
-side:
-  sourceLang: Ngôn ngữ nguồn
-  targetLang: Ngôn ngữ đích
-  fileExport: Xuất tệp
 translateService:
   title: Dịch vụ dịch thuật
   description: Chỉ để dịch trang web
   normalTranslator: Trình dịch thông thường
   aiTranslator: Trình dịch AI
-  selectServices: Chọn dịch vụ
-  translationProviders: Dịch vụ dịch thuật
-  configureAPI: Cấu hình API
 translatePrompt:
   title: Kiểu dịch AI
   description: Chọn một Prompt để sử dụng trong quá trình dịch. Thêm hoặc sửa đổi Prompt tùy chỉnh trên trang tùy chọn.
-languageLevel: Trình độ ngôn ngữ nguồn của bạn
-languageLevels:
-  beginner: Người mới bắt đầu
-  intermediate: Trung cấp
-  advanced: Nâng cao
 noAPIKeyConfig:
   warning: Nếu bạn muốn sử dụng mô hình AI, vui lòng đặt API key trên trang tùy chọn trước
-  warningWithLink:
-    youMust: Bạn phải
-    setTheAPIKey: đặt API key
-    firstOnThe: trước trên trang
-    optionsPage: tùy chọn
-    page: ""
 languageDetection:
   llmFailed: Phát hiện ngôn ngữ LLM thất bại, đã chuyển về phát hiện cơ bản
 translation:
   sameLanguage: Ngôn ngữ nguồn và đích phải khác nhau
-  autoModeSameLanguage: Ngôn ngữ phát hiện '$1' giống với ngôn ngữ đích
-speak:
-  fetchingAudio: Đang tạo âm thanh...
-  playingAudio: Đang phát âm thanh...
-  failedToGenerateSpeech: Không thể tạo giọng nói
-  noTextSelected: Không có văn bản nào được chọn
-  openaiNotConfigured: Nhà cung cấp OpenAI chưa được cấu hình hoặc chưa được bật
-  openaiApiKeyNotConfigured: API key OpenAI chưa được cấu hình
-action:
-  copy: Sao chép
-  copied: Đã sao chép
-  regenerate: Tạo lại
-  viewContextDetails: Ngữ cảnh
-  saveToNotebase: Lưu vào Notebase
-  saveToNotebaseSaving: Đang lưu...
-  saveToNotebaseSuccess: Đã lưu vào Notebase
-  saveToNotebaseFailed: Không thể lưu vào Notebase
-  saveToNotebaseLoginRequired: Hãy đăng nhập trên readfrog.app để lưu vào Notebase
-  saveToNotebaseBetaRequired: Tài khoản này chưa được mở quyền beta Notebase
-  saveToNotebaseTableUnavailable: Notebase đã chọn không còn khả dụng
-  saveToNotebaseConnectionInvalid: Kết nối Notebase này đã lỗi thời. Hãy làm mới trong Custom AI Actions và sửa các ánh xạ.
-  saveToNotebaseNoMappings: Hãy thêm ít nhất một ánh xạ hợp lệ trước khi lưu
-  saveToNotebaseCreateTitle: Tạo Notebase?
-  saveToNotebaseCreateDescription: Tạo một Notebase có các cột khớp với Custom Action này, rồi lưu kết quả hiện tại làm ghi chú đầu tiên.
-  saveToNotebaseCreateAndSave: Tạo và lưu
-  saveToNotebaseCreateAndSaveShort: Tạo và lưu
-  saveToNotebaseLoginAndCreate: Đăng nhập và tự tạo
-  saveToNotebaseLoginAndSave: Đăng nhập và lưu
-  saveToNotebaseConnectExisting: Kết nối Notebase hiện có
-  saveToNotebaseGoConfigure: Cấu hình
-  saveToNotebaseLoginConnectedTitle: Đăng nhập để lưu?
-  saveToNotebaseLoginConnectedDescription: Custom Action này đang kết nối với tài khoản bên dưới. Sau khi đăng nhập, ReadBuddy sẽ lưu vào Notebase hiện có nếu có thể, hoặc tạo Notebase mới cho tài khoản đã đăng nhập.
-  saveToNotebaseConnectionUnavailableTitle: Kết nối Notebase không khả dụng
-  saveToNotebaseMissingNotebaseDescription: Notebase cũ không còn tồn tại hoặc tài khoản này không mở được. Hãy tạo Notebase mới và lưu kết quả này, hoặc kết nối Notebase hiện có trong Custom AI Actions.
-  saveToNotebaseAccountUnavailableDescription: Tài khoản đã đăng nhập không khớp với tài khoản đã kết nối bên dưới. Tạo và lưu sẽ thay thế kết nối trước đó cùng các ánh xạ trường. Bạn cũng có thể kết nối Notebase hiện có trong Custom AI Actions.
-  saveToNotebasePendingLogin: Đăng nhập để hoàn tất lưu
-  saveToNotebasePendingLoginDescription: Sau khi đăng nhập, ReadBuddy sẽ tự động tạo Notebase và lưu kết quả này.
-  saveToNotebasePendingConnectedLoginDescription: Sau khi đăng nhập, ReadBuddy sẽ lưu vào Notebase đã kết nối nếu có thể. Nếu tài khoản này không dùng được, ReadBuddy sẽ tạo Notebase mới và lưu kết quả này.
-  openCustomActions: Mở Custom AI Actions
-  openNotebase: Mở Notebase
-  contextDetailsTitleLabel: Tiêu đề
-  contextDetailsParagraphsLabel: Các đoạn văn
-  translation: Dịch
-  speak: Đọc
-  playing: Đang phát
-thinking:
-  label: Đang suy luận
-  complete: Suy luận hoàn tất
-  expand: Mở rộng suy luận
-  collapse: Thu gọn suy luận
 shortcutKeySelector:
   placeholder: Vui lòng nhập phím tắt
 subtitles:
@@ -961,10 +476,7 @@ subtitles:
     http403: 403 Không được phép truy cập phụ đề Youtube
     http500: 500 Lỗi máy chủ Youtube
     httpUnknown: Lỗi HTTP $1
-    invalidResponse: Định dạng phản hồi phụ đề Youtube không hợp lệ
-    networkError: Xảy ra lỗi mạng khi lấy phụ đề
     fetchSubTimeout: Quá thời gian lấy phụ đề Youtube
-    buttonNotFound: Không tìm thấy nút phụ đề
     noSubtitlesFound: Video hiện tại không có phụ đề
     videoNotFound: Không tìm thấy phần tử video
     controlsBarNotFound: Không tìm thấy thanh điều khiển
@@ -984,22 +496,6 @@ hotkey:
 translationHub:
   searchLanguages: Tìm kiếm ngôn ngữ...
   noLanguagesFound: Không tìm thấy ngôn ngữ
-  exchangeLanguages: Đổi ngôn ngữ
-  title: Dịch Văn Bản Đa API
-  noServicesSelected: Chưa Chọn Dịch Vụ Dịch Thuật
-  noServicesDescription: Chọn dịch vụ dịch thuật ở trên để xem thẻ dịch thuật tại đây.
-  inputPlaceholder: Nhập văn bản cần dịch...
-  translate: Dịch
-  copiedToClipboard: Đã sao chép bản dịch vào bộ nhớ tạm!
-  copyTranslation: Sao chép bản dịch
-  expandCard: Mở rộng thẻ
-  collapseCard: Thu gọn thẻ
-  expandAllCards: Mở rộng tất cả
-  collapseAllCards: Thu gọn tất cả
-  deleteCard: Xóa thẻ
-  translationFailed: Dịch Thất Bại
-  translationFailedFallback: Dịch thất bại
-  retryTranslation: Thử lại dịch
 languages:
   eng: Tiếng Anh
   cmn: Tiếng Trung giản thể
