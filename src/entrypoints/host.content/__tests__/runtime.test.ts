@@ -8,7 +8,6 @@ const {
   messageHandlers,
   managerInstances,
   mockBindTranslationShortcutKey,
-  mockClearEffectiveSiteControlUrl,
   mockDetectPageLanguageLightweight,
   mockEnsurePresetStyles,
   mockMountHostToast,
@@ -26,7 +25,6 @@ const {
     registerPageTranslationTriggers: ReturnType<typeof vi.fn>
   }>,
   mockBindTranslationShortcutKey: vi.fn(),
-  mockClearEffectiveSiteControlUrl: vi.fn(),
   mockDetectPageLanguageLightweight: vi.fn(),
   mockEnsurePresetStyles: vi.fn(),
   mockMountHostToast: vi.fn(),
@@ -55,10 +53,6 @@ vi.mock("@/utils/logger", () => ({
 vi.mock("@/utils/message", () => ({
   onMessage: mockOnMessage,
   sendMessage: mockSendMessage,
-}))
-
-vi.mock("@/utils/site-control", () => ({
-  clearEffectiveSiteControlUrl: mockClearEffectiveSiteControlUrl,
 }))
 
 vi.mock("../listen", () => ({

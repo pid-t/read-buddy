@@ -11,8 +11,16 @@ describe("all Config Migrations", () => {
     expect(typeof LATEST_SCHEMA_VERSION).toBe("number")
     expect(LATEST_SCHEMA_VERSION).toBe(CONFIG_SCHEMA_VERSION)
 
-    const maxKey = Math.max(...Object.keys(migrationScripts).map(Number))
-    expect(maxKey).toBe(LATEST_SCHEMA_VERSION)
+    // When the schema is at its initial version (no migrations yet), there are
+    // no migration scripts to discover. Only assert the max-key invariant once
+    // at least one migration exists (LATEST > 1).
+    if (LATEST_SCHEMA_VERSION > 1) {
+      const maxKey = Math.max(...Object.keys(migrationScripts).map(Number))
+      expect(maxKey).toBe(LATEST_SCHEMA_VERSION)
+    }
+    else {
+      expect(Object.keys(migrationScripts)).toHaveLength(0)
+    }
 
     const latestVersionStr = String(LATEST_SCHEMA_VERSION).padStart(3, "0")
     const latestExampleModule = await import(`../example/v${latestVersionStr}.ts`) as VersionTestData
