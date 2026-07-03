@@ -13,8 +13,8 @@ export function AutoTranslateLanguages() {
     <div className="py-6 flex flex-col gap-y-4">
       <ConfigCard
         id="auto-translate-languages"
-        title={i18n.t("options.translation.autoTranslateLanguages.title")}
-        description={i18n.t("options.translation.autoTranslateLanguages.description")}
+        title={i18n.t("options.siteRules.autoTranslateLanguages.title")}
+        description={i18n.t("options.siteRules.autoTranslateLanguages.description")}
         className="py-0"
       >
         <AutoTranslateLanguagesSelector />
@@ -39,7 +39,7 @@ function AutoTranslateLanguagesSelector() {
               autoTranslateLanguages: languages,
             },
           })}
-        buttonLabel={i18n.t("options.translation.autoTranslateLanguages.selectLanguages")}
+        buttonLabel={i18n.t("options.siteRules.autoTranslateLanguages.selectLanguages")}
       />
     </div>
   )

@@ -16,8 +16,8 @@ export function SkipLanguages() {
     <div className="py-6 flex flex-col gap-y-4">
       <ConfigCard
         id="skip-languages"
-        title={i18n.t("options.translation.skipLanguages.title")}
-        description={i18n.t("options.translation.skipLanguages.description")}
+        title={i18n.t("options.siteRules.skipLanguages.title")}
+        description={i18n.t("options.siteRules.skipLanguages.description")}
         className="py-0"
       >
         <div className="flex flex-col gap-4">
@@ -37,8 +37,8 @@ function TargetLanguageSkipToggle() {
     <Field orientation="horizontal">
       <FieldContent className="self-center">
         <FieldLabel htmlFor="target-language-skip-toggle">
-          {i18n.t("options.translation.skipLanguages.targetLanguageSkip")}
-          <HelpTooltip>{i18n.t("options.translation.skipLanguages.targetLanguageSkipDescription")}</HelpTooltip>
+          {i18n.t("options.siteRules.skipLanguages.targetLanguageSkip")}
+          <HelpTooltip>{i18n.t("options.siteRules.skipLanguages.targetLanguageSkipDescription")}</HelpTooltip>
         </FieldLabel>
       </FieldContent>
       <Switch
@@ -72,7 +72,7 @@ function SkipLanguagesSelector() {
               skipLanguages: languages,
             },
           })}
-        buttonLabel={i18n.t("options.translation.skipLanguages.selectLanguages")}
+        buttonLabel={i18n.t("options.siteRules.skipLanguages.selectLanguages")}
       />
     </div>
   )

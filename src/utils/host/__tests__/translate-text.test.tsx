@@ -83,6 +83,15 @@ describe("translate-text", () => {
 
   describe("translateTextForPage", () => {
     it("should send message with correct parameters", async () => {
+      // Use a non-LLM provider so webpage context is not fetched
+      const config = {
+        ...DEFAULT_CONFIG,
+        translate: {
+          ...DEFAULT_CONFIG.translate,
+          providerId: "deeplx-default",
+        },
+      }
+      mockGetConfigFromStorage.mockResolvedValue(config)
       mockSendMessage.mockResolvedValue("translated text")
 
       const result = await translateTextForPage("test text")

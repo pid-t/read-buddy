@@ -1,6 +1,8 @@
 name: ReadBuddy
 extName: ReadBuddy - Traduce y aprende
-extDescription: ReadBuddy es una extensión de navegador de código abierto diseñada para ayudarte a aprender idiomas en profundidad desde cualquier sitio web.
+extDescription: ReadBuddy es una extensión de navegador de código abierto
+  diseñada para ayudarte a aprender idiomas en profundidad desde cualquier sitio
+  web.
 popup:
   autoLang: Auto
   sourceLang: Origen
@@ -8,8 +10,6 @@ popup:
   translate: Traducir
   showOriginal: Mostrar original
   alwaysTranslate: Traducir siempre este sitio
-  addToWhitelist: Activar extensión en este sitio
-  addToBlacklist: Desactivar extensión en este sitio
   options: Opciones
   hover: Pasar el cursor
   translateParagraph: para traducir el párrafo
@@ -22,11 +22,15 @@ popup:
         current: Modo solo traducción actual
         action: Haz clic para cambiar a bilingüe
   aiSmartContext: Contexto inteligente de IA
-  aiSmartContextDescription: Usa el contexto de la página web para mejorar la calidad de la traducción. Requiere un proveedor de traducción LLM.
+  aiSmartContextDescription: Usa el contexto de la página web para mejorar la
+    calidad de la traducción. Requiere un proveedor de traducción LLM.
 errorRecovery:
   title: Algo salió mal
-  description: El modo de recuperación está activo. Puedes exportar tu configuración actual como copia de seguridad y luego restablecer la configuración e intentarlo de nuevo.
-  backupTitle: Primero haz una copia de seguridad de la configuración actual (recomendado)
+  description: El modo de recuperación está activo. Puedes exportar tu
+    configuración actual como copia de seguridad y luego restablecer la
+    configuración e intentarlo de nuevo.
+  backupTitle: Primero haz una copia de seguridad de la configuración actual
+    (recomendado)
   exportWithApiKeys: Exportar con claves API
   exportWithoutApiKeys: Exportar sin claves API
   recoveryTitle: Opciones de recuperación
@@ -37,7 +41,8 @@ errorRecovery:
   errorDetails: Detalles del error
   resetDialog:
     title: ¿Restablecer configuración?
-    description: Esto reemplazará tu configuración actual por los valores predeterminados.
+    description: Esto reemplazará tu configuración actual por los valores
+      predeterminados.
     confirm: Restablecer
     cancel: Cancelar
 options:
@@ -49,7 +54,9 @@ options:
     page: página
   apiProviders:
     title: Proveedores de API
-    description: Configura proveedores de API para traducción e información de vocabulario. Tenemos más de 20 proveedores integrados y admitimos cualquier proveedor de API compatible con OpenAI.
+    description: Configura proveedores de API para traducción e información de
+      vocabulario. Tenemos más de 20 proveedores integrados y admitimos
+      cualquier proveedor de API compatible con OpenAI.
     addProvider: Añadir proveedor
     badges:
       featureCount: $1 funciones
@@ -58,13 +65,17 @@ options:
       groups:
         builtInProviders:
           title: Proveedores LLM integrados
-          description: Proveedores integrados de modelos de lenguaje grandes; no hace falta completar la mayoría de configuraciones, como Base URL
+          description: Proveedores integrados de modelos de lenguaje grandes; no
+            hace falta completar la mayoría de configuraciones, como Base URL
         openaiCompatibleProviders:
           title: Proveedores personalizados compatibles con OpenAI
-          description: Si no encuentras el proveedor de AI que deseas, selecciona Proveedor personalizado para configurar cualquier proveedor compatible con OpenAI, como Zhipu AI
+          description: Si no encuentras el proveedor de AI que deseas,
+            selecciona Proveedor personalizado para configurar cualquier
+            proveedor compatible con OpenAI, como Zhipu AI
         pureTranslationProviders:
           title: Proveedores de traducción pura
-          description: Proveedores centrados en funciones de traducción sin capacidades de modelos de lenguaje grandes
+          description: Proveedores centrados en funciones de traducción sin
+            capacidades de modelos de lenguaje grandes
     form:
       fields:
         name: Nombre
@@ -75,11 +86,15 @@ options:
       delete: Eliminar
       deleteDialog:
         title: ¿Eliminar proveedor?
-        description: Esta acción no se puede deshacer. Las funciones que usan este proveedor se reasignarán automáticamente a otro proveedor disponible.
+        description: Esta acción no se puede deshacer. Las funciones que usan
+          este proveedor se reasignarán automáticamente a otro proveedor
+          disponible.
         confirm: Eliminar
         cancel: Cancelar
-      atLeastOneLLMProvider: Se requiere al menos un proveedor de traducción LLM.
-      providerInUseCannotDisable: 'No se puede desactivar "$1" porque actualmente lo usan $2 función(es).'
+      atLeastOneLLMProvider: Se requiere al menos un proveedor de traducción
+        LLM.
+      providerInUseCannotDisable: 'No se puede desactivar "$1" porque actualmente
+        lo usan $2 función(es).'
       duplicateProviderName: 'Nombre de proveedor duplicado "$1"'
       models:
         translate:
@@ -97,15 +112,26 @@ options:
       providerSettingLabels:
         region: Región
       temperature: Temperatura
-      temperatureHint: Controla la aleatoriedad en las respuestas. Los valores más bajos (0) son más deterministas; los más altos son más creativos. El rango varía según el proveedor. Déjalo vacío para usar el valor predeterminado del proveedor.
+      temperatureHint: Controla la aleatoriedad en las respuestas. Los valores
+        más bajos (0) son más deterministas; los más altos son más creativos. El
+        rango varía según el proveedor. Déjalo vacío para usar el valor
+        predeterminado del proveedor.
       headers: Encabezados
-      headersHint: Encabezados HTTP personalizados enviados al crear el cliente del proveedor de IA. Déjalo vacío para usar los valores predeterminados; usa {} para desactivarlos.
+      headersHint: Encabezados HTTP personalizados enviados al crear el cliente
+        del proveedor de IA. Déjalo vacío para usar los valores predeterminados;
+        usa {} para desactivarlos.
       providerOptions: Opciones del proveedor
-      providerOptionsHint: Opciones específicas del proveedor para funciones API no estándar, como el modo thinking/reasoning. Consulta la documentación de Vercel AI SDK o la documentación oficial de tu proveedor para ver detalles de configuración.
+      providerOptionsHint: Opciones específicas del proveedor para funciones API
+        no estándar, como el modo thinking/reasoning. Consulta la documentación
+        de Vercel AI SDK o la documentación oficial de tu proveedor para ver
+        detalles de configuración.
       providerOptionsDocsLink: Ver documentación del proveedor
-      providerOptionsRecommendationTrigger: Ver opciones recomendadas del proveedor
-      providerOptionsRecommendationTitle: Opciones recomendadas del proveedor detectadas
-      providerOptionsRecommendationDescription: Revisa y aplica manualmente la configuración recomendada.
+      providerOptionsRecommendationTrigger: Ver opciones recomendadas del
+        proveedor
+      providerOptionsRecommendationTitle: Opciones recomendadas del proveedor
+        detectadas
+      providerOptionsRecommendationDescription: Revisa y aplica manualmente la
+        configuración recomendada.
       providerOptionsRecommendationApply: Aplicar
       providerOptionsRecommendationApplied: Aplicado
       invalidJson: Formato JSON no válido
@@ -113,32 +139,54 @@ options:
       description:
         openai: Proporciona modelos como GPT-4o
         deepseek: Recomendado para usar en China
-        openrouter: Interfaz unificada para varios proveedores LLM con precios de pago por uso
-        ollama: Ejecuta modelos de lenguaje grandes localmente en tu equipo con privacidad completa
-        google: Modelos AI principales de Google con capacidades avanzadas de razonamiento
-        anthropic: Modelos Claude conocidos por su seguridad y excelente razonamiento
-        xai: Empresa de AI de Elon Musk que ofrece modelos Grok con acceso a datos en tiempo real
-        siliconflow: Plataforma de inferencia de alto rendimiento para modelos chinos e internacionales
-        tensdaq: Plataforma revolucionaria de pujas AI MaaS con precios impulsados por el mercado, que elimina los altos precios fijos
+        openrouter: Interfaz unificada para varios proveedores LLM con precios
+          de pago por uso
+        ollama: Ejecuta modelos de lenguaje grandes localmente en tu equipo con
+          privacidad completa
+        google: Modelos AI principales de Google con capacidades avanzadas de
+          razonamiento
+        anthropic: Modelos Claude conocidos por su seguridad y excelente
+          razonamiento
+        xai: Empresa de AI de Elon Musk que ofrece modelos Grok con acceso a
+          datos en tiempo real
+        siliconflow: Plataforma de inferencia de alto rendimiento para modelos
+          chinos e internacionales
+        tensdaq: Plataforma revolucionaria de pujas AI MaaS con precios
+          impulsados por el mercado, que elimina los altos precios fijos
         openaiCompatible: Compatible con API de terceros y OpenAI
         deeplx: API de DeepL no oficial
         deepl: API oficial de DeepL
-        bedrock: Servicio administrado de AWS para modelos fundacionales de nivel empresarial
+        bedrock: Servicio administrado de AWS para modelos fundacionales de
+          nivel empresarial
         groq: Hardware especializado para inferencia LLM ultrarrápida
-        deepinfra: Inferencia en la nube rentable para modelos populares de código abierto
-        mistral: Empresa europea de AI especializada en modelos multilingües eficientes
-        togetherai: Plataforma colaborativa para ejecutar y ajustar modelos de código abierto
-        cohere: AI enfocada en empresas con sólidas capacidades multilingües y RAG
-        fireworks: Plataforma de inferencia lista para producción para modelos de código abierto
-        cerebras: Inferencia AI ultrarrápida para traducción y análisis de texto rápidos
-        replicate: Acceso a diversos modelos de código abierto para tareas de traducción especializadas
-        perplexity: AI mejorada con conocimiento en tiempo real para traducciones contextuales y asistencia de lectura
-        vercel: Modelos AI optimizados para traducción y análisis de contenido web
-        volcengine: Plataforma cloud AI de ByteDance que ofrece modelos Doubao para traducción y lectura
-        minimax: Plataforma MiniMax AI que ofrece modelos avanzados MiniMax-M2 para generación de texto
-        alibaba: Serie de modelos Qwen de Alibaba Cloud con razonamiento avanzado y capacidades multilingües
-        moonshotai: Serie de modelos Kimi de Moonshot AI con razonamiento sólido y capacidades de contexto largo
-        huggingface: API de inferencia de Hugging Face que proporciona acceso a miles de modelos de código abierto
+        deepinfra: Inferencia en la nube rentable para modelos populares de
+          código abierto
+        mistral: Empresa europea de AI especializada en modelos multilingües
+          eficientes
+        togetherai: Plataforma colaborativa para ejecutar y ajustar modelos de
+          código abierto
+        cohere: AI enfocada en empresas con sólidas capacidades multilingües y
+          RAG
+        fireworks: Plataforma de inferencia lista para producción para modelos
+          de código abierto
+        cerebras: Inferencia AI ultrarrápida para traducción y análisis de texto
+          rápidos
+        replicate: Acceso a diversos modelos de código abierto para tareas de
+          traducción especializadas
+        perplexity: AI mejorada con conocimiento en tiempo real para
+          traducciones contextuales y asistencia de lectura
+        vercel: Modelos AI optimizados para traducción y análisis de contenido
+          web
+        volcengine: Plataforma cloud AI de ByteDance que ofrece modelos Doubao
+          para traducción y lectura
+        minimax: Plataforma MiniMax AI que ofrece modelos avanzados MiniMax-M2
+          para generación de texto
+        alibaba: Serie de modelos Qwen de Alibaba Cloud con razonamiento
+          avanzado y capacidades multilingües
+        moonshotai: Serie de modelos Kimi de Moonshot AI con razonamiento sólido
+          y capacidades de contexto largo
+        huggingface: API de inferencia de Hugging Face que proporciona acceso a
+          miles de modelos de código abierto
     apiKey:
       showAPIKey: Mostrar clave API
     howToConfigure: ¿Cómo configurar?
@@ -156,24 +204,15 @@ options:
       description: Elige qué proveedor usar para cada función
       features:
         translate: Traducción de página
-        videoSubtitles: Subtítulos de video
+        videoSubtitles: Traducción de subtítulos
     translationConfig:
       model:
         title: Modelo
         enterCustomModel: Introduce el nombre del modelo personalizado
-    clearCache:
-      title: Borrar caché
-      description: Borra toda la caché de traducción en tu navegador
-      clearing: Borrando...
-      dialog:
-        title: Borrar caché
-        trigger: Borrar caché
-        confirm: Confirmar
-        cancel: Cancelar
-        description: Esta operación borrará toda la caché de traducción. Esta acción no se puede deshacer.
     languageDetection:
       title: Detección de idioma
-      description: Afecta la detección de idioma para traducción automática, la detección de idiomas omitidos y la precisión de selección de voz.
+      description: Afecta la precisión de la detección de idioma para la
+        traducción automática.
       mode:
         basic: Básica
         llm: LLM
@@ -184,56 +223,41 @@ options:
         noProviders: Configura primero un proveedor LLM
         basicRecommend: Se recomienda activar LLM
         llmEnabled: Detección LLM activada
-  siteControl:
-    mode:
-      title: Modo de activación de la extensión
-      description: Usa el modo de lista negra para desactivar la extensión en sitios específicos, o el modo de lista blanca para limitarla solo a sitios específicos.
-      blacklist: Desactivar solo en sitios listados
-      whitelist: Ejecutar solo en sitios listados
-    patterns:
-      enterUrlPattern: Introduce patrón de URL (p. ej., example.com)
-      urlPattern: Patrón de URL
   translation:
     title: Traducción
-    groups:
-      behavior: Comportamiento de traducción
-      displayAndQuality: Visualización y calidad
-      automationAndRules: Automatización y reglas
-      performanceAndCache: Rendimiento y caché
     requestQueueConfig:
       title: Tasa de traducción
-      firstOnDescription: Ajusta la velocidad de procesamiento de las solicitudes de traducción usando el
+      firstOnDescription: Ajusta la velocidad de procesamiento de las
+        solicitudes de traducción usando el
       lastOnDescription: algoritmo
       capacity:
         title: Recuento máximo de solicitudes en ráfaga
-        description: El recuento de solicitudes temporales en ráfaga permitido determina el número máximo de solicitudes que se pueden procesar de forma concurrente durante un periodo corto
+        description: El recuento de solicitudes temporales en ráfaga permitido
+          determina el número máximo de solicitudes que se pueden procesar de
+          forma concurrente durante un periodo corto
       rate:
         title: Solicitudes promedio por segundo
-        description: Solicitudes promedio por segundo, pero permite configurar un recuento máximo en ráfaga para enviar temporalmente solicitudes excedentes
+        description: Solicitudes promedio por segundo, pero permite configurar
+          un recuento máximo en ráfaga para enviar temporalmente solicitudes
+          excedentes
     batchQueueConfig:
       title: Traducción por lotes
-      description: Configura límites de caracteres y recuento máximo de párrafos para la traducción por lotes (solo efectivo para traducción LLM)
+      description: Configura límites de caracteres y recuento máximo de párrafos
+        para la traducción por lotes (solo efectivo para traducción LLM)
       maxCharactersPerBatch:
         title: Caracteres máximos
-        description: Número máximo de caracteres permitido por solicitud por lote para controlar el volumen de contenido de cada traducción
+        description: Número máximo de caracteres permitido por solicitud por
+          lote para controlar el volumen de contenido de cada traducción
       maxItemsPerBatch:
         title: Recuento máximo de párrafos
-        description: Número máximo de párrafos para cada traducción por lote para controlar el volumen de contenido de cada traducción
-    autoTranslateWebsite:
-      title: Traducción automática por sitio web
-      description: Traducir siempre este sitio web
-      urlPattern: Patrón de URL
-      enterUrlPattern: Introduce patrón de URL
-    neverAutoTranslateWebsite:
-      title: Never Auto Translate Based on Website
-      description: Never automatically translate this website
-      urlPattern: URL Pattern
-      enterUrlPattern: Enter URL Pattern
+        description: Número máximo de párrafos para cada traducción por lote
+          para controlar el volumen de contenido de cada traducción
     personalizedPrompts:
       title: Prompts personalizados
-      description: Personalizar distintos tipos de Prompts te permite ajustar tú mismo el tipo de Prompt durante la traducción. Un Prompt representa el texto que el usuario envía al LLM.
+      description: Personaliza los prompts para la traducción de páginas web.
       communityPrompts: Obtener o compartir prompts de la comunidad
-      communityPromptsUrl: https://github.com/mengxi-ream/read-frog/discussions/821
+      communityPromptsUrl:
+        https://github.com/mengxi-ream/read-frog/discussions/821
       addPrompt: Añadir Prompt
       default: Predeterminado
       importSuccess: Importación correcta
@@ -250,8 +274,10 @@ options:
           targetLanguage: Idioma de destino
           webTitle: Título de la página web
           webDescription: Descripción de la página web desde los metadatos
-          webContent: Contenido de la página web (truncado a los primeros 2000 caracteres)
-          webSummary: Resumen de la página web (requiere contexto inteligente de IA)
+          webContent: Contenido de la página web (truncado a los primeros 2000
+            caracteres)
+          webSummary: Resumen de la página web (requiere contexto inteligente de
+            IA)
         save: Guardar cambios
         close: Cancelar
       deletePrompt:
@@ -264,9 +290,11 @@ options:
         cancel: Cancelar
     translationStyle:
       title: Estilo de visualización de traducción
-      description: Define cualquier estilo que quieras para distinguir los resultados de traducción del texto original
+      description: Define cualquier estilo que quieras para distinguir los
+        resultados de traducción del texto original
       useCustomStyle: Usar estilo CSS personalizado
-      useCustomStyleDescription: Admite cualquier CSS, incluidas fuentes, animaciones y estilos específicos de idioma
+      useCustomStyleDescription: Admite cualquier CSS, incluidas fuentes,
+        animaciones y estilos específicos de idioma
       presetStyle: Estilo preestablecido
       cssEditor: Editor CSS
       preview: Vista previa
@@ -308,64 +336,84 @@ options:
         translationOnly: Solo traducción
     translateRange:
       title: Rango de traducción
-      description: Selecciona si traducir solo el contenido principal o todo el contenido de la página.
+      description: Selecciona si traducir solo el contenido principal o todo el
+        contenido de la página.
       range:
         main: Contenido principal
         all: Todo el contenido
     pageTranslationShortcut:
       title: Atajo de traducción de página
-      description: Personaliza la tecla de atajo para traducir páginas web completas
+      description: Personaliza la tecla de atajo para traducir páginas web
+        completas
     preloadConfig:
       title: Rango de pretraducción
-      description: Controla cuánto contenido por debajo de la ventana visible se pretraduce para ahorrar costes de API
+      description: Controla cuánto contenido por debajo de la ventana visible se
+        pretraduce para ahorrar costes de API
       margin:
         title: Distancia de precarga (píxeles)
-        description: Qué tan lejos por debajo de la ventana visible empezar a traducir contenido. Los valores más bajos ahorran costes de API, pero pueden causar retrasos al desplazarse.
+        description: Qué tan lejos por debajo de la ventana visible empezar a
+          traducir contenido. Los valores más bajos ahorran costes de API, pero
+          pueden causar retrasos al desplazarse.
       threshold:
         title: Umbral de visibilidad
-        description: Porcentaje de visibilidad del elemento requerido para activar la traducción (0-1). Los valores más altos retrasan la traducción hasta que sea visible una mayor parte del elemento.
+        description: Porcentaje de visibilidad del elemento requerido para
+          activar la traducción (0-1). Los valores más altos retrasan la
+          traducción hasta que sea visible una mayor parte del elemento.
     smallParagraphFilter:
       title: Filtro de párrafos pequeños
-      description: Omitir la traducción de nodos de texto con menos caracteres o palabras que el umbral (0 = desactivado)
+      description: Omitir la traducción de nodos de texto con menos caracteres o
+        palabras que el umbral (0 = desactivado)
       minCharacters:
         title: Caracteres mínimos
-        description: Los nodos de texto con menos caracteres que este valor no se traducirán. El recuento de caracteres incluye espacios en blanco.
+        description: Los nodos de texto con menos caracteres que este valor no
+          se traducirán. El recuento de caracteres incluye espacios en blanco.
       minWords:
         title: Palabras mínimas
-        description: Los nodos de texto con menos palabras que este valor no se traducirán. Usa Intl.Segmenter para un recuento preciso de palabras en todos los idiomas.
+        description: Los nodos de texto con menos palabras que este valor no se
+          traducirán. Usa Intl.Segmenter para un recuento preciso de palabras en
+          todos los idiomas.
       error: El valor debe estar entre $1 y $2
     nodeTranslationHotkey:
       title: Atajo de traducción al pasar el cursor o mantener pulsado
-      description: Personaliza la tecla modificadora al pasar el cursor o usa pulsación larga para traducir párrafos
+      description: Personaliza la tecla modificadora al pasar el cursor o usa
+        pulsación larga para traducir párrafos
       enable: Activar
     llmProviderConfigured: Proveedor LLM seleccionado para $1
     llmProviderNotConfigured: No se seleccionó ningún proveedor LLM para $1
-    autoTranslateLanguages:
-      title: Traducción automática por idioma
-      description: Traduce automáticamente el contenido de la página cuando se detectan idiomas específicos
-      selectLanguages: Seleccionar idiomas
-    skipLanguages:
-      title: Omisión automática por idioma
-      description: Omite automáticamente la traducción de párrafos cuando se detectan idiomas específicos
-      targetLanguageSkip: Omitir idioma de destino
-      targetLanguageSkipDescription: Antes de traducir, detecta si el párrafo ya está en el idioma de destino. El texto coincidente se omite sin enviar una solicitud. Desactivar esto no cambia la protección posterior que oculta salidas de traducción sin cambios.
-      selectLanguages: Seleccionar idiomas
     aiContentAware:
       title: Traducción con contexto inteligente de IA
-      description: Mejora la calidad de la traducción proporcionando contexto de la página web a la AI
+      description: Mejora la calidad de la traducción proporcionando contexto de
+        la página web a la AI
       enable: Activar traducción con contexto inteligente de IA
-      enableDescription: La AI usa el resumen de la página web para mejorar la precisión de traducción. Requiere proveedor LLM. Añade latencia al empezar a traducir una página y aumenta los costes de API.
+      enableDescription: La AI usa el resumen de la página web para mejorar la
+        precisión de traducción. Requiere proveedor LLM. Añade latencia al
+        empezar a traducir una página y aumenta los costes de API.
   system:
     title: Sistema
 
+    clearCache:
+      title: Borrar caché
+      description: Borra todos los cachés de traducción, resumen de página web y
+        segmentación AI en el navegador.
+      clearing: Borrando...
+      dialog:
+        title: Borrar caché
+        trigger: Borrar caché
+        confirm: Confirmar
+        cancel: Cancelar
+        description: Esto borrará todos los cachés de traducción, resumen de
+          página web y segmentación AI. Esta acción no se puede deshacer.
   config:
     about:
       title: Acerca de
       description: Fundado en junio de 2026
-      mission: "Una extensión de traducción inmersiva de código abierto, bifurcada de [Read Frog](https://github.com/mengxi-ream/read-frog), con simplificaciones y modificaciones personalizadas sobre su base."
+      mission: "Una extensión de traducción inmersiva de código abierto, bifurcada
+        de [Read Frog](https://github.com/mengxi-ream/read-frog), con simplificaciones
+        y modificaciones personalizadas sobre su base."
     sync:
       exportSuccess: Configuración exportada correctamente
-      versionTooNew: La versión de configuración importada es más reciente; actualiza ReadBuddy a la última versión
+      versionTooNew: La versión de configuración importada es más reciente;
+        actualiza ReadBuddy a la última versión
       validationError: Error de validación de configuración
     resetConfig:
       title: Restablecer configuración
@@ -375,14 +423,19 @@ options:
         trigger: Restablecer configuración
         confirm: Confirmar
         cancel: Cancelar
-        description: Esta operación borrará todas tus configuraciones personalizadas y las restablecerá a los valores predeterminados. Confirma para continuar.
+        description: Esta operación borrará todas tus configuraciones
+          personalizadas y las restablecerá a los valores predeterminados.
+          Confirma para continuar.
   videoSubtitles:
-    title: Subtítulos de video
+    title: Traducción de subtítulos
     description: Actualmente solo admite subtítulos de videos de YouTube
     enable: Activar subtítulos de video
-    enableDescription: Cuando está activado, aparecerá un botón de traducción en los controles del reproductor de YouTube. Haz clic para empezar a traducir subtítulos.
+    enableDescription: Cuando está activado, aparecerá un botón de traducción en
+      los controles del reproductor de YouTube. Haz clic para empezar a traducir
+      subtítulos.
     autoStart: Activar subtítulos automáticamente
-    autoStartDescription: Activa automáticamente la traducción de subtítulos cuando se carga el video.
+    autoStartDescription: Activa automáticamente la traducción de subtítulos
+      cuando se carga el video.
     style:
       title: Estilo de subtítulos
       description: Personaliza la apariencia de los subtítulos
@@ -407,36 +460,49 @@ options:
       reset: Restablecer a predeterminado
     aiSegmentation:
       enable: Activar segmentación inteligente de IA
-      enableDescription: Usa AI para segmentar subtítulos de forma inteligente y mejorar la legibilidad. La línea de tiempo la determina la AI, lo que ocasionalmente puede causar desajustes de tiempo. Requiere proveedor de traducción LLM.
+      enableDescription: Usa AI para segmentar subtítulos de forma inteligente y
+        mejorar la legibilidad. La línea de tiempo la determina la AI, lo que
+        ocasionalmente puede causar desajustes de tiempo. Requiere proveedor de
+        traducción LLM.
       clearCache: Borrar caché
       clearing: Borrando...
       clearCacheDialog:
         title: Borrar caché de segmentación AI
-        description: Esto eliminará todos los resultados de segmentación AI en caché. La próxima vez que reproduzcas un video con segmentación AI activada, se volverán a procesar los subtítulos.
+        description: Esto eliminará todos los resultados de segmentación AI en
+          caché. La próxima vez que reproduzcas un video con segmentación AI
+          activada, se volverán a procesar los subtítulos.
         cancel: Cancelar
         confirm: Confirmar
     requestQueueConfig:
       title: Tasa de traducción de subtítulos
-      firstOnDescription: Ajusta la velocidad de procesamiento de las solicitudes de traducción de subtítulos usando el
+      firstOnDescription: Ajusta la velocidad de procesamiento de las
+        solicitudes de traducción de subtítulos usando el
       lastOnDescription: algoritmo
       capacity:
         title: Recuento máximo de solicitudes en ráfaga
-        description: El recuento de solicitudes temporales en ráfaga permitido determina el número máximo de solicitudes de traducción de subtítulos que se pueden procesar de forma concurrente durante un periodo corto
+        description: El recuento de solicitudes temporales en ráfaga permitido
+          determina el número máximo de solicitudes de traducción de subtítulos
+          que se pueden procesar de forma concurrente durante un periodo corto
       rate:
         title: Solicitudes promedio por segundo
-        description: Solicitudes promedio de traducción de subtítulos por segundo, pero permite configurar un recuento máximo en ráfaga para enviar temporalmente solicitudes excedentes
+        description: Solicitudes promedio de traducción de subtítulos por
+          segundo, pero permite configurar un recuento máximo en ráfaga para
+          enviar temporalmente solicitudes excedentes
     batchQueueConfig:
       title: Traducción de subtítulos por lotes
-      description: Configura límites de caracteres y recuento máximo de párrafos para la traducción por lotes (solo efectivo para traducción LLM)
+      description: Configura límites de caracteres y recuento máximo de párrafos
+        para la traducción por lotes (solo efectivo para traducción LLM)
       maxCharactersPerBatch:
         title: Caracteres máximos
-        description: Número máximo de caracteres permitido por solicitud por lote, usado para controlar el volumen de contenido por traducción
+        description: Número máximo de caracteres permitido por solicitud por
+          lote, usado para controlar el volumen de contenido por traducción
       maxItemsPerBatch:
         title: Recuento máximo de párrafos
-        description: Párrafos máximos por traducción por lote, usado para controlar el volumen de contenido por traducción
+        description: Párrafos máximos por traducción por lote, usado para
+          controlar el volumen de contenido por traducción
     customPrompts:
       title: Prompts personalizados de subtítulos
-      description: Personaliza plantillas de prompts para la traducción de subtítulos (separadas de los prompts de traducción de páginas web)
+      description: Personaliza los prompts para la traducción de subtítulos.
       editPrompt:
         promptCellInput:
           input: Texto de subtítulos a traducir
@@ -444,6 +510,33 @@ options:
           webTitle: Título de la página web
           webDescription: Descripción de la página web desde los metadatos
           videoSummary: Resumen del video (requiere contexto inteligente de IA)
+  siteRules:
+    title: Reglas del sitio
+    autoTranslateWebsite:
+      title: Traducción automática por sitio web
+      description: Traducir siempre este sitio web
+      urlPattern: Patrón de URL
+      enterUrlPattern: Introduce patrón de URL
+    neverAutoTranslateWebsite:
+      title: Never Auto Translate Based on Website
+      description: Never automatically translate this website
+      urlPattern: URL Pattern
+      enterUrlPattern: Enter URL Pattern
+    autoTranslateLanguages:
+      title: Traducción automática por idioma
+      description: Traduce automáticamente el contenido de la página cuando se
+        detectan idiomas específicos
+      selectLanguages: Seleccionar idiomas
+    skipLanguages:
+      title: Omisión automática por idioma
+      description: Omite automáticamente la traducción de párrafos cuando se
+        detectan idiomas específicos
+      targetLanguageSkip: Omitir idioma de destino
+      targetLanguageSkipDescription: Antes de traducir, detecta si el párrafo ya
+        está en el idioma de destino. El texto coincidente se omite sin enviar
+        una solicitud. Desactivar esto no cambia la protección posterior que
+        oculta salidas de traducción sin cambios.
+      selectLanguages: Seleccionar idiomas
 translateService:
   title: Servicio de traducción
   description: Solo para traducir la página web
@@ -451,9 +544,11 @@ translateService:
   aiTranslator: Traductor AI
 translatePrompt:
   title: Estilo de traducción AI
-  description: Selecciona un Prompt para usar durante la traducción. Añade o modifica Prompts personalizados en la página de opciones.
+  description: Selecciona un Prompt para usar durante la traducción. Añade o
+    modifica Prompts personalizados en la página de opciones.
 noAPIKeyConfig:
-  warning: Si quieres usar modelos AI, primero configura la clave API en la página de opciones
+  warning: Si quieres usar modelos AI, primero configura la clave API en la
+    página de opciones
 languageDetection:
   llmFailed: Falló la detección de idioma LLM; se recurrió a la detección básica
 translation:
@@ -463,7 +558,8 @@ shortcutKeySelector:
 subtitles:
   actions:
     downloadTranslated: Descargar subtítulos traducidos
-    downloadTranslatedPreparing: Preparando subtítulos, los videos largos pueden tardar más
+    downloadTranslatedPreparing: Preparando subtítulos, los videos largos pueden
+      tardar más
     downloadTranslatedTranslating: Traduciendo subtítulos
     downloadTranslatedComplete: Subtítulos traducidos descargados
     downloadSource: Descargar subtítulos de origen
@@ -471,7 +567,8 @@ subtitles:
     loading: ReadBuddy está cargando subtítulos
     error: Se produjo un error
   errors:
-    http429: 429 Demasiadas solicitudes a la API de subtítulos de youtube; inténtalo de nuevo más tarde
+    http429: 429 Demasiadas solicitudes a la API de subtítulos de youtube;
+      inténtalo de nuevo más tarde
     http404: 404 Subtítulos de Youtube no encontrados
     http403: 403 Acceso a subtítulos de Youtube denegado
     http500: 500 Error del servidor de Youtube
@@ -485,8 +582,10 @@ subtitles:
     aiServiceUnavailable: Servicio de traducción temporalmente no disponible
     aiNoResponse: El servicio AI no respondió; se usa el texto original
     translatedExportFailed: No se pudieron generar los subtítulos traducidos
-    translatedExportIncomplete: No se pudieron traducir todas las líneas de subtítulos
-    translatedExportSameLanguage: El idioma de origen y el de destino son iguales
+    translatedExportIncomplete: No se pudieron traducir todas las líneas de
+      subtítulos
+    translatedExportSameLanguage: El idioma de origen y el de destino son
+      iguales
 hotkey:
   control: Ctrl
   alt: Opción

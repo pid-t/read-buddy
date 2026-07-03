@@ -8,8 +8,6 @@ popup:
   translate: 翻譯
   showOriginal: 顯示原文
   alwaysTranslate: 總是翻譯這個網站
-  addToWhitelist: 在此網站啟用擴充功能
-  addToBlacklist: 在此網站停用擴充功能
   options: 選項
   hover: 滑鼠停留
   translateParagraph: 翻譯段落
@@ -61,7 +59,8 @@ options:
           description: 內建的大型語言模型提供者，大多數設定不需要填寫，例如 Base URL
         openaiCompatibleProviders:
           title: OpenAI 相容自訂提供者
-          description: 如果找不到你想要的 AI 提供者，請選擇 Custom Provider 來設定任何 OpenAI API 相容的提供者，例如智譜
+          description: 如果找不到你想要的 AI 提供者，請選擇 Custom Provider 來設定任何 OpenAI API
+            相容的提供者，例如智譜
         pureTranslationProviders:
           title: 純翻譯提供者
           description: 專注於翻譯功能的提供者，沒有大型語言模型能力
@@ -79,7 +78,8 @@ options:
         confirm: 刪除
         cancel: 取消
       atLeastOneLLMProvider: 至少需要一個 LLM 翻譯提供者。
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used by $2 feature(s).'
+      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
+        by $2 feature(s).'
       duplicateProviderName: '重複的提供者名稱 "$1"'
       models:
         translate:
@@ -101,7 +101,8 @@ options:
       headers: 請求標頭
       headersHint: 建立 AI 提供者用戶端時送出的自訂 HTTP 請求標頭。留空則使用提供者預設值；填入 {} 可停用預設值。
       providerOptions: 提供者選項
-      providerOptionsHint: 用於非標準 API 功能（例如思考／推理模式）的提供者專屬選項。詳細資訊請參閱 Vercel AI SDK 文件或你的提供者官方文件。
+      providerOptionsHint: 用於非標準 API 功能（例如思考／推理模式）的提供者專屬選項。詳細資訊請參閱 Vercel AI SDK
+        文件或你的提供者官方文件。
       providerOptionsDocsLink: 查看提供者文件
       providerOptionsRecommendationTrigger: 查看推薦的提供者選項
       providerOptionsRecommendationTitle: 偵測到推薦的提供者選項
@@ -156,24 +157,14 @@ options:
       description: 為每個功能選擇使用的提供者
       features:
         translate: 網頁翻譯
-        videoSubtitles: 影片字幕
+        videoSubtitles: 字幕翻譯
     translationConfig:
       model:
         title: 模型
         enterCustomModel: 輸入自訂模型名稱
-    clearCache:
-      title: 清除快取
-      description: 清理瀏覽器中的所有翻譯快取
-      clearing: 清除中…
-      dialog:
-        title: 清除快取
-        trigger: 清除快取
-        confirm: 確認
-        cancel: 取消
-        description: 此操作將清理所有翻譯快取。此操作無法撤銷。
     languageDetection:
       title: 語言偵測
-      description: 影響自動翻譯語言偵測、跳過語言偵測和朗讀語音選擇的準確性。
+      description: 影響自動翻譯時的語言檢測準確性。
       mode:
         basic: 基礎
         llm: LLM
@@ -184,22 +175,8 @@ options:
         noProviders: 請先設定 LLM 提供者
         basicRecommend: 建議啟用 LLM
         llmEnabled: LLM 偵測已啟用
-  siteControl:
-    mode:
-      title: 擴充功能啟動模式
-      description: 使用封鎖清單模式可在特定網站停用擴充功能；使用允許清單模式則只在指定網站啟用擴充功能。
-      blacklist: 只在列出的網站停用
-      whitelist: 只在列出的網站啟用
-    patterns:
-      enterUrlPattern: 輸入 URL 模式（例如 example.com）
-      urlPattern: URL 模式
   translation:
     title: 翻譯
-    groups:
-      behavior: 翻譯行為
-      displayAndQuality: 顯示與品質
-      automationAndRules: 自動化與規則
-      performanceAndCache: 效能與快取
     requestQueueConfig:
       title: 翻譯速率
       firstOnDescription: 調整翻譯請求的處理速度，使用
@@ -219,21 +196,12 @@ options:
       maxItemsPerBatch:
         title: 最大段落數
         description: 每個批次翻譯的最大段落數，用於控制單次翻譯的內容量
-    autoTranslateWebsite:
-      title: 依網站自動翻譯
-      description: 總是翻譯這個網站
-      urlPattern: URL 模式
-      enterUrlPattern: 輸入 URL 模式
-    neverAutoTranslateWebsite:
-      title: 依網站永不自動翻譯
-      description: 永不自動翻譯這個網站
-      urlPattern: URL 模式
-      enterUrlPattern: 輸入 URL 模式
     personalizedPrompts:
       title: 個人化提示詞
-      description: 自訂不同類型的提示詞，可以在翻譯時自行調整提示詞類型。提示詞表示以使用者身份發送給 LLM 的文字。
+      description: 自定義不同類型網頁翻譯的 Prompt。
       communityPrompts: 取得或分享社群提示詞
-      communityPromptsUrl: https://github.com/mengxi-ream/read-frog/discussions/820
+      communityPromptsUrl:
+        https://github.com/mengxi-ream/read-frog/discussions/820
       addPrompt: 新增提示詞
       default: 通用
       importSuccess: 匯入成功
@@ -340,16 +308,6 @@ options:
       enable: 啟用
     llmProviderConfigured: 已為$1選擇 LLM 提供者
     llmProviderNotConfigured: 沒有為$1選擇 LLM 提供者
-    autoTranslateLanguages:
-      title: 依語言自動翻譯
-      description: 當偵測到特定語言時自動翻譯頁面內容
-      selectLanguages: 選擇語言
-    skipLanguages:
-      title: 依語言自動跳過
-      description: 當偵測到指定語言時自動跳過段落翻譯
-      targetLanguageSkip: 跳過目標語言
-      targetLanguageSkipDescription: 翻譯前預先偵測段落是否已是目標語言；命中時不發送翻譯請求。關閉後仍保留譯文與原文相同則不顯示的後置保護。
-      selectLanguages: 選擇語言
     aiContentAware:
       title: AI 智慧上下文翻譯
       description: 透過向 AI 提供網頁上下文來提高翻譯品質
@@ -358,6 +316,16 @@ options:
   system:
     title: 系統
 
+    clearCache:
+      title: 清除快取
+      description: 清理瀏覽器中的所有翻譯緩存、網頁摘要緩存和 AI 斷句緩存。
+      clearing: 清除中…
+      dialog:
+        title: 清除快取
+        trigger: 清除快取
+        confirm: 確認
+        cancel: 取消
+        description: 此操作將清理所有翻譯緩存、網頁摘要緩存和 AI 斷句緩存。此操作無法撤銷。
   config:
     about:
       title: 關於
@@ -377,7 +345,7 @@ options:
         cancel: 取消
         description: 此操作將清空你的所有自訂設定，並將其重設為預設值，請確認是否清除。
   videoSubtitles:
-    title: 影片字幕
+    title: 字幕翻譯
     description: 目前僅支援 YouTube 影片字幕
     enable: 開啟影片字幕
     enableDescription: 啟用後，YouTube 播放器控制列會出現翻譯按鈕。點選即可開始翻譯字幕。
@@ -407,7 +375,8 @@ options:
       reset: 重設為預設值
     aiSegmentation:
       enable: 啟用 AI 智慧斷句
-      enableDescription: 使用 AI 智慧斷句字幕，提升可讀性。啟用後時間軸由 AI 判斷，可能出現時間軸錯位。需要設定 LLM 翻譯提供者。
+      enableDescription: 使用 AI 智慧斷句字幕，提升可讀性。啟用後時間軸由 AI 判斷，可能出現時間軸錯位。需要設定 LLM
+        翻譯提供者。
       clearCache: 清除快取
       clearing: 清除中…
       clearCacheDialog:
@@ -436,7 +405,7 @@ options:
         description: 每個批次翻譯的最大段落數，用於控制單次翻譯的內容量
     customPrompts:
       title: 自訂字幕提示詞
-      description: 自訂字幕翻譯的提示詞模板（與網頁翻譯提示詞分離）
+      description: 自定義字幕翻譯的提示詞。
       editPrompt:
         promptCellInput:
           input: 要翻譯的字幕文字
@@ -444,6 +413,29 @@ options:
           webTitle: 網頁標題
           webDescription: 頁面中繼資料的網頁描述
           videoSummary: 影片摘要（需啟用 AI 智慧上下文）
+  siteRules:
+    title: 站點規則
+    autoTranslateWebsite:
+      title: 依網站自動翻譯
+      description: 總是翻譯這個網站
+      urlPattern: URL 模式
+      enterUrlPattern: 輸入 URL 模式
+    neverAutoTranslateWebsite:
+      title: 依網站永不自動翻譯
+      description: 永不自動翻譯這個網站
+      urlPattern: URL 模式
+      enterUrlPattern: 輸入 URL 模式
+    autoTranslateLanguages:
+      title: 依語言自動翻譯
+      description: 當偵測到特定語言時自動翻譯頁面內容
+      selectLanguages: 選擇語言
+    skipLanguages:
+      title: 依語言自動跳過
+      description: 當偵測到指定語言時自動跳過段落翻譯
+      targetLanguageSkip: 跳過目標語言
+      targetLanguageSkipDescription:
+        翻譯前預先偵測段落是否已是目標語言；命中時不發送翻譯請求。關閉後仍保留譯文與原文相同則不顯示的後置保護。
+      selectLanguages: 選擇語言
 translateService:
   title: 翻譯服務
   description: 僅用於翻譯網頁內容

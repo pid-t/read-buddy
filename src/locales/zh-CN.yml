@@ -8,8 +8,6 @@ popup:
   translate: 翻译
   showOriginal: 显示原文
   alwaysTranslate: 总是翻译这个网站
-  addToWhitelist: 在此网站启用扩展
-  addToBlacklist: 在此网站禁用扩展
   options: 选项
   hover: 鼠标悬停
   translateParagraph: 来翻译段落
@@ -61,7 +59,8 @@ options:
           description: 内置的大语言模型提供商，无需填写大部分配置比如 Base URL
         openaiCompatibleProviders:
           title: OpenAI 兼容自定义提供商
-          description: 如果找不到你想要的 AI 提供商，请选择 Custom Provider 来配置任何 OpenAI 接口兼容的提供商，比如智谱
+          description: 如果找不到你想要的 AI 提供商，请选择 Custom Provider 来配置任何 OpenAI
+            接口兼容的提供商，比如智谱
         pureTranslationProviders:
           title: 纯翻译提供商
           description: 专注于翻译功能的提供商，没有大语言模型能力
@@ -101,7 +100,8 @@ options:
       headers: 请求头
       headersHint: 创建 AI 提供商客户端时发送的自定义 HTTP 请求头。留空则使用提供商默认值；填写 {} 可禁用默认值。
       providerOptions: 提供商选项
-      providerOptionsHint: 用于非标准 API 功能（如思考/推理模式）的提供商特定选项。详情请参阅 Vercel AI SDK 文档或您的提供商官方文档。
+      providerOptionsHint: 用于非标准 API 功能（如思考/推理模式）的提供商特定选项。详情请参阅 Vercel AI SDK
+        文档或您的提供商官方文档。
       providerOptionsDocsLink: 查看提供商文档
       providerOptionsRecommendationTrigger: 查看推荐的提供商选项
       providerOptionsRecommendationTitle: 检测到推荐的提供商选项
@@ -156,24 +156,14 @@ options:
       description: 为每个功能选择使用的提供商
       features:
         translate: 网页翻译
-        videoSubtitles: 视频字幕
+        videoSubtitles: 字幕翻译
     translationConfig:
       model:
         title: 模型
         enterCustomModel: 输入自定义模型名称
-    clearCache:
-      title: 清理缓存
-      description: 清理浏览器中的所有翻译缓存
-      clearing: 清理中...
-      dialog:
-        title: 清理缓存
-        trigger: 清理缓存
-        confirm: 确认
-        cancel: 取消
-        description: 此操作将清理所有翻译缓存。此操作无法撤销。
     languageDetection:
       title: 语言检测
-      description: 影响自动翻译语言检测、跳过语言检测和朗读语音选择的准确性。
+      description: 影响自动翻译时的语言检测准确性。
       mode:
         basic: 基础
         llm: LLM
@@ -184,22 +174,8 @@ options:
         noProviders: 请先配置 LLM 提供商
         basicRecommend: 建议启用 LLM
         llmEnabled: LLM 检测已启用
-  siteControl:
-    mode:
-      title: 扩展激活模式
-      description: 使用黑名单模式可以在特定网站上禁用扩展，或使用白名单模式限制扩展仅在特定网站上运行。
-      blacklist: 仅在列出的站点禁止
-      whitelist: 仅在列出的站点运行
-    patterns:
-      enterUrlPattern: 输入 URL 模式（例如 example.com）
-      urlPattern: URL 模式
   translation:
     title: 翻译
-    groups:
-      behavior: 翻译行为
-      displayAndQuality: 显示与品质
-      automationAndRules: 自动化与规则
-      performanceAndCache: 性能与缓存
     requestQueueConfig:
       title: 翻译速率
       firstOnDescription: 调整翻译请求的处理速度，使用
@@ -219,21 +195,12 @@ options:
       maxItemsPerBatch:
         title: 最大段落数
         description: 每个批量翻译的最大段落数，用于控制单次翻译的内容量
-    autoTranslateWebsite:
-      title: 基于网站自动翻译
-      description: 总是翻译这个网站
-      urlPattern: URL 模式
-      enterUrlPattern: 输入 URL 模式
-    neverAutoTranslateWebsite:
-      title: 基于网站永不自动翻译
-      description: 永不自动翻译这个网站
-      urlPattern: URL 模式
-      enterUrlPattern: 输入 URL 模式
     personalizedPrompts:
       title: 个性化 Prompt
-      description: 自定义不同类型的 Prompt，可以在翻译时自行调整 Prompt 类型。Prompt 表示以用户身份发送给 LLM 的文本。
+      description: 自定义不同类型网页翻译的 Prompt。
       communityPrompts: 获取或分享社区 Prompt
-      communityPromptsUrl: https://github.com/mengxi-ream/read-frog/discussions/820
+      communityPromptsUrl:
+        https://github.com/mengxi-ream/read-frog/discussions/820
       addPrompt: 添加 Prompt
       default: 通用
       importSuccess: 导入成功
@@ -340,16 +307,6 @@ options:
       enable: 启用
     llmProviderConfigured: 已为$1选择 LLM 提供商
     llmProviderNotConfigured: 没有为$1选择 LLM 提供商
-    autoTranslateLanguages:
-      title: 基于语言的自动翻译
-      description: 当检测到指定语言时自动翻译页面内容
-      selectLanguages: 选择语言
-    skipLanguages:
-      title: 基于语言的自动跳过
-      description: 当检测到指定语言时自动跳过段落翻译
-      targetLanguageSkip: 跳过目标语言
-      targetLanguageSkipDescription: 翻译前预检测段落是否已是目标语言；命中时不发送翻译请求。关闭后仍保留译文与原文相同则不显示的后置保护。
-      selectLanguages: 选择语言
     aiContentAware:
       title: AI 智能上下文翻译
       description: 通过向 AI 提供网页上下文来提高翻译质量
@@ -358,6 +315,16 @@ options:
   system:
     title: 系统
 
+    clearCache:
+      title: 清理缓存
+      description: 清理浏览器中的所有翻译缓存、网页摘要缓存和 AI 断句缓存。
+      clearing: 清理中...
+      dialog:
+        title: 清理缓存
+        trigger: 清理缓存
+        confirm: 确认
+        cancel: 取消
+        description: 此操作将清理所有翻译缓存、网页摘要缓存和 AI 断句缓存。此操作无法撤销。
   config:
     about:
       title: 关于
@@ -377,7 +344,7 @@ options:
         cancel: 取消
         description: 该操作将清空您的所有自定义配置，并将其重置为默认值，请确认是否清除。
   videoSubtitles:
-    title: 视频字幕
+    title: 字幕翻译
     description: 当前仅支持 YouTube 视频字幕
     enable: 开启视频字幕
     enableDescription: 启用后，YouTube 播放器控制栏会出现翻译按钮。点击即可开始翻译字幕。
@@ -407,7 +374,8 @@ options:
       reset: 重置为默认
     aiSegmentation:
       enable: 启用 AI 智能断句
-      enableDescription: 使用 AI 智能断句字幕，提升可读性。启用后时间轴由 AI 判断，可能出现时间轴错位。需要配置 LLM 翻译提供商。
+      enableDescription: 使用 AI 智能断句字幕，提升可读性。启用后时间轴由 AI 判断，可能出现时间轴错位。需要配置 LLM
+        翻译提供商。
       clearCache: 清除缓存
       clearing: 清除中...
       clearCacheDialog:
@@ -436,7 +404,7 @@ options:
         description: 每个批量翻译的最大段落数，用于控制单次翻译的内容量
     customPrompts:
       title: 自定义字幕提示词
-      description: 自定义字幕翻译的提示词模板（与网页翻译提示词分离）
+      description: 自定义字幕翻译的提示词。
       editPrompt:
         promptCellInput:
           input: 要翻译的字幕文本
@@ -444,6 +412,29 @@ options:
           webTitle: 网页标题
           webDescription: 页面元信息中的网页描述
           videoSummary: 视频摘要（需启用 AI 智能上下文）
+  siteRules:
+    title: 站点规则
+    autoTranslateWebsite:
+      title: 基于网站自动翻译
+      description: 总是翻译这个网站
+      urlPattern: URL 模式
+      enterUrlPattern: 输入 URL 模式
+    neverAutoTranslateWebsite:
+      title: 基于网站永不自动翻译
+      description: 永不自动翻译这个网站
+      urlPattern: URL 模式
+      enterUrlPattern: 输入 URL 模式
+    autoTranslateLanguages:
+      title: 基于语言的自动翻译
+      description: 当检测到指定语言时自动翻译页面内容
+      selectLanguages: 选择语言
+    skipLanguages:
+      title: 基于语言的自动跳过
+      description: 当检测到指定语言时自动跳过段落翻译
+      targetLanguageSkip: 跳过目标语言
+      targetLanguageSkipDescription:
+        翻译前预检测段落是否已是目标语言；命中时不发送翻译请求。关闭后仍保留译文与原文相同则不显示的后置保护。
+      selectLanguages: 选择语言
 translateService:
   title: 翻译服务
   description: 仅用于翻译网页内容

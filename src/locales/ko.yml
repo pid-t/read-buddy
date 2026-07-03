@@ -1,6 +1,7 @@
 name: ReadBuddy
 extName: ReadBuddy - 번역하고 배우기
-extDescription: ReadBuddy는 모든 웹사이트에서 언어를 깊이 있게 학습할 수 있도록 도와주는 오픈 소스 브라우저 확장 프로그램입니다.
+extDescription: ReadBuddy는 모든 웹사이트에서 언어를 깊이 있게 학습할 수 있도록 도와주는 오픈 소스 브라우저 확장
+  프로그램입니다.
 popup:
   autoLang: 자동
   sourceLang: 원본
@@ -8,8 +9,6 @@ popup:
   translate: 번역
   showOriginal: 원문 보기
   alwaysTranslate: 이 사이트 항상 번역
-  addToWhitelist: 이 사이트에서 확장 프로그램 활성화
-  addToBlacklist: 이 사이트에서 확장 프로그램 비활성화
   options: 옵션
   hover: 마우스 오버
   translateParagraph: 단락 번역
@@ -49,7 +48,8 @@ options:
     page: 페이지에서
   apiProviders:
     title: API 제공업체
-    description: 번역 및 어휘 분석 기능을 위한 API 제공업체를 구성합니다. 20개 이상의 내장 제공업체와 모든 OpenAI 호환 API를 지원합니다.
+    description: 번역 및 어휘 분석 기능을 위한 API 제공업체를 구성합니다. 20개 이상의 내장 제공업체와 모든 OpenAI
+      호환 API를 지원합니다.
     addProvider: 제공업체 추가
     badges:
       featureCount: $1 개 기능
@@ -61,7 +61,8 @@ options:
           description: 내장된 대규모 언어 모델 제공업체, Base URL과 같은 대부분의 설정이 필요 없음
         openaiCompatibleProviders:
           title: OpenAI 호환 사용자 정의 제공업체
-          description: 원하는 AI 제공업체를 찾을 수 없는 경우 Custom Provider를 선택하여 Zhipu AI와 같은 OpenAI 호환 제공업체를 구성할 수 있습니다
+          description: 원하는 AI 제공업체를 찾을 수 없는 경우 Custom Provider를 선택하여 Zhipu AI와
+            같은 OpenAI 호환 제공업체를 구성할 수 있습니다
         pureTranslationProviders:
           title: 순수 번역 제공업체
           description: 대규모 언어 모델 기능이 없는 번역 전문 제공업체
@@ -75,11 +76,13 @@ options:
       delete: 삭제
       deleteDialog:
         title: 제공업체를 삭제하시겠습니까?
-        description: 이 작업은 취소할 수 없습니다. 이 제공업체를 사용하는 기능은 다른 사용 가능한 제공업체로 자동 재할당됩니다.
+        description: 이 작업은 취소할 수 없습니다. 이 제공업체를 사용하는 기능은 다른 사용 가능한 제공업체로 자동
+          재할당됩니다.
         confirm: 삭제
         cancel: 취소
       atLeastOneLLMProvider: 최소 하나의 LLM 번역 제공업체가 필요합니다.
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used by $2 feature(s).'
+      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
+        by $2 feature(s).'
       duplicateProviderName: '중복된 제공업체 이름 "$1"'
       models:
         translate:
@@ -97,11 +100,14 @@ options:
       providerSettingLabels:
         region: 리전
       temperature: 온도
-      temperatureHint: 응답의 무작위성을 제어합니다. 낮은 값(0)은 더 결정적이고, 높은 값은 더 창의적입니다. 범위는 제공자에 따라 다릅니다. 비워두면 제공자 기본값을 사용합니다.
+      temperatureHint: 응답의 무작위성을 제어합니다. 낮은 값(0)은 더 결정적이고, 높은 값은 더 창의적입니다. 범위는
+        제공자에 따라 다릅니다. 비워두면 제공자 기본값을 사용합니다.
       headers: 헤더
-      headersHint: AI 제공자 클라이언트를 만들 때 전송할 사용자 지정 HTTP 헤더입니다. 비워두면 제공자 기본값을 사용하고, {}를 입력하면 기본값을 비활성화합니다.
+      headersHint: AI 제공자 클라이언트를 만들 때 전송할 사용자 지정 HTTP 헤더입니다. 비워두면 제공자 기본값을 사용하고,
+        {}를 입력하면 기본값을 비활성화합니다.
       providerOptions: 제공자 옵션
-      providerOptionsHint: 사고/추론 모드와 같은 비표준 API 기능을 위한 공급자별 옵션입니다. 자세한 내용은 Vercel AI SDK 문서 또는 공급자의 공식 문서를 참조하세요.
+      providerOptionsHint: 사고/추론 모드와 같은 비표준 API 기능을 위한 공급자별 옵션입니다. 자세한 내용은
+        Vercel AI SDK 문서 또는 공급자의 공식 문서를 참조하세요.
       providerOptionsDocsLink: 공급자 문서 보기
       providerOptionsRecommendationTrigger: 추천 제공자 옵션 보기
       providerOptionsRecommendationTitle: 추천 제공자 옵션이 감지되었습니다
@@ -156,24 +162,14 @@ options:
       description: 각 기능에 사용할 제공업체를 선택
       features:
         translate: 페이지 번역
-        videoSubtitles: 비디오 자막
+        videoSubtitles: 자막 번역
     translationConfig:
       model:
         title: 모델
         enterCustomModel: 사용자 정의 모델 이름 입력
-    clearCache:
-      title: 캐시 지우기
-      description: 브라우저의 모든 번역 캐시를 지웁니다
-      clearing: 지우는 중...
-      dialog:
-        title: 캐시 지우기
-        trigger: 캐시 지우기
-        confirm: 확인
-        cancel: 취소
-        description: 이 작업은 모든 번역 캐시를 지웁니다. 이 작업은 되돌릴 수 없습니다.
     languageDetection:
       title: 언어 감지
-      description: 자동 번역 언어 감지, 건너뛰기 언어 감지 및 읽기 음성 선택 정확도에 영향을 줍니다.
+      description: 자동 번역 시 언어 감지 정확도에 영향을 줍니다.
       mode:
         basic: 기본
         llm: LLM
@@ -184,22 +180,8 @@ options:
         noProviders: LLM 제공자를 먼저 구성하세요
         basicRecommend: LLM 활성화 권장
         llmEnabled: LLM 감지 활성화됨
-  siteControl:
-    mode:
-      title: 확장 프로그램 활성화 모드
-      description: 블랙리스트 모드를 사용하여 특정 사이트에서 확장 프로그램을 비활성화하거나, 화이트리스트 모드를 사용하여 특정 사이트에서만 실행되도록 제한할 수 있습니다.
-      blacklist: 나열된 사이트에서만 비활성화
-      whitelist: 나열된 사이트에서만 실행
-    patterns:
-      enterUrlPattern: "URL 패턴 입력 (예: example.com)"
-      urlPattern: URL 패턴
   translation:
     title: 번역
-    groups:
-      behavior: 번역 동작
-      displayAndQuality: 표시 및 품질
-      automationAndRules: 자동화 및 규칙
-      performanceAndCache: 성능 및 캐시
     requestQueueConfig:
       title: 번역 속도
       firstOnDescription: 번역 요청 처리 속도 조정 및
@@ -219,21 +201,12 @@ options:
       maxItemsPerBatch:
         title: 최대 단락 수
         description: 각 배치 번역의 최대 단락 수로 각 번역의 콘텐츠 양을 제어합니다
-    autoTranslateWebsite:
-      title: 웹사이트 기반 자동 번역
-      description: 이 사이트를 항상 번역합니다
-      urlPattern: URL 패턴
-      enterUrlPattern: URL 패턴 입력
-    neverAutoTranslateWebsite:
-      title: Never Auto Translate Based on Website
-      description: Never automatically translate this website
-      urlPattern: URL Pattern
-      enterUrlPattern: Enter URL Pattern
     personalizedPrompts:
       title: 개인화된 프롬프트
-      description: 다양한 유형의 프롬프트를 사용자 정의하여, 번역 시 프롬프트 유형을 직접 조정할 수 있습니다. 프롬프트는 사용자가 LLM에게 보내는 텍스트를 나타내며.
+      description: 웹 페이지 번역을 위한 프롬프트를 사용자 지정합니다.
       communityPrompts: 커뮤니티에서 프롬프트 가져오기 또는 공유
-      communityPromptsUrl: https://github.com/mengxi-ream/read-frog/discussions/821
+      communityPromptsUrl:
+        https://github.com/mengxi-ream/read-frog/discussions/821
       addPrompt: 프롬프트 추가
       default: 기본
       importSuccess: 가져오기 성공
@@ -320,10 +293,12 @@ options:
       description: API 비용을 절약하기 위해 뷰포트 아래 콘텐츠를 얼마나 사전 번역할지 제어합니다
       margin:
         title: 미리 로드 거리 (픽셀)
-        description: 뷰포트에서 얼마나 떨어진 곳에서 콘텐츠 번역을 시작할지. 작은 값은 API 비용을 절약하지만 스크롤 시 지연이 발생할 수 있습니다.
+        description: 뷰포트에서 얼마나 떨어진 곳에서 콘텐츠 번역을 시작할지. 작은 값은 API 비용을 절약하지만 스크롤 시
+          지연이 발생할 수 있습니다.
       threshold:
         title: 가시성 임계값
-        description: 번역을 트리거하는 데 필요한 요소 가시성 비율 (0-1). 높은 값은 요소가 더 많이 보일 때까지 번역을 지연시킵니다.
+        description: 번역을 트리거하는 데 필요한 요소 가시성 비율 (0-1). 높은 값은 요소가 더 많이 보일 때까지 번역을
+          지연시킵니다.
     smallParagraphFilter:
       title: 짧은 텍스트 필터
       description: 지정한 문자 수 또는 단어 수보다 적은 텍스트 노드의 번역을 건너뜁니다 (0 = 비활성화)
@@ -332,7 +307,8 @@ options:
         description: 이 값보다 적은 문자 수의 텍스트 노드는 번역되지 않습니다. 문자 수에는 공백이 포함됩니다.
       minWords:
         title: 최소 단어 수
-        description: 이 값보다 적은 단어 수의 텍스트 노드는 번역되지 않습니다. 모든 언어에서 정확한 단어 카운트를 위해 Intl.Segmenter를 사용합니다.
+        description: 이 값보다 적은 단어 수의 텍스트 노드는 번역되지 않습니다. 모든 언어에서 정확한 단어 카운트를 위해
+          Intl.Segmenter를 사용합니다.
       error: 값은 $1에서 $2 사이여야 합니다
     nodeTranslationHotkey:
       title: 호버 또는 길게 누르기 번역 단축키
@@ -340,29 +316,32 @@ options:
       enable: 활성화
     llmProviderConfigured: $1에 LLM 제공업체 선택됨
     llmProviderNotConfigured: $1에 LLM 제공업체 미선택
-    autoTranslateLanguages:
-      title: 언어에 기반한 자동 번역
-      description: 특정 언어가 감지되면 페이지 콘텐츠를 자동으로 번역합니다
-      selectLanguages: 언어 선택
-    skipLanguages:
-      title: 언어 기반 자동 건너뛰기
-      description: 지정된 언어가 감지되면 단락 번역을 자동으로 건너뜁니다
-      targetLanguageSkip: 대상 언어 건너뛰기
-      targetLanguageSkipDescription: 번역 전에 단락이 이미 대상 언어인지 미리 감지합니다. 일치하는 텍스트는 요청을 보내지 않고 건너뜁니다. 이 옵션을 꺼도 번역 결과가 원문과 같으면 숨기는 후처리 보호는 유지됩니다.
-      selectLanguages: 언어 선택
     aiContentAware:
       title: AI 스마트 컨텍스트 번역
       description: AI에 웹페이지 컨텍스트를 제공하여 번역 품질을 향상시킵니다
       enable: AI 스마트 컨텍스트 번역 활성화
-      enableDescription: AI가 웹페이지 요약을 사용하여 번역 정확도를 향상시킵니다. LLM 제공업체가 필요합니다. 번역 시작 시 지연이 발생하고 API 비용이 증가합니다.
+      enableDescription: AI가 웹페이지 요약을 사용하여 번역 정확도를 향상시킵니다. LLM 제공업체가 필요합니다. 번역
+        시작 시 지연이 발생하고 API 비용이 증가합니다.
   system:
     title: 시스템
 
+    clearCache:
+      title: 캐시 지우기
+      description: 브라우저의 모든 번역 캐시, 웹 페이지 요약 캐시 및 AI 문장 분할 캐시를 지웁니다.
+      clearing: 지우는 중...
+      dialog:
+        title: 캐시 지우기
+        trigger: 캐시 지우기
+        confirm: 확인
+        cancel: 취소
+        description: 이 작업을 수행하면 모든 번역 캐시, 웹 페이지 요약 캐시 및 AI 문장 분할 캐시가 지워집니다. 이
+          작업은 취소할 수 없습니다.
   config:
     about:
       title: 소개
       description: 2026년 6월 출시
-      mission: "[Read Frog](https://github.com/mengxi-ream/read-frog)를 포크하고 이를 기반으로 단순화 및 맞춤 수정을 적용한 오픈소스 몰입형 번역 확장 프로그램입니다."
+      mission: "[Read Frog](https://github.com/mengxi-ream/read-frog)를 포크하고 이를 기반으로
+        단순화 및 맞춤 수정을 적용한 오픈소스 몰입형 번역 확장 프로그램입니다."
     sync:
       exportSuccess: 설정 내보내기 완료
       versionTooNew: 가져온 설정 버전이 최신이므로 ReadBuddy를 최신 버전으로 업그레이드해 주세요
@@ -377,10 +356,11 @@ options:
         cancel: 취소
         description: 이 작업은 모든 사용자 지정 설정을 지우고 기본값으로 재설정합니다. 삭제하시겠습니까?
   videoSubtitles:
-    title: 비디오 자막
+    title: 자막 번역
     description: 현재 YouTube 비디오 자막만 지원
     enable: 비디오 자막 활성화
-    enableDescription: 활성화하면 YouTube 플레이어 컨트롤 바에 번역 버튼이 나타납니다. 클릭하여 자막 번역을 시작하세요.
+    enableDescription: 활성화하면 YouTube 플레이어 컨트롤 바에 번역 버튼이 나타납니다. 클릭하여 자막 번역을
+      시작하세요.
     autoStart: 자막 자동 활성화
     autoStartDescription: 비디오가 로드되면 자동으로 자막 번역을 활성화합니다.
     style:
@@ -407,12 +387,14 @@ options:
       reset: 기본값으로 재설정
     aiSegmentation:
       enable: AI 스마트 분할 활성화
-      enableDescription: AI를 사용하여 자막을 지능적으로 분할하여 가독성을 향상시킵니다. 타임라인은 AI가 결정하므로 타이밍 오차가 발생할 수 있습니다. LLM 번역 공급자가 필요합니다.
+      enableDescription: AI를 사용하여 자막을 지능적으로 분할하여 가독성을 향상시킵니다. 타임라인은 AI가 결정하므로
+        타이밍 오차가 발생할 수 있습니다. LLM 번역 공급자가 필요합니다.
       clearCache: 캐시 삭제
       clearing: 삭제 중...
       clearCacheDialog:
         title: AI 분할 캐시 삭제
-        description: 모든 캐시된 AI 분할 결과가 삭제됩니다. 다음에 AI 분할이 활성화된 비디오를 재생하면 자막이 다시 처리됩니다.
+        description: 모든 캐시된 AI 분할 결과가 삭제됩니다. 다음에 AI 분할이 활성화된 비디오를 재생하면 자막이 다시
+          처리됩니다.
         cancel: 취소
         confirm: 확인
     requestQueueConfig:
@@ -436,7 +418,7 @@ options:
         description: 각 배치 번역의 최대 단락 수로 각 번역의 콘텐츠 양을 제어합니다
     customPrompts:
       title: 사용자 정의 자막 프롬프트
-      description: 자막 번역용 프롬프트 템플릿을 사용자 정의합니다 (웹페이지 번역 프롬프트와 별도)
+      description: 자막 번역을 위한 프롬프트를 사용자 지정합니다.
       editPrompt:
         promptCellInput:
           input: 번역할 자막 텍스트
@@ -444,6 +426,29 @@ options:
           webTitle: 웹페이지 제목
           webDescription: 페이지 메타데이터의 웹페이지 설명
           videoSummary: 동영상 요약 (AI 스마트 컨텍스트 필요)
+  siteRules:
+    title: 사이트 규칙
+    autoTranslateWebsite:
+      title: 웹사이트 기반 자동 번역
+      description: 이 사이트를 항상 번역합니다
+      urlPattern: URL 패턴
+      enterUrlPattern: URL 패턴 입력
+    neverAutoTranslateWebsite:
+      title: Never Auto Translate Based on Website
+      description: Never automatically translate this website
+      urlPattern: URL Pattern
+      enterUrlPattern: Enter URL Pattern
+    autoTranslateLanguages:
+      title: 언어에 기반한 자동 번역
+      description: 특정 언어가 감지되면 페이지 콘텐츠를 자동으로 번역합니다
+      selectLanguages: 언어 선택
+    skipLanguages:
+      title: 언어 기반 자동 건너뛰기
+      description: 지정된 언어가 감지되면 단락 번역을 자동으로 건너뜁니다
+      targetLanguageSkip: 대상 언어 건너뛰기
+      targetLanguageSkipDescription: 번역 전에 단락이 이미 대상 언어인지 미리 감지합니다. 일치하는 텍스트는
+        요청을 보내지 않고 건너뜁니다. 이 옵션을 꺼도 번역 결과가 원문과 같으면 숨기는 후처리 보호는 유지됩니다.
+      selectLanguages: 언어 선택
 translateService:
   title: 번역 서비스
   description: 웹페이지 번역 전용

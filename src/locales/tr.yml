@@ -1,6 +1,8 @@
 name: ReadBuddy
 extName: ReadBuddy - Çevir ve Öğren
-extDescription: ReadBuddy, herhangi bir web sitesinden dilleri derinlemesine öğrenmenize yardımcı olmak için tasarlanmış açık kaynaklı bir tarayıcı uzantısıdır.
+extDescription: ReadBuddy, herhangi bir web sitesinden dilleri derinlemesine
+  öğrenmenize yardımcı olmak için tasarlanmış açık kaynaklı bir tarayıcı
+  uzantısıdır.
 popup:
   autoLang: Otomatik
   sourceLang: Kaynak
@@ -8,8 +10,6 @@ popup:
   translate: Çevir
   showOriginal: Orijinali Göster
   alwaysTranslate: Bu siteyi her zaman çevir
-  addToWhitelist: Bu sitede uzantıyı etkinleştir
-  addToBlacklist: Bu sitede uzantıyı devre dışı bırak
   options: Seçenekler
   hover: Üzerine Gel
   translateParagraph: paragrafı çevirmek için
@@ -22,10 +22,12 @@ popup:
         current: "Geçerli mod: Yalnızca çeviri"
         action: İki dilli moda geçmek için tıklayın
   aiSmartContext: AI Akıllı Bağlam
-  aiSmartContextDescription: Çeviri kalitesini artırmak için web sayfası bağlamını kullanır. LLM çeviri sağlayıcısı gerektirir.
+  aiSmartContextDescription: Çeviri kalitesini artırmak için web sayfası
+    bağlamını kullanır. LLM çeviri sağlayıcısı gerektirir.
 errorRecovery:
   title: Bir sorun oluştu
-  description: Kurtarma modu etkin. Geçerli ayarlarınızı yedek olarak dışa aktarabilir, ardından ayarları sıfırlayıp tekrar deneyebilirsiniz.
+  description: Kurtarma modu etkin. Geçerli ayarlarınızı yedek olarak dışa
+    aktarabilir, ardından ayarları sıfırlayıp tekrar deneyebilirsiniz.
   backupTitle: Önce geçerli ayarları yedekleyin (önerilir)
   exportWithApiKeys: API Anahtarlarıyla Dışa Aktar
   exportWithoutApiKeys: API Anahtarları olmadan Dışa Aktar
@@ -49,7 +51,9 @@ options:
     page: sayfasında ayarlayın
   apiProviders:
     title: API Sağlayıcıları
-    description: Çeviri ve kelime analizi işlevleri için API sağlayıcılarını buradan yapılandırın. 20'den fazla yerleşik sağlayıcımız var ve OpenAI uyumlu tüm API sağlayıcılarını destekliyoruz.
+    description: Çeviri ve kelime analizi işlevleri için API sağlayıcılarını
+      buradan yapılandırın. 20'den fazla yerleşik sağlayıcımız var ve OpenAI
+      uyumlu tüm API sağlayıcılarını destekliyoruz.
     addProvider: Sağlayıcı Ekle
     badges:
       featureCount: $1 özellik
@@ -58,13 +62,17 @@ options:
       groups:
         builtInProviders:
           title: Yerleşik LLM Sağlayıcıları
-          description: Yerleşik büyük dil modeli sağlayıcıları, Base URL gibi çoğu yapılandırmayı doldurmaya gerek yok
+          description: Yerleşik büyük dil modeli sağlayıcıları, Base URL gibi
+            çoğu yapılandırmayı doldurmaya gerek yok
         openaiCompatibleProviders:
           title: OpenAI Uyumlu Özel Sağlayıcılar
-          description: İstediğiniz AI sağlayıcısını bulamıyorsanız, Zhipu AI gibi herhangi bir OpenAI uyumlu sağlayıcıyı yapılandırmak için Özel Sağlayıcı'yı seçin
+          description: İstediğiniz AI sağlayıcısını bulamıyorsanız, Zhipu AI
+            gibi herhangi bir OpenAI uyumlu sağlayıcıyı yapılandırmak için Özel
+            Sağlayıcı'yı seçin
         pureTranslationProviders:
           title: Saf Çeviri Sağlayıcıları
-          description: Büyük dil modeli yetenekleri olmadan çeviri özelliklerine odaklanan sağlayıcılar
+          description: Büyük dil modeli yetenekleri olmadan çeviri özelliklerine
+            odaklanan sağlayıcılar
     form:
       fields:
         name: Ad
@@ -75,11 +83,13 @@ options:
       delete: Sil
       deleteDialog:
         title: Sağlayıcıyı sil?
-        description: Bu işlem geri alınamaz. Bu sağlayıcıyı kullanan özellikler otomatik olarak başka bir mevcut sağlayıcıya yeniden atanacaktır.
+        description: Bu işlem geri alınamaz. Bu sağlayıcıyı kullanan özellikler
+          otomatik olarak başka bir mevcut sağlayıcıya yeniden atanacaktır.
         confirm: Sil
         cancel: İptal
       atLeastOneLLMProvider: En az bir LLM çeviri sağlayıcısı gereklidir.
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used by $2 feature(s).'
+      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
+        by $2 feature(s).'
       duplicateProviderName: 'Yinelenen sağlayıcı adı "$1"'
       models:
         translate:
@@ -97,15 +107,24 @@ options:
       providerSettingLabels:
         region: Bölge
       temperature: Sıcaklık
-      temperatureHint: Yanıtlardaki rastgeleliği kontrol eder. Düşük değerler (0) daha belirleyici, yüksek değerler daha yaratıcıdır. Aralık sağlayıcıya göre değişir. Sağlayıcı varsayılanını kullanmak için boş bırakın.
+      temperatureHint: Yanıtlardaki rastgeleliği kontrol eder. Düşük değerler
+        (0) daha belirleyici, yüksek değerler daha yaratıcıdır. Aralık
+        sağlayıcıya göre değişir. Sağlayıcı varsayılanını kullanmak için boş
+        bırakın.
       headers: Başlıklar
-      headersHint: AI sağlayıcı istemcisi oluşturulurken gönderilecek özel HTTP başlıkları. Sağlayıcı varsayılanlarını kullanmak için boş bırakın; varsayılanları devre dışı bırakmak için {} kullanın.
+      headersHint: AI sağlayıcı istemcisi oluşturulurken gönderilecek özel HTTP
+        başlıkları. Sağlayıcı varsayılanlarını kullanmak için boş bırakın;
+        varsayılanları devre dışı bırakmak için {} kullanın.
       providerOptions: Sağlayıcı Seçenekleri
-      providerOptionsHint: Düşünme/akıl yürütme modu gibi standart dışı API özellikleri için sağlayıcıya özel seçenekler. Ayrıntılar için Vercel AI SDK belgelerine veya sağlayıcınızın resmi belgelerine bakın.
+      providerOptionsHint: Düşünme/akıl yürütme modu gibi standart dışı API
+        özellikleri için sağlayıcıya özel seçenekler. Ayrıntılar için Vercel AI
+        SDK belgelerine veya sağlayıcınızın resmi belgelerine bakın.
       providerOptionsDocsLink: Sağlayıcı Belgelerini Görüntüle
-      providerOptionsRecommendationTrigger: Önerilen sağlayıcı seçeneklerini görüntüle
+      providerOptionsRecommendationTrigger: Önerilen sağlayıcı seçeneklerini
+        görüntüle
       providerOptionsRecommendationTitle: Önerilen sağlayıcı seçenekleri bulundu
-      providerOptionsRecommendationDescription: Önerilen yapılandırmayı gözden geçirip manuel olarak uygulayın.
+      providerOptionsRecommendationDescription: Önerilen yapılandırmayı gözden
+        geçirip manuel olarak uygulayın.
       providerOptionsRecommendationApply: Uygula
       providerOptionsRecommendationApplied: Uygulandı
       invalidJson: Geçersiz JSON formatı
@@ -113,32 +132,48 @@ options:
       description:
         openai: GPT-4o gibi modeller sağlar
         deepseek: Çin'de kullanım için önerilir
-        openrouter: Kullandıkça öde fiyatlandırmasıyla birden fazla LLM sağlayıcısı için birleşik arayüz
-        ollama: Tam gizlilik için büyük dil modellerini makinenizde yerel olarak çalıştırın
-        google: Gelişmiş akıl yürütme yeteneklerine sahip Google'ın amiral gemisi AI modelleri
-        anthropic: Güvenlik ve akıl yürütme mükemmelliğiyle tanınan Claude modelleri
-        xai: Gerçek zamanlı veri erişimli Grok modelleri sunan Elon Musk'ın AI şirketi
-        siliconflow: Çin ve uluslararası modeller için yüksek performanslı çıkarım platformu
-        tensdaq: Yüksek maliyetli sabit fiyatlandırmayı ortadan kaldıran pazar odaklı fiyatlandırma ile devrimci açık artırma AI MaaS platformu
+        openrouter: Kullandıkça öde fiyatlandırmasıyla birden fazla LLM
+          sağlayıcısı için birleşik arayüz
+        ollama: Tam gizlilik için büyük dil modellerini makinenizde yerel olarak
+          çalıştırın
+        google: Gelişmiş akıl yürütme yeteneklerine sahip Google'ın amiral
+          gemisi AI modelleri
+        anthropic: Güvenlik ve akıl yürütme mükemmelliğiyle tanınan Claude
+          modelleri
+        xai: Gerçek zamanlı veri erişimli Grok modelleri sunan Elon Musk'ın AI
+          şirketi
+        siliconflow: Çin ve uluslararası modeller için yüksek performanslı
+          çıkarım platformu
+        tensdaq: Yüksek maliyetli sabit fiyatlandırmayı ortadan kaldıran pazar
+          odaklı fiyatlandırma ile devrimci açık artırma AI MaaS platformu
         openaiCompatible: Üçüncü taraf ve OpenAI API uyumlu
         deeplx: Resmi olmayan DeepL API
         deepl: Resmi DeepL API
         bedrock: Kurumsal düzeyde temel modeller için AWS yönetilen hizmeti
         groq: Ultra hızlı LLM çıkarım hızları için özel donanım
-        deepinfra: Popüler açık kaynak modelleri için uygun maliyetli bulut çıkarımı
+        deepinfra: Popüler açık kaynak modelleri için uygun maliyetli bulut
+          çıkarımı
         mistral: Verimli çok dilli modellerde uzmanlaşmış Avrupalı AI şirketi
-        togetherai: Açık kaynak modellerini çalıştırma ve ince ayar yapma için işbirlikçi platform
+        togetherai: Açık kaynak modellerini çalıştırma ve ince ayar yapma için
+          işbirlikçi platform
         cohere: Güçlü çok dilli ve RAG yetenekleriyle kurumsal odaklı AI
         fireworks: Açık kaynak modelleri için üretime hazır çıkarım platformu
         cerebras: Hızlı çeviri ve metin analizi için ultra hızlı AI çıkarımı
-        replicate: Özel çeviri görevleri için çeşitli açık kaynak modellere erişim
-        perplexity: Bağlamsal çeviriler ve okuma yardımı için gerçek zamanlı bilgi ile güçlendirilmiş AI
-        vercel: Web içeriği çevirisi ve analizi için optimize edilmiş AI modelleri
-        volcengine: Çeviri ve okuma için Doubao modelleri sunan ByteDance'ın bulut AI platformu
+        replicate: Özel çeviri görevleri için çeşitli açık kaynak modellere
+          erişim
+        perplexity: Bağlamsal çeviriler ve okuma yardımı için gerçek zamanlı
+          bilgi ile güçlendirilmiş AI
+        vercel: Web içeriği çevirisi ve analizi için optimize edilmiş AI
+          modelleri
+        volcengine: Çeviri ve okuma için Doubao modelleri sunan ByteDance'ın
+          bulut AI platformu
         minimax: Gelişmiş MiniMax-M2 modelleri sunan MiniMax AI platformu
-        alibaba: Alibaba Cloud'un Qwen model serisi, gelişmiş muhakeme ve çok dilli yeteneklerle
-        moonshotai: Moonshot AI'ın güçlü muhakeme ve uzun bağlam yeteneklerine sahip Kimi model serisi
-        huggingface: Binlerce açık kaynak modele erişim sağlayan Hugging Face Çıkarım API'si
+        alibaba: Alibaba Cloud'un Qwen model serisi, gelişmiş muhakeme ve çok
+          dilli yeteneklerle
+        moonshotai: Moonshot AI'ın güçlü muhakeme ve uzun bağlam yeteneklerine
+          sahip Kimi model serisi
+        huggingface: Binlerce açık kaynak modele erişim sağlayan Hugging Face
+          Çıkarım API'si
     apiKey:
       showAPIKey: API Anahtarını Göster
     howToConfigure: Nasıl yapılandırılır?
@@ -156,24 +191,14 @@ options:
       description: Her özellik için kullanılacak sağlayıcıyı seçin
       features:
         translate: Sayfa Çevirisi
-        videoSubtitles: Video Altyazıları
+        videoSubtitles: Altyazı Çevirisi
     translationConfig:
       model:
         title: Model
         enterCustomModel: Özel model adını girin
-    clearCache:
-      title: Önbelleği Temizle
-      description: Tarayıcınızdaki tüm çeviri önbelleğini temizleyin
-      clearing: Temizleniyor...
-      dialog:
-        title: Önbelleği Temizle
-        trigger: Önbelleği Temizle
-        confirm: Onayla
-        cancel: İptal
-        description: Bu işlem tüm çeviri önbelleğini temizleyecektir. Bu işlem geri alınamaz.
     languageDetection:
       title: Dil Algılama
-      description: Otomatik çeviri dil algılama, atlama dil algılama ve Konuşma ses seçimi doğruluğunu etkiler.
+      description: Otomatik çeviri için dil algılama doğruluğunu etkiler.
       mode:
         basic: Temel
         llm: LLM
@@ -184,56 +209,38 @@ options:
         noProviders: Önce bir LLM sağlayıcısı yapılandırın
         basicRecommend: LLM etkinleştirmesi önerilir
         llmEnabled: LLM algılama etkin
-  siteControl:
-    mode:
-      title: Uzantı Etkinleştirme Modu
-      description: Kara liste modunu kullanarak uzantıyı belirli sitelerde devre dışı bırakabilir veya beyaz liste modunu kullanarak yalnızca belirli sitelerle sınırlayabilirsiniz.
-      blacklist: Yalnızca listelenen sitelerde devre dışı bırak
-      whitelist: Yalnızca listelenen sitelerde çalıştır
-    patterns:
-      enterUrlPattern: URL deseni girin (örn. example.com)
-      urlPattern: URL Deseni
   translation:
     title: Çeviri
-    groups:
-      behavior: Çeviri Davranışı
-      displayAndQuality: Görünüm ve Kalite
-      automationAndRules: Otomasyon ve Kurallar
-      performanceAndCache: Performans ve Önbellek
     requestQueueConfig:
       title: Çeviri Hızı
       firstOnDescription: Çeviri isteklerinin işleme hızını
       lastOnDescription: algoritmasıyla ayarlayın
       capacity:
         title: Maksimum Ani İstek Sayısı
-        description: İzin verilen geçici ani istek sayısı, kısa bir süre içinde eşzamanlı olarak işlenebilecek maksimum istek sayısını belirler
+        description: İzin verilen geçici ani istek sayısı, kısa bir süre içinde
+          eşzamanlı olarak işlenebilecek maksimum istek sayısını belirler
       rate:
         title: Saniyedeki Ortalama İstek
-        description: Saniyedeki ortalama istek, ancak geçici olarak fazla istek göndermek için maksimum ani sayısını yapılandırmaya izin verir
+        description: Saniyedeki ortalama istek, ancak geçici olarak fazla istek
+          göndermek için maksimum ani sayısını yapılandırmaya izin verir
     batchQueueConfig:
       title: Toplu Çeviri
-      description: Toplu çeviri için karakter limitleri ve maksimum paragraf sayısını yapılandırın (yalnızca LLM çevirisi için geçerlidir)
+      description: Toplu çeviri için karakter limitleri ve maksimum paragraf
+        sayısını yapılandırın (yalnızca LLM çevirisi için geçerlidir)
       maxCharactersPerBatch:
         title: Maksimum Karakter
-        description: Her çevirinin içerik hacmini kontrol etmek için toplu istek başına izin verilen maksimum karakter sayısı
+        description: Her çevirinin içerik hacmini kontrol etmek için toplu istek
+          başına izin verilen maksimum karakter sayısı
       maxItemsPerBatch:
         title: Maksimum Paragraf Sayısı
-        description: Her çevirinin içerik hacmini kontrol etmek için her toplu çeviri için maksimum paragraf sayısı
-    autoTranslateWebsite:
-      title: Web Sitesine Göre Otomatik Çevir
-      description: Bu web sitesini her zaman çevir
-      urlPattern: URL Kalıbı
-      enterUrlPattern: URL Kalıbı Girin
-    neverAutoTranslateWebsite:
-      title: Never Auto Translate Based on Website
-      description: Never automatically translate this website
-      urlPattern: URL Pattern
-      enterUrlPattern: Enter URL Pattern
+        description: Her çevirinin içerik hacmini kontrol etmek için her toplu
+          çeviri için maksimum paragraf sayısı
     personalizedPrompts:
       title: Kişiselleştirilmiş Promptlar
-      description: Farklı türde Promptları özelleştirmek, çeviri sırasında Prompt türünü kendiniz ayarlamanıza olanak tanır. Prompt, kullanıcının LLM'ye gönderdiği metni temsil eder.
+      description: Web sayfası çevirisi için prompt'ları özelleştirin.
       communityPrompts: Topluluktan prompt al veya paylaş
-      communityPromptsUrl: https://github.com/mengxi-ream/read-frog/discussions/821
+      communityPromptsUrl:
+        https://github.com/mengxi-ream/read-frog/discussions/821
       addPrompt: Prompt Ekle
       default: Varsayılan
       importSuccess: İçe Aktarma Başarılı
@@ -264,9 +271,11 @@ options:
         cancel: İptal
     translationStyle:
       title: Çeviri Görüntüleme Stili
-      description: Çeviri sonuçlarını orijinal metinden ayırt etmek için istediğiniz herhangi bir stili ayarlayın
+      description: Çeviri sonuçlarını orijinal metinden ayırt etmek için
+        istediğiniz herhangi bir stili ayarlayın
       useCustomStyle: Özel CSS Stili Kullan
-      useCustomStyleDescription: Yazı tipleri, animasyonlar ve dile özgü stiller dahil herhangi bir CSS'yi destekler
+      useCustomStyleDescription: Yazı tipleri, animasyonlar ve dile özgü stiller
+        dahil herhangi bir CSS'yi destekler
       presetStyle: Hazır Stil
       cssEditor: CSS Editörü
       preview: Önizleme
@@ -302,13 +311,15 @@ options:
             saved: Tüm değişiklikler kaydedildi
     translationMode:
       title: Çeviri Modu
-      description: "Çevrilmiş metnin nasıl görüntüleneceğini seçin: iki dilli veya yalnızca çeviri."
+      description: "Çevrilmiş metnin nasıl görüntüleneceğini seçin: iki dilli veya
+        yalnızca çeviri."
       mode:
         bilingual: İki Dilli
         translationOnly: Yalnızca Çeviri
     translateRange:
       title: Çeviri Kapsamı
-      description: Sayfadaki yalnızca ana içeriğin mi yoksa tüm içeriğin mi çevrileceğini seçin.
+      description: Sayfadaki yalnızca ana içeriğin mi yoksa tüm içeriğin mi
+        çevrileceğini seçin.
       range:
         main: Ana İçerik
         all: Tüm İçerik
@@ -317,55 +328,73 @@ options:
       description: Tüm web sayfalarını çevirmek için kısayol tuşunu özelleştirin
     preloadConfig:
       title: Ön Çeviri Aralığı
-      description: API maliyetlerinden tasarruf etmek için görünüm alanının altındaki ne kadar içeriğin önceden çevrileceğini kontrol edin
+      description: API maliyetlerinden tasarruf etmek için görünüm alanının
+        altındaki ne kadar içeriğin önceden çevrileceğini kontrol edin
       margin:
         title: Ön Yükleme Mesafesi (piksel)
-        description: İçeriği çevirmeye başlamak için görünüm alanının ne kadar altı. Daha düşük değerler API maliyetlerinden tasarruf sağlar ancak kaydırma sırasında gecikmelere neden olabilir.
+        description: İçeriği çevirmeye başlamak için görünüm alanının ne kadar
+          altı. Daha düşük değerler API maliyetlerinden tasarruf sağlar ancak
+          kaydırma sırasında gecikmelere neden olabilir.
       threshold:
         title: Görünürlük Eşiği
-        description: Çeviriyi tetiklemek için gereken öğe görünürlük yüzdesi (0-1). Daha yüksek değerler, öğenin daha fazlası görünür olana kadar çeviriyi geciktirir.
+        description: Çeviriyi tetiklemek için gereken öğe görünürlük yüzdesi
+          (0-1). Daha yüksek değerler, öğenin daha fazlası görünür olana kadar
+          çeviriyi geciktirir.
     smallParagraphFilter:
       title: Kısa Metin Filtresi
-      description: Eşik değerinden az karakterli veya kelimeli metin düğümlerinin çevirisini atla (0 = devre dışı)
+      description: Eşik değerinden az karakterli veya kelimeli metin
+        düğümlerinin çevirisini atla (0 = devre dışı)
       minCharacters:
         title: Minimum Karakter
-        description: Bu değerden az karakterli metin düğümleri çevrilmeyecektir. Karakter sayısı boşlukları içerir.
+        description: Bu değerden az karakterli metin düğümleri çevrilmeyecektir.
+          Karakter sayısı boşlukları içerir.
       minWords:
         title: Minimum Kelime
-        description: Bu değerden az kelimeli metin düğümleri çevrilmeyecektir. Tüm dillerde doğru kelime sayımı için Intl.Segmenter kullanılır.
+        description: Bu değerden az kelimeli metin düğümleri çevrilmeyecektir.
+          Tüm dillerde doğru kelime sayımı için Intl.Segmenter kullanılır.
       error: Değer $1 ile $2 arasında olmalıdır
     nodeTranslationHotkey:
       title: Üzerine Gelme veya Uzun Basma Çeviri Kısayolu
-      description: Üzerine gelme için değiştirici tuşu özelleştirin veya paragrafları çevirmek için uzun basın
+      description: Üzerine gelme için değiştirici tuşu özelleştirin veya
+        paragrafları çevirmek için uzun basın
       enable: Etkinleştir
     llmProviderConfigured: $1 için LLM sağlayıcısı seçildi
     llmProviderNotConfigured: $1 için LLM sağlayıcısı seçilmedi
-    autoTranslateLanguages:
-      title: Dile Göre Otomatik Çevir
-      description: Belirli diller algılandığında sayfa içeriğini otomatik olarak çevir
-      selectLanguages: Dilleri seçin
-    skipLanguages:
-      title: Dile Göre Otomatik Atla
-      description: Belirli diller algılandığında paragraf çevirisini otomatik olarak atla
-      targetLanguageSkip: Hedef dili atla
-      targetLanguageSkipDescription: Çeviriden önce paragrafın zaten hedef dilde olup olmadığını algılar. Eşleşen metin istek göndermeden atlanır. Bunu kapatmak, değişmeyen çeviri çıktısını gizleyen sonraki korumayı değiştirmez.
-      selectLanguages: Dilleri seçin
     aiContentAware:
       title: AI Akıllı Bağlam Çevirisi
-      description: AI'ya web sayfası bağlamı sağlayarak çeviri kalitesini artırın
+      description: AI'ya web sayfası bağlamı sağlayarak çeviri kalitesini
+        artırın
       enable: AI Akıllı Bağlam Çevirisini Etkinleştir
-      enableDescription: AI, çeviri doğruluğunu artırmak için web sayfası özetini kullanır. LLM sağlayıcısı gerektirir. Bir sayfayı çevirmeye başlarken gecikme ekler ve API maliyetlerini artırır.
+      enableDescription: AI, çeviri doğruluğunu artırmak için web sayfası
+        özetini kullanır. LLM sağlayıcısı gerektirir. Bir sayfayı çevirmeye
+        başlarken gecikme ekler ve API maliyetlerini artırır.
   system:
     title: Sistem
 
+    clearCache:
+      title: Önbelleği Temizle
+      description: Tarayıcıdaki tüm çeviri önbelleğini, web sayfası özet
+        önbelleğini ve AI cümle bölme önbelleğini temizler.
+      clearing: Temizleniyor...
+      dialog:
+        title: Önbelleği Temizle
+        trigger: Önbelleği Temizle
+        confirm: Onayla
+        cancel: İptal
+        description: Bu işlem, tüm çeviri önbelleğini, web sayfası özet
+          önbelleğini ve AI cümle bölme önbelleğini temizler. Bu işlem geri
+          alınamaz.
   config:
     about:
       title: Hakkında
       description: Haziran 2026'da kuruldu
-      mission: "[Read Frog](https://github.com/mengxi-ream/read-frog)'den çatallanmış, üzerinde basitleştirmeler ve özel değişiklikler yapılmış açık kaynaklı sürükleyici çeviri eklentisi."
+      mission: "[Read Frog](https://github.com/mengxi-ream/read-frog)'den çatallanmış,
+        üzerinde basitleştirmeler ve özel değişiklikler yapılmış açık kaynaklı sürükleyici
+        çeviri eklentisi."
     sync:
       exportSuccess: Yapılandırma başarıyla dışa aktarıldı
-      versionTooNew: İçe aktarılan yapılandırma sürümü daha yeni, lütfen ReadBuddy'u en son sürüme yükseltin
+      versionTooNew: İçe aktarılan yapılandırma sürümü daha yeni, lütfen
+        ReadBuddy'u en son sürüme yükseltin
       validationError: Yapılandırma doğrulaması başarısız
     resetConfig:
       title: Yapılandırmayı Sıfırla
@@ -375,14 +404,17 @@ options:
         trigger: Yapılandırmayı Sıfırla
         confirm: Onayla
         cancel: İptal
-        description: Bu işlem tüm özel yapılandırmalarınızı temizleyecek ve varsayılan değerlere sıfırlayacaktır. Lütfen onaylayın.
+        description: Bu işlem tüm özel yapılandırmalarınızı temizleyecek ve
+          varsayılan değerlere sıfırlayacaktır. Lütfen onaylayın.
   videoSubtitles:
-    title: Video Altyazıları
+    title: Altyazı Çevirisi
     description: Şu anda yalnızca YouTube video altyazılarını desteklemektedir
     enable: Video Altyazılarını Etkinleştir
-    enableDescription: Etkinleştirildiğinde, YouTube oynatıcı kontrollerinde bir çeviri düğmesi görünecektir. Altyazıları çevirmeye başlamak için tıklayın.
+    enableDescription: Etkinleştirildiğinde, YouTube oynatıcı kontrollerinde bir
+      çeviri düğmesi görünecektir. Altyazıları çevirmeye başlamak için tıklayın.
     autoStart: Altyazıyı Otomatik Etkinleştir
-    autoStartDescription: Video yüklendiğinde altyazı çevirisini otomatik olarak etkinleştirir.
+    autoStartDescription: Video yüklendiğinde altyazı çevirisini otomatik olarak
+      etkinleştirir.
     style:
       title: Altyazı Stili
       description: Altyazı görünümünü özelleştirin
@@ -407,36 +439,48 @@ options:
       reset: Varsayılana Sıfırla
     aiSegmentation:
       enable: AI Akıllı Bölümlendirmeyi Etkinleştir
-      enableDescription: Daha iyi okunabilirlik için altyazıları akıllıca bölümlemek üzere AI kullanın. Zaman çizelgesi AI tarafından belirlenir ve zaman zaman zamanlama kayması olabilir. LLM çeviri sağlayıcısı gerektirir.
+      enableDescription: Daha iyi okunabilirlik için altyazıları akıllıca
+        bölümlemek üzere AI kullanın. Zaman çizelgesi AI tarafından belirlenir
+        ve zaman zaman zamanlama kayması olabilir. LLM çeviri sağlayıcısı
+        gerektirir.
       clearCache: Önbelleği Temizle
       clearing: Temizleniyor...
       clearCacheDialog:
         title: AI Bölümlendirme Önbelleğini Temizle
-        description: Tüm önbelleğe alınmış AI bölümlendirme sonuçları silinecektir. AI bölümlendirme etkinleştirilmiş bir video oynatıldığında altyazılar yeniden işlenecektir.
+        description: Tüm önbelleğe alınmış AI bölümlendirme sonuçları
+          silinecektir. AI bölümlendirme etkinleştirilmiş bir video
+          oynatıldığında altyazılar yeniden işlenecektir.
         cancel: İptal
         confirm: Onayla
     requestQueueConfig:
       title: Altyazı Çeviri Hızı
-      firstOnDescription: Altyazı çeviri isteklerinin işlem hızını ayarlamak için
+      firstOnDescription: Altyazı çeviri isteklerinin işlem hızını ayarlamak
+        için
       lastOnDescription: algoritmasını kullanın
       capacity:
         title: Maksimum Patlama İstek Sayısı
-        description: Kısa sürede eşzamanlı olarak işlenebilecek maksimum altyazı çeviri isteği sayısı
+        description: Kısa sürede eşzamanlı olarak işlenebilecek maksimum altyazı
+          çeviri isteği sayısı
       rate:
         title: Saniyede Ortalama İstek
-        description: Saniyede ortalama altyazı çeviri isteği sayısı. Geçici olarak fazla istek göndermek için maksimum patlama sayısı yapılandırılabilir
+        description: Saniyede ortalama altyazı çeviri isteği sayısı. Geçici
+          olarak fazla istek göndermek için maksimum patlama sayısı
+          yapılandırılabilir
     batchQueueConfig:
       title: Altyazı Toplu Çeviri
-      description: Toplu çeviri için karakter limitleri ve maksimum paragraf sayısını yapılandırın (yalnızca LLM çevirisi için geçerlidir)
+      description: Toplu çeviri için karakter limitleri ve maksimum paragraf
+        sayısını yapılandırın (yalnızca LLM çevirisi için geçerlidir)
       maxCharactersPerBatch:
         title: Maksimum Karakter
-        description: Her çevirinin içerik hacmini kontrol etmek için toplu istek başına izin verilen maksimum karakter sayısı
+        description: Her çevirinin içerik hacmini kontrol etmek için toplu istek
+          başına izin verilen maksimum karakter sayısı
       maxItemsPerBatch:
         title: Maksimum Paragraf Sayısı
-        description: Her çevirinin içerik hacmini kontrol etmek için her toplu çeviri için maksimum paragraf sayısı
+        description: Her çevirinin içerik hacmini kontrol etmek için her toplu
+          çeviri için maksimum paragraf sayısı
     customPrompts:
       title: Özel Altyazı İstemleri
-      description: Altyazı çevirisi için istem şablonlarını özelleştirin (web sayfası çeviri istemlerinden ayrı)
+      description: Altyazı çevirisi için prompt'ları özelleştirin.
       editPrompt:
         promptCellInput:
           input: Çevrilecek altyazı metni
@@ -444,6 +488,33 @@ options:
           webTitle: Web sayfası başlığı
           webDescription: Sayfa meta verilerinden web sayfası açıklaması
           videoSummary: Video özeti (AI Akıllı Bağlam gerektirir)
+  siteRules:
+    title: Site Kuralları
+    autoTranslateWebsite:
+      title: Web Sitesine Göre Otomatik Çevir
+      description: Bu web sitesini her zaman çevir
+      urlPattern: URL Kalıbı
+      enterUrlPattern: URL Kalıbı Girin
+    neverAutoTranslateWebsite:
+      title: Never Auto Translate Based on Website
+      description: Never automatically translate this website
+      urlPattern: URL Pattern
+      enterUrlPattern: Enter URL Pattern
+    autoTranslateLanguages:
+      title: Dile Göre Otomatik Çevir
+      description: Belirli diller algılandığında sayfa içeriğini otomatik olarak
+        çevir
+      selectLanguages: Dilleri seçin
+    skipLanguages:
+      title: Dile Göre Otomatik Atla
+      description: Belirli diller algılandığında paragraf çevirisini otomatik
+        olarak atla
+      targetLanguageSkip: Hedef dili atla
+      targetLanguageSkipDescription: Çeviriden önce paragrafın zaten hedef dilde
+        olup olmadığını algılar. Eşleşen metin istek göndermeden atlanır. Bunu
+        kapatmak, değişmeyen çeviri çıktısını gizleyen sonraki korumayı
+        değiştirmez.
+      selectLanguages: Dilleri seçin
 translateService:
   title: Çeviri Servisi
   description: Yalnızca web sayfası çevirisi için
@@ -451,9 +522,11 @@ translateService:
   aiTranslator: AI Çevirmen
 translatePrompt:
   title: AI Çeviri Stili
-  description: Çeviri sırasında kullanılacak bir Prompt seçin. Seçenekler sayfasında özel Promptlar ekleyin veya değiştirin.
+  description: Çeviri sırasında kullanılacak bir Prompt seçin. Seçenekler
+    sayfasında özel Promptlar ekleyin veya değiştirin.
 noAPIKeyConfig:
-  warning: AI modelleri kullanmak istiyorsanız, lütfen önce seçenekler sayfasında API anahtarını ayarlayın
+  warning: AI modelleri kullanmak istiyorsanız, lütfen önce seçenekler
+    sayfasında API anahtarını ayarlayın
 languageDetection:
   llmFailed: LLM dil algılama başarısız oldu, temel algılamaya geri dönüldü
 translation:
@@ -463,7 +536,8 @@ shortcutKeySelector:
 subtitles:
   actions:
     downloadTranslated: Çevrilmiş altyazıları indir
-    downloadTranslatedPreparing: Altyazılar hazırlanıyor, uzun videolar daha uzun sürebilir
+    downloadTranslatedPreparing: Altyazılar hazırlanıyor, uzun videolar daha
+      uzun sürebilir
     downloadTranslatedTranslating: Altyazılar çevriliyor
     downloadTranslatedComplete: Çevrilmiş altyazılar indirildi
     downloadSource: Kaynak altyazıları indir
@@ -471,7 +545,8 @@ subtitles:
     loading: ReadBuddy altyazılar yükleniyor
     error: Bir hata oluştu
   errors:
-    http429: 429 YouTube altyazı API'sine çok fazla istek gönderildi. Lütfen biraz bekleyip tekrar deneyin.
+    http429: 429 YouTube altyazı API'sine çok fazla istek gönderildi. Lütfen
+      biraz bekleyip tekrar deneyin.
     http404: 404 YouTube altyazı bulunamadı.
     http403: 403 YouTube altyazı erişimi reddedildi.
     http500: 500 YouTube sunucu hatası oluştu.
@@ -481,7 +556,8 @@ subtitles:
     videoNotFound: Video öğesi bulunamadı
     controlsBarNotFound: Kontrol çubuğu bulunamadı
     aiRateLimited: Çok fazla istek, lütfen daha sonra tekrar deneyin
-    aiAuthFailed: API kimlik doğrulaması başarısız, lütfen API anahtarınızı kontrol edin
+    aiAuthFailed: API kimlik doğrulaması başarısız, lütfen API anahtarınızı
+      kontrol edin
     aiServiceUnavailable: Çeviri hizmeti geçici olarak kullanılamıyor
     aiNoResponse: AI hizmeti yanıt vermedi, orijinal metin gösteriliyor
     translatedExportFailed: Çevrilmiş altyazılar oluşturulamadı

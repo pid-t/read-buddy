@@ -12,12 +12,10 @@ describe("dEFAULT_CONFIG", () => {
 
     expect(parseResult.success).toBe(true)
     expect(DEFAULT_CONFIG.providersConfig.map(provider => provider.id)).toEqual([
-      "microsoft-translate-default",
-      "google-translate-default",
       "openai-default",
-      "deepseek-default",
-      "tensdaq-default",
       "google-default",
+      "xai-default",
+      "deepseek-default",
       "deeplx-default",
     ])
     expect(DEFAULT_CONFIG.providersConfig.find(provider => provider.id === "deepseek-default")).toEqual(

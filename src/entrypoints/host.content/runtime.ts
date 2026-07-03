@@ -5,7 +5,6 @@ import { detectPageLanguageLightweight } from "@/utils/content/page-language"
 import { ensurePresetStyles } from "@/utils/host/translate/ui/style-injector"
 import { logger } from "@/utils/logger"
 import { onMessage, sendMessage } from "@/utils/message"
-import { clearEffectiveSiteControlUrl } from "@/utils/site-control"
 import { areSamePageTranslationOrigin } from "@/utils/url"
 import { setupUrlChangeListener } from "./listen"
 import { mountHostToast } from "./mount-host-toast"
@@ -109,7 +108,6 @@ export async function bootstrapHostContent(ctx: ContentScriptContext, initialCon
     cleanupDetectedLanguageRefreshListener()
     window.removeEventListener("extension:URLChange", handleExtensionUrlChange)
     window.__READ_FROG_HOST_INJECTED__ = false
-    clearEffectiveSiteControlUrl()
   })
 
   // Only the top frame should detect and set language to avoid race conditions from iframes

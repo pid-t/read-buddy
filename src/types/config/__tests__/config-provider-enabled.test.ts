@@ -13,8 +13,9 @@ function getIssuePaths(input: unknown) {
 
 describe("config provider enabled validation", () => {
   it("fails when a built-in feature uses a disabled provider", () => {
+    const disabledId = DEFAULT_CONFIG.translate.providerId
     const providersConfig = DEFAULT_CONFIG.providersConfig.map((provider) => {
-      if (provider.id === "microsoft-translate-default") {
+      if (provider.id === disabledId) {
         return { ...provider, enabled: false }
       }
       return provider
@@ -29,8 +30,9 @@ describe("config provider enabled validation", () => {
   })
 
   it("fails when video subtitles use a disabled provider", () => {
+    const disabledId = DEFAULT_CONFIG.videoSubtitles.providerId
     const providersConfig = DEFAULT_CONFIG.providersConfig.map((provider) => {
-      if (provider.id === "microsoft-translate-default") {
+      if (provider.id === disabledId) {
         return { ...provider, enabled: false }
       }
       return provider
@@ -41,7 +43,7 @@ describe("config provider enabled validation", () => {
       providersConfig,
       videoSubtitles: {
         ...DEFAULT_CONFIG.videoSubtitles,
-        providerId: "microsoft-translate-default",
+        providerId: disabledId,
       },
     })
 

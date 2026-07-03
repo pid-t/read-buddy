@@ -10,7 +10,7 @@ export const CONFIG_STORAGE_KEY = "config"
 
 export const THEME_STORAGE_KEY = "theme"
 export const DEFAULT_DETECTED_CODE = "eng" as const
-export const CONFIG_SCHEMA_VERSION = 81
+export const CONFIG_SCHEMA_VERSION = 82
 
 export const DEFAULT_CONFIG: Config = {
   uiLocale: undefined,
@@ -21,7 +21,7 @@ export const DEFAULT_CONFIG: Config = {
   },
   providersConfig: DEFAULT_PROVIDER_CONFIG_LIST,
   translate: {
-    providerId: "microsoft-translate-default",
+    providerId: "deepseek-default",
     mode: "bilingual",
     node: {
       enabled: false,
@@ -64,7 +64,7 @@ export const DEFAULT_CONFIG: Config = {
   videoSubtitles: {
     enabled: true,
     autoStart: false,
-    providerId: "microsoft-translate-default",
+    providerId: "deepseek-default",
     style: {
       displayMode: DEFAULT_DISPLAY_MODE,
       translationPosition: DEFAULT_TRANSLATION_POSITION,
@@ -95,11 +95,6 @@ export const DEFAULT_CONFIG: Config = {
     },
     customPromptsConfig: DEFAULT_TRANSLATE_PROMPTS_CONFIG,
     position: DEFAULT_SUBTITLE_POSITION,
-  },
-  siteControl: {
-    mode: "blacklist",
-    blacklistPatterns: [],
-    whitelistPatterns: [],
   },
 }
 

@@ -31,13 +31,13 @@ export function NeverAutoTranslateWebsitePatterns() {
   }
 
   return (
-    <ConfigCard id="never-auto-translate-website" title={i18n.t("options.translation.neverAutoTranslateWebsite.title")} description={i18n.t("options.translation.neverAutoTranslateWebsite.description")}>
+    <ConfigCard id="never-auto-translate-website" title={i18n.t("options.siteRules.neverAutoTranslateWebsite.title")} description={i18n.t("options.siteRules.neverAutoTranslateWebsite.description")}>
       <PatternsTable
         patterns={neverAutoTranslatePatterns}
         onAddPattern={addPattern}
         onRemovePattern={removePattern}
-        placeholderText={i18n.t("options.translation.neverAutoTranslateWebsite.enterUrlPattern")}
-        tableHeaderText={i18n.t("options.translation.neverAutoTranslateWebsite.urlPattern")}
+        placeholderText={i18n.t("options.siteRules.neverAutoTranslateWebsite.enterUrlPattern")}
+        tableHeaderText={i18n.t("options.siteRules.neverAutoTranslateWebsite.urlPattern")}
       />
     </ConfigCard>
   )

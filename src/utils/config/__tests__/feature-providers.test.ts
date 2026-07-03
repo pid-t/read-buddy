@@ -62,15 +62,15 @@ describe("feature providers", () => {
       }
 
       const remainingProviders = [
-        getProviderById("microsoft-translate-default"),
+        getProviderById("deepseek-default"),
         getProviderById("openai-default"),
       ]
 
       const fallbacks = computeProviderFallbacksAfterDeletion("deleted-provider", config, remainingProviders)
 
       expect(fallbacks).toEqual({
-        translate: "microsoft-translate-default",
-        videoSubtitles: "microsoft-translate-default",
+        translate: "deepseek-default",
+        videoSubtitles: "deepseek-default",
       })
     })
 
@@ -121,7 +121,7 @@ describe("feature providers", () => {
 
     it("returns null when all features have at least one compatible provider", () => {
       const remainingProviders = [
-        getProviderById("microsoft-translate-default"),
+        getProviderById("deepseek-default"),
       ]
 
       expect(findFeatureMissingProvider(remainingProviders)).toBeNull()

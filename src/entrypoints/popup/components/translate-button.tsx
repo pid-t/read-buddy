@@ -10,15 +10,11 @@ import { isPageTranslationShortcutEmpty } from "@/utils/page-translation-shortcu
 import { cn } from "@/utils/styles/utils"
 import { isPageTranslatedAtom } from "../atoms/auto-translate"
 import { isIgnoreTabAtom } from "../atoms/ignore"
-import { isCurrentSiteInBlacklistAtom, isCurrentSiteInWhitelistAtom } from "../atoms/site-control"
 
 export default function TranslateButton({ className }: { className?: string }) {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom)
   const isIgnoreTab = useAtomValue(isIgnoreTabAtom)
   const translateConfig = useAtomValue(configFieldsAtomMap.translate)
-  const { mode } = useAtomValue(configFieldsAtomMap.siteControl)
-  const isCurrentSiteInWhitelist = useAtomValue(isCurrentSiteInWhitelistAtom)
-  const isCurrentSiteInBlacklist = useAtomValue(isCurrentSiteInBlacklistAtom)
 
   const toggleTranslation = async () => {
     const [currentTab] = await browser.tabs.query({
@@ -37,8 +33,7 @@ export default function TranslateButton({ className }: { className?: string }) {
     }
   }
 
-  const isSiteBlocked = mode === "whitelist" ? !isCurrentSiteInWhitelist : isCurrentSiteInBlacklist
-  const isDisabled = isIgnoreTab || isSiteBlocked
+  const isDisabled = isIgnoreTab
   const shortcutParts = isPageTranslationShortcutEmpty(translateConfig.page.shortcut)
     ? []
     : formatHotkeyParts(translateConfig.page.shortcut)

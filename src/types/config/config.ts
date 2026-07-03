@@ -14,13 +14,6 @@ const languageSchema = z.object({
   level: langLevel,
 })
 
-// site control schema
-const siteControlSchema = z.object({
-  mode: z.enum(["blacklist", "whitelist"]),
-  blacklistPatterns: z.array(z.string()),
-  whitelistPatterns: z.array(z.string()),
-})
-
 // Complete config schema
 export const configSchema = z.object({
   uiLocale: uiLocaleSchema.optional(),
@@ -29,7 +22,6 @@ export const configSchema = z.object({
   translate: translateConfigSchema,
   languageDetection: languageDetectionConfigSchema,
   videoSubtitles: videoSubtitlesSchema,
-  siteControl: siteControlSchema,
 }).superRefine((data, ctx) => {
   const providerIdsSet = new Set(data.providersConfig.map(p => p.id))
 

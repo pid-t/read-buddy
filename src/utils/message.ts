@@ -47,7 +47,6 @@ interface ProtocolMap {
   backgroundFetch: (data: ProxyRequest) => Promise<ProxyResponse>
   // cache management
   clearAllTranslationRelatedCache: () => Promise<void>
-  clearAiSegmentationCache: () => Promise<void>
 }
 
 export const { sendMessage, onMessage }

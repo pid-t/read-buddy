@@ -544,27 +544,11 @@ export const DEFAULT_PROVIDER_CONFIG = {
 } as const satisfies Record<AllProviderTypes, ProviderConfig>
 
 export const DEFAULT_PROVIDER_CONFIG_LIST: ProvidersConfig = [
-  DEFAULT_PROVIDER_CONFIG["microsoft-translate"],
-  DEFAULT_PROVIDER_CONFIG["google-translate"],
   DEFAULT_PROVIDER_CONFIG.openai,
-  DEFAULT_PROVIDER_CONFIG.deepseek,
-  DEFAULT_PROVIDER_CONFIG.tensdaq,
   DEFAULT_PROVIDER_CONFIG.google,
-  // DEFAULT_PROVIDER_CONFIG.openaiCompatible,
+  DEFAULT_PROVIDER_CONFIG.xai,
+  DEFAULT_PROVIDER_CONFIG.deepseek,
   DEFAULT_PROVIDER_CONFIG.deeplx,
-  // DEFAULT_PROVIDER_CONFIG.anthropic,
-  // DEFAULT_PROVIDER_CONFIG.xai,
-  // DEFAULT_PROVIDER_CONFIG.bedrock,
-  // DEFAULT_PROVIDER_CONFIG.groq,
-  // DEFAULT_PROVIDER_CONFIG.deepinfra,
-  // DEFAULT_PROVIDER_CONFIG.mistral,
-  // DEFAULT_PROVIDER_CONFIG.togetherai,
-  // DEFAULT_PROVIDER_CONFIG.cohere,
-  // DEFAULT_PROVIDER_CONFIG.fireworks,
-  // DEFAULT_PROVIDER_CONFIG.cerebras,
-  // DEFAULT_PROVIDER_CONFIG.replicate,
-  // DEFAULT_PROVIDER_CONFIG.perplexity,
-  // DEFAULT_PROVIDER_CONFIG.vercel,
 ]
 
 export const NON_API_TRANSLATE_PROVIDER_ITEMS = pick(

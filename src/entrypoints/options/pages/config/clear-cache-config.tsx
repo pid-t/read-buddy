@@ -35,25 +35,25 @@ export function ClearCacheConfig() {
   }
 
   return (
-    <ConfigCard id="clear-cache" title={i18n.t("options.general.clearCache.title")} description={i18n.t("options.general.clearCache.description")}>
+    <ConfigCard id="clear-cache" title={i18n.t("options.system.clearCache.title")} description={i18n.t("options.system.clearCache.description")}>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <div className="w-full flex justify-end">
           <AlertDialogTrigger render={<Button variant="destructive" disabled={isClearing} />}>
             <IconTrash className="size-4" />
-            {isClearing ? i18n.t("options.general.clearCache.clearing") : i18n.t("options.general.clearCache.dialog.trigger")}
+            {isClearing ? i18n.t("options.system.clearCache.clearing") : i18n.t("options.system.clearCache.dialog.trigger")}
           </AlertDialogTrigger>
         </div>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{i18n.t("options.general.clearCache.dialog.title")}</AlertDialogTitle>
+            <AlertDialogTitle>{i18n.t("options.system.clearCache.dialog.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {i18n.t("options.general.clearCache.dialog.description")}
+              {i18n.t("options.system.clearCache.dialog.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{i18n.t("options.general.clearCache.dialog.cancel")}</AlertDialogCancel>
+            <AlertDialogCancel>{i18n.t("options.system.clearCache.dialog.cancel")}</AlertDialogCancel>
             <AlertDialogAction variant="destructive" onClick={handleClearCache} disabled={isClearing}>
-              {isClearing ? i18n.t("options.general.clearCache.clearing") : i18n.t("options.general.clearCache.dialog.confirm")}
+              {isClearing ? i18n.t("options.system.clearCache.clearing") : i18n.t("options.system.clearCache.dialog.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

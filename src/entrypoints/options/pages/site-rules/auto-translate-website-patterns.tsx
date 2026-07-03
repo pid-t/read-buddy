@@ -31,13 +31,13 @@ export function AutoTranslateWebsitePatterns() {
   }
 
   return (
-    <ConfigCard id="auto-translate-website" title={i18n.t("options.translation.autoTranslateWebsite.title")} description={i18n.t("options.translation.autoTranslateWebsite.description")}>
+    <ConfigCard id="auto-translate-website" title={i18n.t("options.siteRules.autoTranslateWebsite.title")} description={i18n.t("options.siteRules.autoTranslateWebsite.description")}>
       <PatternsTable
         patterns={autoTranslatePatterns}
         onAddPattern={addPattern}
         onRemovePattern={removePattern}
-        placeholderText={i18n.t("options.translation.autoTranslateWebsite.enterUrlPattern")}
-        tableHeaderText={i18n.t("options.translation.autoTranslateWebsite.urlPattern")}
+        placeholderText={i18n.t("options.siteRules.autoTranslateWebsite.enterUrlPattern")}
+        tableHeaderText={i18n.t("options.siteRules.autoTranslateWebsite.urlPattern")}
       />
     </ConfigCard>
   )

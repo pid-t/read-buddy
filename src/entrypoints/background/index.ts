@@ -50,9 +50,6 @@ export default defineBackground({
     onMessage("clearAllTranslationRelatedCache", async () => {
       await cleanupAllTranslationCache()
       await cleanupAllSummaryCache()
-    })
-
-    onMessage("clearAiSegmentationCache", async () => {
       await cleanupAllAiSegmentationCache()
     })
 
