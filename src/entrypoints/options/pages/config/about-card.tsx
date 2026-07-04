@@ -11,7 +11,7 @@ export function AboutCard() {
       title={i18n.t("options.config.about.title")}
       description={i18n.t("options.config.about.description")}
     >
-      <div className="max-w-xl text-sm text-muted-foreground">
+      <div className="max-w-xl pt-7 text-sm leading-relaxed text-muted-foreground">
         <ReactMarkdown
           components={{
             p: "span",
