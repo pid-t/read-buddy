@@ -1,5 +1,5 @@
 import { IconChevronLeft } from "@tabler/icons-react"
-import { Activity, useMemo, useRef } from "react"
+import { Activity, useRef } from "react"
 import { Button } from "@/components/ui/base-ui/button"
 import { cn } from "@/utils/styles/utils"
 import { useSubtitlesUI } from "../subtitles-ui-context"
@@ -14,6 +14,15 @@ interface PanelShellProps {
   onClose: () => void
   header?: { title: string, onBack: () => void }
   transition?: { key: string, direction: TransitionDirection }
+}
+
+const PANEL_CONTROLS_GAP = 18
+const PANEL_FALLBACK_BOTTOM_OFFSET = 22
+
+function getPanelBottomOffset(controlsHeight: number): number {
+  return controlsHeight > 0
+    ? controlsHeight + PANEL_CONTROLS_GAP
+    : PANEL_FALLBACK_BOTTOM_OFFSET
 }
 
 function TransitionContent({
@@ -101,12 +110,8 @@ export function PanelShell({
   const rootRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const { controlsConfig, embedded } = useSubtitlesUI()
-  const { controlsHeight, controlsVisible } = useControlsInfo(rootRef, controlsConfig)
-
-  const bottomOffset = useMemo(
-    () => (controlsVisible ? controlsHeight + 18 : 22),
-    [controlsHeight, controlsVisible],
-  )
+  const { controlsHeight } = useControlsInfo(rootRef, controlsConfig)
+  const bottomOffset = getPanelBottomOffset(controlsHeight)
 
   useSubtitlesPanelDismiss({
     enabled: open,
@@ -121,7 +126,7 @@ export function PanelShell({
   const positionClassName = cn(
     "absolute z-40 transition-[bottom,opacity,transform] duration-200 ease-out",
     embedded ? "bottom-full right-0" : "right-4",
-    open ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
+    open ? "visible translate-y-0 opacity-100" : "invisible translate-y-2 opacity-0",
   )
 
   const positionStyle = embedded
@@ -134,18 +139,21 @@ export function PanelShell({
 
   return (
     <div ref={rootRef} className={rootClassName}>
-      <Activity mode={open ? "visible" : "hidden"}>
-        <div className={positionClassName} style={positionStyle}>
-          <PanelContent
-            panelRef={panelRef}
-            header={header}
-            transition={transition}
-            maxHeight={maxHeight}
-          >
-            {children}
-          </PanelContent>
-        </div>
-      </Activity>
+      <div
+        aria-hidden={!open}
+        className={positionClassName}
+        inert={!open}
+        style={positionStyle}
+      >
+        <PanelContent
+          panelRef={panelRef}
+          header={header}
+          transition={transition}
+          maxHeight={maxHeight}
+        >
+          {children}
+        </PanelContent>
+      </div>
     </div>
   )
 }
