@@ -1,4 +1,21 @@
 name: ReadBuddy
+selectionTranslation:
+  action:
+    translate: 선택한 텍스트 번역
+  popover:
+    title: 선택 번역
+    loading: 번역 중...
+    retry: 다시 시도
+    copy: 복사
+    copied: 복사됨
+    close: 닫기
+  errors:
+    unavailable: 현재 번역 API를 사용할 수 없습니다
+    missingApiKey: 먼저 API 키를 설정하세요
+    timeout: 번역 요청 시간이 초과되었습니다
+    rateLimited: 요청이 너무 많습니다. 잠시 후 다시 시도하세요
+    contextInvalidated: 확장 프로그램이 업데이트되었습니다. 페이지를 새로 고침하세요
+    generic: 번역에 실패했습니다
 extName: ReadBuddy - 번역하고 배우기
 extDescription: ReadBuddy는 모든 웹사이트에서 언어를 깊이 있게 학습할 수 있도록 도와주는 오픈 소스 브라우저 확장
   프로그램입니다.
@@ -162,6 +179,7 @@ options:
       description: 각 기능에 사용할 제공업체를 선택
       features:
         translate: 페이지 번역
+        selectionTranslation: 선택 번역
         videoSubtitles: 자막 번역
     translationConfig:
       model:
@@ -355,6 +373,19 @@ options:
         confirm: 확인
         cancel: 취소
         description: 이 작업은 모든 사용자 지정 설정을 지우고 기본값으로 재설정합니다. 삭제하시겠습니까?
+  selectionTranslation:
+    title: 선택 번역
+    enable:
+      title: 선택 번역 사용
+      description: 대상 언어가 아닌 텍스트를 선택하면 선택 영역 근처에 번역 버튼을 표시합니다.
+    targetLanguage:
+      title: 대상 언어
+      description: 선택한 텍스트를 이 언어로 번역합니다. 이미 이 언어인 선택 영역에서는 버튼을 숨깁니다.
+    provider:
+      title: 번역 API
+      description: 선택 번역에 사용할 Provider를 선택합니다.
+      placeholder: Provider 선택
+      noProviders: 활성화된 번역 제공자를 먼저 구성하세요
   videoSubtitles:
     title: 자막 번역
     description: 현재 YouTube 비디오 자막만 지원

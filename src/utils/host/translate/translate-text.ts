@@ -4,7 +4,7 @@ import type { ProviderConfig } from "@/types/config/provider"
 import type { WebPagePromptContext } from "@/types/content"
 import { LANG_CODE_TO_EN_NAME } from "@read-frog/definitions"
 import { toast } from "sonner"
-import { isAPIProviderConfig, isLLMProviderConfig } from "@/types/config/provider"
+import { isAPIKeyOptionalProvider, isAPIProviderConfig, isLLMProviderConfig } from "@/types/config/provider"
 import { getProviderConfigById } from "@/utils/config/helpers"
 import { detectLanguage } from "@/utils/content/language"
 
@@ -181,7 +181,7 @@ export function validateTranslationConfigAndToast(
   }
 
   // check if the API key is configured
-  if (isAPIProviderConfig(providerConfig) && !providerConfig.apiKey?.trim() && !["deeplx", "ollama"].includes(providerConfig.provider)) {
+  if (isAPIProviderConfig(providerConfig) && !providerConfig.apiKey?.trim() && !isAPIKeyOptionalProvider(providerConfig.provider)) {
     toast.error(i18n.t("noAPIKeyConfig.warning"))
     logger.info("validateTranslationConfig: returning false (no API key)")
     return false

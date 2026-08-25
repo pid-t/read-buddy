@@ -49,4 +49,25 @@ describe("config provider enabled validation", () => {
 
     expect(issuePaths).toContain("videoSubtitles.providerId")
   })
+
+  it("fails when selection translation uses a disabled provider", () => {
+    const disabledId = DEFAULT_CONFIG.selectionTranslation.providerId
+    const providersConfig = DEFAULT_CONFIG.providersConfig.map((provider) => {
+      if (provider.id === disabledId) {
+        return { ...provider, enabled: false }
+      }
+      return provider
+    })
+
+    const issuePaths = getIssuePaths({
+      ...DEFAULT_CONFIG,
+      providersConfig,
+      selectionTranslation: {
+        ...DEFAULT_CONFIG.selectionTranslation,
+        providerId: disabledId,
+      },
+    })
+
+    expect(issuePaths).toContain("selectionTranslation.providerId")
+  })
 })

@@ -4,6 +4,7 @@ import { z } from "zod"
 import { FEATURE_PROVIDER_DEFS } from "@/utils/constants/feature-providers"
 import { languageDetectionConfigSchema } from "./language-detection"
 import { isLLMProvider, NON_API_TRANSLATE_PROVIDERS_MAP, providersConfigSchema } from "./provider"
+import { selectionTranslationConfigSchema } from "./selection-translation"
 import { videoSubtitlesSchema } from "./subtitles"
 import { translateConfigSchema } from "./translate"
 import { uiLocaleSchema } from "./ui-locale"
@@ -20,6 +21,7 @@ export const configSchema = z.object({
   language: languageSchema,
   providersConfig: providersConfigSchema,
   translate: translateConfigSchema,
+  selectionTranslation: selectionTranslationConfigSchema,
   languageDetection: languageDetectionConfigSchema,
   videoSubtitles: videoSubtitlesSchema,
 }).superRefine((data, ctx) => {

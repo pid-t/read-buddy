@@ -1,4 +1,21 @@
 name: ReadBuddy
+selectionTranslation:
+  action:
+    translate: Translate selected text
+  popover:
+    title: Selection Translation
+    loading: Translating...
+    retry: Retry
+    copy: Copy
+    copied: Copied
+    close: Close
+  errors:
+    unavailable: The current translation API is unavailable
+    missingApiKey: Please configure an API key first
+    timeout: The translation request timed out
+    rateLimited: Too many requests, please try again later
+    contextInvalidated: The extension was updated, please refresh the page
+    generic: Translation failed
 extName: "ReadBuddy - Translate & Learn"
 extDescription: ReadBuddy is an open source browser extension designed to help
   you learn languages deeply from any website.
@@ -189,6 +206,7 @@ options:
       description: Choose which provider to use for each feature
       features:
         translate: Page Translation
+        selectionTranslation: Selection Translation
         videoSubtitles: Subtitle Translation
     translationConfig:
       model:
@@ -405,6 +423,19 @@ options:
         cancel: Cancel
         description: This operation will clear all your custom configurations
           and reset them to default values. Please confirm.
+  selectionTranslation:
+    title: Selection Translation
+    enable:
+      title: Enable Selection Translation
+      description: Show a translation button near selected text when it is not in the target language.
+    targetLanguage:
+      title: Target Language
+      description: Translate selected text into this language; selections already in this language hide the button.
+    provider:
+      title: Translation API
+      description: Choose the provider used for selection translation.
+      placeholder: Select a provider
+      noProviders: Configure an enabled translation provider first
   videoSubtitles:
     title: Subtitle Translation
     description: Currently only supports YouTube video subtitles

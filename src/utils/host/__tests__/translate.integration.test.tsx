@@ -1297,10 +1297,27 @@ describe("translate", () => {
 
       const wrapper = node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
       expect(wrapper).toBeTruthy()
-      expect(wrapper?.innerHTML).toBe(TRANSLATED_TEXT)
+      expect(wrapper?.textContent).toBe(TRANSLATED_TEXT)
 
       await removeOrShowPageTranslation("translationOnly", true)
       expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+    })
+    it("translation only mode: renders HTML-looking translations as plain text", async () => {
+      const maliciousTranslation = `<img src=x onerror="window.__readFrogXss = true">`
+      vi.mocked(translateTextForPage).mockResolvedValueOnce(maliciousTranslation)
+
+      render(
+        <div data-testid="test-node">
+          {MOCK_ORIGINAL_TEXT}
+        </div>,
+      )
+      const node = screen.getByTestId("test-node")
+      await removeOrShowPageTranslation("translationOnly", true)
+
+      const wrapper = node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
+      expect(wrapper?.textContent).toBe(maliciousTranslation)
+      expect(wrapper?.querySelector("img")).toBeNull()
+      expect(wrapper?.querySelector("[onerror]")).toBeNull()
     })
   })
   describe("switching between translation modes", () => {

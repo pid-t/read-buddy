@@ -15,6 +15,7 @@ export function SettingsNav() {
   const generalTitle = i18n.t("options.general.title")
   const apiProvidersTitle = i18n.t("options.apiProviders.title")
   const translationTitle = i18n.t("options.translation.title")
+  const selectionTranslationTitle = i18n.t("options.selectionTranslation.title")
   const siteRulesTitle = i18n.t("options.siteRules.title")
   const videoSubtitlesTitle = i18n.t("options.videoSubtitles.title")
   const systemTitle = i18n.t("options.system.title")
@@ -42,6 +43,13 @@ export function SettingsNav() {
             <SidebarMenuButton render={<Link to="/translation" />} isActive={pathname === "/translation"} tooltip={translationTitle}>
               <Icon icon="ri:translate" />
               <span>{translationTitle}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton render={<Link to="/selection-translation" />} isActive={pathname === "/selection-translation"} tooltip={selectionTranslationTitle}>
+              <Icon icon="tabler:text-recognition" />
+              <span>{selectionTranslationTitle}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
 

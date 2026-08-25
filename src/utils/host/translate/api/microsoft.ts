@@ -13,18 +13,15 @@ export async function microsoftTranslate(
   }
 
   const effectiveFromLang = fromLang === "auto" ? "" : fromLang
-  const token = await refreshMicrosoftToken()
 
   const resp = await fetch(
-    `https://api-edge.cognitive.microsofttranslator.com/translate?from=${effectiveFromLang}&to=${toLang}&api-version=3.0&includeSentenceLength=true&textType=html`,
+    `https://edge.microsoft.com/translate/translatetext?from=${encodeURIComponent(effectiveFromLang)}&to=${encodeURIComponent(toLang)}`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Ocp-Apim-Subscription-Key": token,
-        "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify(texts.map(text => ({ Text: text }))),
+      body: JSON.stringify(texts),
     },
   ).catch((error) => {
     throw new Error(
@@ -65,25 +62,6 @@ export async function microsoftTranslate(
   catch (error) {
     throw new Error(
       `Failed to parse Microsoft translation response: ${(error as Error).message}`,
-    )
-  }
-}
-
-export async function refreshMicrosoftToken(): Promise<string> {
-  try {
-    const resp = await fetch("https://edge.microsoft.com/translate/auth")
-
-    if (!resp.ok) {
-      throw new Error(
-        `Failed to refresh Microsoft token: ${resp.status} ${resp.statusText}`,
-      )
-    }
-
-    return await resp.text()
-  }
-  catch (error) {
-    throw new Error(
-      `Error refreshing Microsoft token: ${(error as Error).message}`,
     )
   }
 }

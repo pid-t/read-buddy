@@ -39,7 +39,8 @@ coverage/
 
 tsconfig.local.json
 
-docs/
+docs/*
+!docs/selection-translation-design.md
 
 /repos
 

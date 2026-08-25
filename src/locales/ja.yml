@@ -1,4 +1,21 @@
 name: ReadBuddy
+selectionTranslation:
+  action:
+    translate: 選択したテキストを翻訳
+  popover:
+    title: 選択翻訳
+    loading: 翻訳中...
+    retry: 再試行
+    copy: コピー
+    copied: コピーしました
+    close: 閉じる
+  errors:
+    unavailable: 現在の翻訳 API を利用できません
+    missingApiKey: 先に API キーを設定してください
+    timeout: 翻訳リクエストがタイムアウトしました
+    rateLimited: リクエストが多すぎます。後でもう一度お試しください
+    contextInvalidated: 拡張機能が更新されました。ページを再読み込みしてください
+    generic: 翻訳に失敗しました
 extName: ReadBuddy - 翻訳して学ぶ
 extDescription: ReadBuddyは、あらゆるウェブサイトから言語を深く学ぶために設計されたオープンソースのブラウザ拡張機能です。
 popup:
@@ -161,6 +178,7 @@ options:
       description: 各機能に使用するプロバイダーを選択
       features:
         translate: ページ翻訳
+        selectionTranslation: 選択翻訳
         videoSubtitles: 字幕翻訳
     translationConfig:
       model:
@@ -352,6 +370,19 @@ options:
         confirm: 確認
         cancel: キャンセル
         description: この操作は、すべての設定をデフォルト値にリセットします。ご確認ください。
+  selectionTranslation:
+    title: 選択翻訳
+    enable:
+      title: 選択翻訳を有効にする
+      description: 対象言語以外のテキストを選択すると、選択範囲の近くに翻訳ボタンを表示します。
+    targetLanguage:
+      title: 対象言語
+      description: 選択したテキストをこの言語に翻訳します。この言語の選択範囲ではボタンを隠します。
+    provider:
+      title: 翻訳 API
+      description: 選択翻訳に使用する Provider を選択します。
+      placeholder: Provider を選択
+      noProviders: 有効な翻訳プロバイダーを設定してください
   videoSubtitles:
     title: 字幕翻訳
     description: 現在 YouTube 動画字幕のみ対応

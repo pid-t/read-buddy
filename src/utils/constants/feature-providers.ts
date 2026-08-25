@@ -6,6 +6,7 @@ import { getProviderConfigById } from "../config/helpers"
 
 export const FEATURE_KEYS = [
   "translate",
+  "selectionTranslation",
   "videoSubtitles",
 ] as const
 
@@ -23,6 +24,11 @@ export const FEATURE_PROVIDER_DEFS = {
     getProviderId: (c: Config) => c.translate.providerId,
     configPath: ["translate", "providerId"],
   },
+  selectionTranslation: {
+    isProvider: isTranslateProvider,
+    getProviderId: (c: Config) => c.selectionTranslation.providerId,
+    configPath: ["selectionTranslation", "providerId"],
+  },
   videoSubtitles: {
     isProvider: isTranslateProvider,
     getProviderId: (c: Config) => c.videoSubtitles.providerId,
@@ -33,6 +39,7 @@ export const FEATURE_PROVIDER_DEFS = {
 /** Maps FeatureKey (with dots) to i18n-safe key (with underscores) for `options.general.featureProviders.features.*` */
 export const FEATURE_KEY_I18N_MAP = {
   translate: "translate",
+  selectionTranslation: "selectionTranslation",
   videoSubtitles: "videoSubtitles",
 } as const satisfies Record<FeatureKey, string>
 

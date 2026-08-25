@@ -1,19 +1,25 @@
 import type { TestSeriesObject } from "./types"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 
+const LEGACY_FREE_PROVIDER_TYPES = new Set(["google-translate", "microsoft-translate"])
+const legacyProvidersConfig = DEFAULT_CONFIG.providersConfig.filter(provider => !LEGACY_FREE_PROVIDER_TYPES.has(provider.provider))
+const { selectionTranslation: _selectionTranslation, ...v001ConfigWithProviders } = DEFAULT_CONFIG
+const v001Config = {
+  ...v001ConfigWithProviders,
+  providersConfig: legacyProvidersConfig,
+}
+
+// Keep the legacy export used by the API-key sanitization tests.
+export const configExample = v001Config
+
 /**
- * v001 is the initial (and only) shipped schema. Because ReadBuddy has not
- * shipped a public release yet, there is no legacy config to migrate — this
- * example simply mirrors the current DEFAULT_CONFIG so the migration test
- * harness has a valid baseline.
- *
- * When the schema changes next, bump CONFIG_SCHEMA_VERSION to 2, add
- * `migration-scripts/v001-to-v002.ts` and `example/v002.ts`, and the
- * auto-discovery tests will pick them up.
+ * v001 is the legacy configuration before selection translation was added.
+ * Keep this snapshot aligned with DEFAULT_CONFIG while omitting the v2 field
+ * so the migration harness exercises the real v1-to-v2 upgrade.
  */
 export const testSeries: TestSeriesObject = {
   default: {
-    description: "Initial shipped schema (mirrors DEFAULT_CONFIG)",
-    config: DEFAULT_CONFIG,
+    description: "Initial shipped schema without selection translation or free provider additions",
+    config: v001Config,
   },
 }

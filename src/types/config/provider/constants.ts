@@ -56,6 +56,12 @@ export function isPureAPIProvider(provider: string): provider is PureAPIProvider
   return PURE_API_PROVIDER_TYPES.includes(provider)
 }
 
+/** Providers that can translate without a configured API key. */
+export const API_KEY_OPTIONAL_PROVIDER_TYPES = ["deeplx", "ollama"] as const
+export function isAPIKeyOptionalProvider(provider: string): boolean {
+  return API_KEY_OPTIONAL_PROVIDER_TYPES.includes(provider as typeof API_KEY_OPTIONAL_PROVIDER_TYPES[number])
+}
+
 export type NonAPIProviderTypes = typeof NON_API_TRANSLATE_PROVIDERS[number]
 export function isNonAPIProvider(provider: string): provider is NonAPIProviderTypes {
   return NON_API_TRANSLATE_PROVIDERS.includes(provider)

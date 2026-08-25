@@ -2,8 +2,10 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
+import { DEFAULT_PROVIDER_CONFIG } from "@/utils/constants/providers"
 import { detectLanguage } from "@/utils/content/language"
 import { executeTranslate } from "@/utils/host/translate/execute-translate"
+import { validateTranslationConfigAndToast } from "@/utils/host/translate/translate-text"
 import { translateTextForPage, translateTextForPageTitle } from "@/utils/host/translate/translate-variants"
 import { getTranslatePrompt } from "@/utils/prompts/translate"
 
@@ -323,6 +325,33 @@ describe("translate-text", () => {
 
       expect(result).toBe("L'Iran chiama \"Dichiarazione\" AT&T <span>")
       expect(mockGoogleTranslate).toHaveBeenCalledWith("test input", "en", "zh")
+    })
+  })
+
+  describe("validateTranslationConfigAndToast", () => {
+    it("accepts DeepLX without an API key", () => {
+      const config = {
+        ...DEFAULT_CONFIG,
+        translate: {
+          ...DEFAULT_CONFIG.translate,
+          providerId: "deeplx-default",
+        },
+      }
+
+      expect(validateTranslationConfigAndToast(config)).toBe(true)
+    })
+
+    it("rejects DeepL without an API key", () => {
+      const config = {
+        ...DEFAULT_CONFIG,
+        translate: {
+          ...DEFAULT_CONFIG.translate,
+          providerId: "deepl-default",
+        },
+        providersConfig: [...DEFAULT_CONFIG.providersConfig, DEFAULT_PROVIDER_CONFIG.deepl],
+      }
+
+      expect(validateTranslationConfigAndToast(config)).toBe(false)
     })
   })
 })

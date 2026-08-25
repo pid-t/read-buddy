@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 describe("dEFAULT_CONFIG", () => {
-  it("seeds DeepSeek without the removed legacy provider in the default providers config", async () => {
+  it("seeds DeepSeek and built-in free providers in the default providers config", async () => {
     const { DEFAULT_CONFIG } = await import("../config")
     const { configSchema } = await import("@/types/config/config")
 
@@ -12,6 +12,8 @@ describe("dEFAULT_CONFIG", () => {
 
     expect(parseResult.success).toBe(true)
     expect(DEFAULT_CONFIG.providersConfig.map(provider => provider.id)).toEqual([
+      "microsoft-translate-default",
+      "google-translate-default",
       "openai-default",
       "google-default",
       "xai-default",

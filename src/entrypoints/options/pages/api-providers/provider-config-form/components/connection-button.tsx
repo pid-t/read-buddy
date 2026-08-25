@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 import LoadingDots from "@/components/loading-dots"
 import { Button } from "@/components/ui/base-ui/button"
+import { isAPIKeyOptionalProvider } from "@/types/config/provider"
 import { getObjectWithoutAPIKeys } from "@/utils/config/api"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { executeTranslate } from "@/utils/host/translate/execute-translate"
@@ -71,7 +72,7 @@ export function ConnectionTestButton({ providerConfig }: { providerConfig: APIPr
         size="xs"
         variant="outline"
         onClick={handleTestConnection}
-        disabled={mutation.isPending || (!apiKey && provider !== "deeplx" && provider !== "ollama")}
+        disabled={mutation.isPending || (!apiKey && !isAPIKeyOptionalProvider(provider))}
       >
         {mutation.isPending
           ? (

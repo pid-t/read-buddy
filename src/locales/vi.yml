@@ -1,4 +1,21 @@
 name: ReadBuddy
+selectionTranslation:
+  action:
+    translate: Dịch văn bản đã chọn
+  popover:
+    title: Dịch văn bản chọn
+    loading: Đang dịch...
+    retry: Thử lại
+    copy: Sao chép
+    copied: Đã sao chép
+    close: Đóng
+  errors:
+    unavailable: API dịch hiện tại không khả dụng
+    missingApiKey: Vui lòng cấu hình API key trước
+    timeout: Yêu cầu dịch đã hết thời gian
+    rateLimited: Quá nhiều yêu cầu, vui lòng thử lại sau
+    contextInvalidated: Tiện ích đã được cập nhật, vui lòng tải lại trang
+    generic: Dịch thất bại
 extName: ReadBuddy - Dịch và học
 extDescription: ReadBuddy là tiện ích mở rộng trình duyệt mã nguồn mở được thiết
   kế để giúp bạn học ngôn ngữ sâu từ bất kỳ trang web nào.
@@ -194,6 +211,7 @@ options:
       description: Chọn nhà cung cấp sử dụng cho mỗi tính năng
       features:
         translate: Dịch trang
+        selectionTranslation: Dịch văn bản chọn
         videoSubtitles: Dịch phụ đề
     translationConfig:
       model:
@@ -410,6 +428,19 @@ options:
         cancel: Hủy
         description: Thao tác này sẽ xóa tất cả cấu hình tùy chỉnh của bạn và
           đặt lại về giá trị mặc định. Vui lòng xác nhận.
+  selectionTranslation:
+    title: Dịch văn bản chọn
+    enable:
+      title: Bật dịch văn bản chọn
+      description: Hiển thị nút dịch gần văn bản được chọn khi văn bản không ở ngôn ngữ đích.
+    targetLanguage:
+      title: Ngôn ngữ đích
+      description: Dịch văn bản được chọn sang ngôn ngữ này; ẩn nút nếu văn bản đã ở ngôn ngữ đích.
+    provider:
+      title: API dịch
+      description: Chọn Provider dùng cho dịch văn bản chọn.
+      placeholder: Chọn Provider
+      noProviders: Hãy cấu hình nhà cung cấp dịch thuật đang bật trước
   videoSubtitles:
     title: Dịch phụ đề
     description: Hiện chỉ hỗ trợ phụ đề video YouTube

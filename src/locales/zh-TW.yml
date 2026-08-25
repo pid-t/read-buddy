@@ -1,4 +1,21 @@
 name: 伴读
+selectionTranslation:
+  action:
+    translate: 翻譯所選文字
+  popover:
+    title: 劃詞翻譯
+    loading: 翻譯中...
+    retry: 重試
+    copy: 複製
+    copied: 已複製
+    close: 關閉
+  errors:
+    unavailable: 目前翻譯 API 無法使用
+    missingApiKey: 請先設定 API Key
+    timeout: 翻譯要求逾時
+    rateLimited: 要求過於頻繁，請稍後再試
+    contextInvalidated: 擴充功能已更新，請重新整理頁面
+    generic: 翻譯失敗
 extName: 伴读 - 翻譯與學習
 extDescription: 伴读是一款開放原始碼的瀏覽器擴充功能，幫助你在任何網站上深入學習語言。
 popup:
@@ -157,6 +174,7 @@ options:
       description: 為每個功能選擇使用的提供者
       features:
         translate: 網頁翻譯
+        selectionTranslation: 劃詞翻譯
         videoSubtitles: 字幕翻譯
     translationConfig:
       model:
@@ -344,6 +362,19 @@ options:
         confirm: 確認
         cancel: 取消
         description: 此操作將清空你的所有自訂設定，並將其重設為預設值，請確認是否清除。
+  selectionTranslation:
+    title: 劃詞翻譯
+    enable:
+      title: 啟用劃詞翻譯
+      description: 選取非目標語言文字後，在選區附近顯示翻譯按鈕。
+    targetLanguage:
+      title: 目標語言
+      description: 將選區翻譯為此語言；已屬於此語言的選區會隱藏按鈕。
+    provider:
+      title: 翻譯 API
+      description: 選擇劃詞翻譯使用的 Provider。
+      placeholder: 選擇 Provider
+      noProviders: 請先設定已啟用的翻譯 Provider
   videoSubtitles:
     title: 字幕翻譯
     description: 目前僅支援 YouTube 影片字幕

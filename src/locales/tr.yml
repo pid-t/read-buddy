@@ -1,4 +1,21 @@
 name: ReadBuddy
+selectionTranslation:
+  action:
+    translate: Seçili metni çevir
+  popover:
+    title: Seçim Çevirisi
+    loading: Çevriliyor...
+    retry: Yeniden dene
+    copy: Kopyala
+    copied: Kopyalandı
+    close: Kapat
+  errors:
+    unavailable: Mevcut çeviri API'si kullanılamıyor
+    missingApiKey: Önce API anahtarını yapılandırın
+    timeout: Çeviri isteği zaman aşımına uğradı
+    rateLimited: Çok fazla istek, daha sonra tekrar deneyin
+    contextInvalidated: Uzantı güncellendi, sayfayı yenileyin
+    generic: Çeviri başarısız oldu
 extName: ReadBuddy - Çevir ve Öğren
 extDescription: ReadBuddy, herhangi bir web sitesinden dilleri derinlemesine
   öğrenmenize yardımcı olmak için tasarlanmış açık kaynaklı bir tarayıcı
@@ -191,6 +208,7 @@ options:
       description: Her özellik için kullanılacak sağlayıcıyı seçin
       features:
         translate: Sayfa Çevirisi
+        selectionTranslation: Seçim Çevirisi
         videoSubtitles: Altyazı Çevirisi
     translationConfig:
       model:
@@ -406,6 +424,19 @@ options:
         cancel: İptal
         description: Bu işlem tüm özel yapılandırmalarınızı temizleyecek ve
           varsayılan değerlere sıfırlayacaktır. Lütfen onaylayın.
+  selectionTranslation:
+    title: Seçim Çevirisi
+    enable:
+      title: Seçim Çevirisini Etkinleştir
+      description: Hedef dilde olmayan seçili metnin yanında çeviri düğmesini gösterir.
+    targetLanguage:
+      title: Hedef Dil
+      description: Seçili metni bu dile çevirir; zaten bu dilde olan seçimlerde düğmeyi gizler.
+    provider:
+      title: Çeviri API'si
+      description: Seçim çevirisi için kullanılacak sağlayıcıyı seçin.
+      placeholder: Sağlayıcı seçin
+      noProviders: Önce etkin bir çeviri sağlayıcısı yapılandırın
   videoSubtitles:
     title: Altyazı Çevirisi
     description: Şu anda yalnızca YouTube video altyazılarını desteklemektedir

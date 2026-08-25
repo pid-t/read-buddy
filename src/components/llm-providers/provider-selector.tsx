@@ -27,6 +27,7 @@ interface ProviderSelectorProps {
   onChange: (id: string) => void
   placeholder?: string
   className?: string
+  disabled?: boolean
   selectContentProps?: ProviderSelectContentProps
 }
 
@@ -36,6 +37,7 @@ export default function ProviderSelector({
   onChange,
   placeholder,
   className,
+  disabled = false,
   selectContentProps,
 }: ProviderSelectorProps) {
   const { theme } = useTheme()
@@ -52,6 +54,7 @@ export default function ProviderSelector({
         className={className}
         selectContentProps={selectContentProps}
         theme={theme}
+        disabled={disabled}
       />
     )
   }
@@ -65,6 +68,7 @@ export default function ProviderSelector({
       className={className}
       selectContentProps={selectContentProps}
       theme={theme}
+      disabled={disabled}
     />
   )
 }
@@ -77,6 +81,7 @@ function TranslateGroupedSelect({
   className,
   theme,
   selectContentProps,
+  disabled,
 }: {
   providers: ProviderConfig[]
   currentProvider: ProviderConfig | undefined
@@ -85,6 +90,7 @@ function TranslateGroupedSelect({
   className?: string
   selectContentProps?: ProviderSelectContentProps
   theme: Theme
+  disabled: boolean
 }) {
   const llmProviders = providers.filter(isLLMProviderConfig)
   const pureTranslateProviders = providers.filter(isPureTranslateProviderConfig)
@@ -98,6 +104,7 @@ function TranslateGroupedSelect({
         onChange(provider.id)
       }}
       itemToStringValue={p => p.id}
+      disabled={disabled || providers.length === 0}
     >
       <SelectTrigger className={className} size="sm">
         <SelectValue placeholder={placeholder}>
@@ -136,6 +143,7 @@ function FlatSelect({
   className,
   theme,
   selectContentProps,
+  disabled,
 }: {
   providers: ProviderConfig[]
   currentProvider: ProviderConfig | undefined
@@ -144,6 +152,7 @@ function FlatSelect({
   className?: string
   selectContentProps?: ProviderSelectContentProps
   theme: Theme
+  disabled: boolean
 }) {
   return (
     <Select<ProviderConfig>
@@ -154,7 +163,7 @@ function FlatSelect({
         onChange(provider.id)
       }}
       itemToStringValue={p => p.id}
-      disabled={providers.length === 0}
+      disabled={disabled || providers.length === 0}
     >
       <SelectTrigger className={className} size="sm">
         <SelectValue placeholder={placeholder}>

@@ -1,4 +1,21 @@
 name: ReadBuddy
+selectionTranslation:
+  action:
+    translate: Перевести выделенный текст
+  popover:
+    title: Перевод выделения
+    loading: Перевод...
+    retry: Повторить
+    copy: Копировать
+    copied: Скопировано
+    close: Закрыть
+  errors:
+    unavailable: Текущий API перевода недоступен
+    missingApiKey: Сначала настройте API-ключ
+    timeout: Истекло время ожидания перевода
+    rateLimited: Слишком много запросов, повторите позже
+    contextInvalidated: Расширение обновлено, обновите страницу
+    generic: Ошибка перевода
 extName: ReadBuddy - Переводи и учись
 extDescription: ReadBuddy — расширение браузера с открытым исходным кодом,
   которое поможет вам глубоко изучать языки на любом веб-сайте.
@@ -194,6 +211,7 @@ options:
       description: Выберите провайдера для каждой функции
       features:
         translate: Перевод страницы
+        selectionTranslation: Перевод выделения
         videoSubtitles: Перевод субтитров
     translationConfig:
       model:
@@ -414,6 +432,19 @@ options:
         cancel: Отмена
         description: Эта операция очистит все ваши пользовательские конфигурации
           и сбросит их до значений по умолчанию. Пожалуйста, подтвердите.
+  selectionTranslation:
+    title: Перевод выделения
+    enable:
+      title: Включить перевод выделения
+      description: Показывать кнопку перевода рядом с выделенным текстом, если он не на целевом языке.
+    targetLanguage:
+      title: Целевой язык
+      description: Переводить выделенный текст на этот язык; для текста на нём кнопка скрывается.
+    provider:
+      title: API перевода
+      description: Выберите провайдера для перевода выделения.
+      placeholder: Выберите провайдера
+      noProviders: Сначала настройте включённый провайдер перевода
   videoSubtitles:
     title: Перевод субтитров
     description: В настоящее время поддерживаются только субтитры YouTube

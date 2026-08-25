@@ -300,7 +300,7 @@ export async function translateNodeTranslationOnlyMode(
       return
     }
 
-    translatedWrapperNode.innerHTML = translatedText
+    translatedWrapperNode.textContent = translatedText
 
     // Batch final DOM mutations to reduce layout thrashing
     batchDOMOperation(() => {

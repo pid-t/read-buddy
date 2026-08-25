@@ -1,4 +1,21 @@
 name: 伴读
+selectionTranslation:
+  action:
+    translate: 翻译所选文本
+  popover:
+    title: 划词翻译
+    loading: 翻译中...
+    retry: 重试
+    copy: 复制
+    copied: 已复制
+    close: 关闭
+  errors:
+    unavailable: 当前翻译 API 不可用
+    missingApiKey: 请先配置 API Key
+    timeout: 翻译请求超时
+    rateLimited: 请求过于频繁，请稍后重试
+    contextInvalidated: 扩展已更新，请刷新页面
+    generic: 翻译失败
 extName: 伴读 - 翻译与学习
 extDescription: 伴读是一款开放源代码的浏览器插件，旨在帮助您从任何网站深入学习语言。
 popup:
@@ -156,6 +173,7 @@ options:
       description: 为每个功能选择使用的提供商
       features:
         translate: 网页翻译
+        selectionTranslation: 划词翻译
         videoSubtitles: 字幕翻译
     translationConfig:
       model:
@@ -343,6 +361,19 @@ options:
         confirm: 确认
         cancel: 取消
         description: 该操作将清空您的所有自定义配置，并将其重置为默认值，请确认是否清除。
+  selectionTranslation:
+    title: 划词翻译
+    enable:
+      title: 启用划词翻译
+      description: 选择非目标语言文本后，在选区附近显示翻译按钮。
+    targetLanguage:
+      title: 目标语言
+      description: 将选区翻译为该语言；已属于该语言的选区会隐藏按钮。
+    provider:
+      title: 翻译 API
+      description: 选择划词翻译使用的 Provider。
+      placeholder: 选择 Provider
+      noProviders: 请先配置已启用的翻译 Provider
   videoSubtitles:
     title: 字幕翻译
     description: 当前仅支持 YouTube 视频字幕

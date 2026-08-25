@@ -1,4 +1,21 @@
 name: ReadBuddy
+selectionTranslation:
+  action:
+    translate: Traducir texto seleccionado
+  popover:
+    title: Traducción de selección
+    loading: Traduciendo...
+    retry: Reintentar
+    copy: Copiar
+    copied: Copiado
+    close: Cerrar
+  errors:
+    unavailable: La API de traducción actual no está disponible
+    missingApiKey: Configura primero una clave API
+    timeout: La solicitud de traducción agotó el tiempo
+    rateLimited: Demasiadas solicitudes; inténtalo más tarde
+    contextInvalidated: La extensión se actualizó; recarga la página
+    generic: Error de traducción
 extName: ReadBuddy - Traduce y aprende
 extDescription: ReadBuddy es una extensión de navegador de código abierto
   diseñada para ayudarte a aprender idiomas en profundidad desde cualquier sitio
@@ -204,6 +221,7 @@ options:
       description: Elige qué proveedor usar para cada función
       features:
         translate: Traducción de página
+        selectionTranslation: Traducción de selección
         videoSubtitles: Traducción de subtítulos
     translationConfig:
       model:
@@ -426,6 +444,19 @@ options:
         description: Esta operación borrará todas tus configuraciones
           personalizadas y las restablecerá a los valores predeterminados.
           Confirma para continuar.
+  selectionTranslation:
+    title: Traducción de selección
+    enable:
+      title: Activar traducción de selección
+      description: Muestra un botón de traducción cerca del texto seleccionado cuando no está en el idioma de destino.
+    targetLanguage:
+      title: Idioma de destino
+      description: Traduce el texto seleccionado a este idioma; oculta el botón si ya pertenece a este idioma.
+    provider:
+      title: API de traducción
+      description: Elige el proveedor para la traducción de selección.
+      placeholder: Seleccionar proveedor
+      noProviders: Configura primero un proveedor de traducción habilitado
   videoSubtitles:
     title: Traducción de subtítulos
     description: Actualmente solo admite subtítulos de videos de YouTube

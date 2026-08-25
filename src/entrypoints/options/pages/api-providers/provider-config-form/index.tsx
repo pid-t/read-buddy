@@ -1,4 +1,3 @@
-import type { ProvidersConfig } from "@/types/config/provider"
 import { useStore } from "@tanstack/react-form"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
@@ -15,7 +14,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/base-ui/alert-dialog"
 import { Button } from "@/components/ui/base-ui/button"
-import { isAPIProviderConfig, isLLMProvider, isNonAPIProvider, isTranslateProvider } from "@/types/config/provider"
+import { isAPIProviderConfig, isLLMProvider, isTranslateProvider } from "@/types/config/provider"
 import { configAtom, configFieldsAtomMap, writeConfigAtom } from "@/utils/atoms/config"
 import { providerConfigAtom } from "@/utils/atoms/provider"
 import {
@@ -36,6 +35,7 @@ import { FeatureProviderSection } from "./feature-provider-section"
 import { formOpts, useAppForm } from "./form"
 import { ProviderHeadersField } from "./provider-headers-field"
 import { ProviderOptionsField } from "./provider-options-field"
+import { chooseNextProviderConfig } from "./provider-selection"
 import { ProviderSpecificSettingsField } from "./provider-specific-settings-field"
 import { TemperatureField } from "./temperature-field"
 import { TranslateModelSelector } from "./translate-model-selector"
@@ -75,11 +75,6 @@ export function ProviderConfigForm() {
     return null
   }
 
-  const chooseNextProviderConfig = (providersConfig: ProvidersConfig) => {
-    const firstProvider = providersConfig.find(p => !isNonAPIProvider(p.provider))
-    return firstProvider ?? providersConfig[0]
-  }
-
   const handleDuplicate = async () => {
     await duplicateProvider(providerConfig, allProvidersConfig, setAllProvidersConfig, setSelectedProviderId)
   }
@@ -112,7 +107,7 @@ export function ProviderConfigForm() {
     }
 
     await setAllProvidersConfig(updatedAllProviders)
-    setSelectedProviderId(chooseNextProviderConfig(updatedAllProviders).id)
+    setSelectedProviderId(chooseNextProviderConfig(updatedAllProviders)?.id)
   }
 
   return (
