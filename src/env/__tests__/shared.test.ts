@@ -38,11 +38,11 @@ describe("extension env resolution", () => {
   it("lets explicit env vars override the selected defaults", () => {
     expect(resolveExtensionEnv({
       WXT_USE_LOCAL_PACKAGES: "true",
-      WXT_AUTH_COOKIE_DOMAINS: "preview.readfrog.app",
+      WXT_AUTH_COOKIE_DOMAINS: "preview.example.com",
     })).toMatchObject({
       ...LOCAL_EXTENSION_ENV_DEFAULTS,
       WXT_USE_LOCAL_PACKAGES: "true",
-      WXT_AUTH_COOKIE_DOMAINS: "preview.readfrog.app",
+      WXT_AUTH_COOKIE_DOMAINS: "preview.example.com",
     })
   })
 
