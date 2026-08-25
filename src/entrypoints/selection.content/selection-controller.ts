@@ -43,9 +43,11 @@ export class SelectionController {
   private sessionId = 0
   private debounceTimer: number | undefined
   private animationFrame: number | undefined
+  private selectionUiPointerResetTimer: number | undefined
   private started = false
   private listening = false
   private pointerSelectionActive = false
+  private selectionUiPointerActive = false
 
   constructor(options: SelectionControllerOptions) {
     this.config = options.config
@@ -162,6 +164,7 @@ export class SelectionController {
       this.listeningAbortController?.abort()
       this.listeningAbortController = null
       this.pointerSelectionActive = false
+      this.selectionUiPointerActive = false
       this.clearScheduledWork()
       return
     }
@@ -188,16 +191,36 @@ export class SelectionController {
       this.cancelAnimationFrame(this.animationFrame)
       this.animationFrame = undefined
     }
+    if (this.selectionUiPointerResetTimer !== undefined) {
+      this.windowRef.clearTimeout(this.selectionUiPointerResetTimer)
+      this.selectionUiPointerResetTimer = undefined
+    }
+    this.selectionUiPointerActive = false
   }
 
   private readonly handlePointerDown = (event: PointerEvent): void => {
-    if (event.target instanceof Node && this.isInsideSelectionUi(event.target))
+    if (event.target instanceof Node && this.isInsideSelectionUi(event.target)) {
+      if (this.selectionUiPointerResetTimer !== undefined) {
+        this.windowRef.clearTimeout(this.selectionUiPointerResetTimer)
+        this.selectionUiPointerResetTimer = undefined
+      }
+      this.selectionUiPointerActive = true
       return
+    }
+    this.selectionUiPointerActive = false
     this.pointerSelectionActive = true
     this.invalidate()
   }
 
-  private readonly handlePointerUp = (): void => {
+  private readonly handlePointerUp = (event: PointerEvent): void => {
+    if (this.selectionUiPointerActive || (event.target instanceof Node && this.isInsideSelectionUi(event.target))) {
+      this.pointerSelectionActive = false
+      this.selectionUiPointerResetTimer = this.windowRef.setTimeout(() => {
+        this.selectionUiPointerResetTimer = undefined
+        this.selectionUiPointerActive = false
+      }, 0)
+      return
+    }
     this.pointerSelectionActive = false
     this.scheduleSelectionRead(0)
   }
@@ -208,8 +231,13 @@ export class SelectionController {
   }
 
   private readonly handleSelectionChange = (): void => {
+    if (this.selectionUiPointerActive)
+      return
+
     const selection = this.documentRef.getSelection()
     if (!selection || selection.isCollapsed || !selection.toString().trim()) {
+      if (this.state.status === "translating" || this.state.status === "success" || this.state.status === "error")
+        return
       this.invalidate()
       return
     }

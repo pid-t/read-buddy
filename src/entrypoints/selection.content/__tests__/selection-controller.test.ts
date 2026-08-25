@@ -177,4 +177,44 @@ describe("selection controller", () => {
     controller.stop()
     vi.useRealTimers()
   })
+
+  it("keeps a translated session while selecting text inside the popover", async () => {
+    selectText("keep the translated result open")
+    const controller = new SelectionController({
+      config: DEFAULT_CONFIG,
+      document,
+      window,
+      detectLanguage: vi.fn().mockResolvedValue({ code: "eng", source: "franc" }),
+      translate: vi.fn().mockResolvedValue("translated result"),
+    })
+
+    controller.start()
+    await vi.runAllTimersAsync()
+    await controller.translateCurrent()
+    expect(controller.getState().status).toBe("success")
+
+    const host = document.createElement("div")
+    host.setAttribute("data-read-frog-selection-ui", "true")
+    const shadowRoot = host.attachShadow({ mode: "open" })
+    const translation = document.createElement("span")
+    translation.textContent = "translated result"
+    shadowRoot.append(translation)
+    document.body.append(host)
+
+    translation.dispatchEvent(new Event("pointerdown", { bubbles: true, composed: true }))
+    window.getSelection()?.removeAllRanges()
+    document.dispatchEvent(new Event("selectionchange"))
+    translation.dispatchEvent(new Event("pointerup", { bubbles: true, composed: true }))
+    await vi.runAllTimersAsync()
+
+    expect(controller.getState().status).toBe("success")
+
+    document.dispatchEvent(new Event("selectionchange"))
+    expect(controller.getState().status).toBe("success")
+
+    document.body.dispatchEvent(new Event("pointerdown", { bubbles: true }))
+    expect(controller.getState().status).toBe("idle")
+    controller.stop()
+    vi.useRealTimers()
+  })
 })
