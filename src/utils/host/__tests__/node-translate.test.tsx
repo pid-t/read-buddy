@@ -5,7 +5,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { BLOCK_ATTRIBUTE, BLOCK_CONTENT_CLASS, CONTENT_WRAPPER_CLASS, PARAGRAPH_ATTRIBUTE } from "@/utils/constants/dom-labels"
 import { flushBatchedOperations } from "../dom/batch-dom"
-import { removeOrShowNodeTranslation } from "../translate/node-manipulation"
+import { removeOrShowNodeTranslation, removeOrShowNodeTranslationAtElement } from "../translate/node-manipulation"
 import { expectNodeLabels, expectTranslatedContent, expectTranslationWrapper, MOCK_ORIGINAL_TEXT } from "./utils"
 
 // Test config with fixed bilingual mode - won't change with DEFAULT_CONFIG
@@ -79,6 +79,28 @@ describe("node translation", () => {
       expect(wrapper).toBe(node.childNodes[1])
       expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
 
+      document.elementFromPoint = originalElementFromPoint
+    })
+
+    it("toggles translation directly from an already resolved element", async () => {
+      render(
+        <div data-testid="test-node">
+          {MOCK_ORIGINAL_TEXT}
+        </div>,
+      )
+      const node = screen.getByTestId("test-node")
+      const originalElementFromPoint = document.elementFromPoint
+      document.elementFromPoint = vi.fn(() => {
+        throw new Error("direct element API must not resolve from a point")
+      })
+
+      await act(async () => {
+        await removeOrShowNodeTranslationAtElement(node, TEST_CONFIG)
+        flushBatchedOperations()
+      })
+
+      expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      expectTranslationWrapper(node, "bilingual")
       document.elementFromPoint = originalElementFromPoint
     })
   })

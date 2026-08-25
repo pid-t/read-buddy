@@ -1,7 +1,7 @@
 import type { Config } from "@/types/config/config"
 import { getLocalConfig } from "@/utils/config/storage"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
-import { removeOrShowNodeTranslation } from "@/utils/host/translate/node-manipulation"
+import { removeOrShowNodeTranslationAtElement } from "@/utils/host/translate/node-manipulation"
 import { applyI18nLocale } from "@/utils/i18n"
 import { registerNodeTranslationTriggerListeners } from "./node-translation-trigger"
 
@@ -25,15 +25,13 @@ export function registerNodeTranslationTriggers(): () => void {
     return resolvedConfig
   }
 
-  const translateNode = async (point: Parameters<typeof removeOrShowNodeTranslation>[0], config: Config) => {
-    await removeOrShowNodeTranslation(point, config)
+  const translateNode = async (element: HTMLElement, config: Config) => {
+    await removeOrShowNodeTranslationAtElement(element, config)
   }
 
   const teardownTriggerListeners = registerNodeTranslationTriggerListeners({
     getConfig: getCurrentConfig,
-    onTrigger: (point, config) => {
-      void translateNode(point, config)
-    },
+    onTriggerElement: translateNode,
   })
 
   // Teardown: abort all listeners + cancel pending timers
