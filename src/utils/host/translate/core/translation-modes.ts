@@ -25,6 +25,38 @@ import { MARK_ATTRIBUTES_REGEX, originalContentMap, translatingNodes } from "./t
 
 const HTML_COMMENT_RE = /<!--[\s\S]*?-->/g
 
+interface WrapperPlacement {
+  backgroundReferenceNode: TransNode
+  insert: () => void
+}
+
+function createWrapperPlacement(
+  targetNode: TransNode,
+  transNodeCount: number,
+  translatedWrapperNode: HTMLElement,
+): WrapperPlacement {
+  const insertAsSibling = isTextNode(targetNode) || transNodeCount > 1
+  const backgroundReferenceNode
+    = insertAsSibling && isHTMLElement(targetNode)
+      ? targetNode.parentElement ?? targetNode
+      : targetNode
+
+  return {
+    backgroundReferenceNode,
+    insert: () => {
+      if (insertAsSibling) {
+        targetNode.parentNode?.insertBefore(
+          translatedWrapperNode,
+          targetNode.nextSibling,
+        )
+      }
+      else {
+        targetNode.appendChild(translatedWrapperNode)
+      }
+    },
+  }
+}
+
 function getDisplayTranslation(sourceText: string, translatedText: string | undefined) {
   if (translatedText === undefined) {
     return undefined
@@ -101,21 +133,15 @@ export async function translateNodesBilingualMode(
     translatedWrapperNode.setAttribute(TRANSLATION_MODE_ATTRIBUTE, "bilingual" satisfies TranslationMode)
     translatedWrapperNode.setAttribute(WALKED_ATTRIBUTE, walkId)
     setTranslationDirAndLang(translatedWrapperNode, config)
-    const spinner = createSpinnerInside(translatedWrapperNode, targetNode, forceBlockTranslation)
+    const placement = createWrapperPlacement(targetNode, transNodes.length, translatedWrapperNode)
+    const spinner = createSpinnerInside(translatedWrapperNode, {
+      targetNode,
+      forceBlockTranslation,
+      backgroundReferenceNode: placement.backgroundReferenceNode,
+    })
 
     // Batch DOM insertion to reduce layout thrashing
-    const insertOperation = () => {
-      if (isTextNode(targetNode) || transNodes.length > 1) {
-        targetNode.parentNode?.insertBefore(
-          translatedWrapperNode,
-          targetNode.nextSibling,
-        )
-      }
-      else {
-        targetNode.appendChild(translatedWrapperNode)
-      }
-    }
-    batchDOMOperation(insertOperation)
+    batchDOMOperation(placement.insert)
 
     const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode, translateTextForPage)
 
@@ -271,21 +297,14 @@ export async function translateNodeTranslationOnlyMode(
     translatedWrapperNode.setAttribute(WALKED_ATTRIBUTE, walkId)
     translatedWrapperNode.style.display = "contents"
     setTranslationDirAndLang(translatedWrapperNode, config)
-    const spinner = createSpinnerInside(translatedWrapperNode, targetNode)
+    const placement = createWrapperPlacement(targetNode, transNodes.length, translatedWrapperNode)
+    const spinner = createSpinnerInside(translatedWrapperNode, {
+      targetNode,
+      backgroundReferenceNode: placement.backgroundReferenceNode,
+    })
 
     // Batch DOM insertion to reduce layout thrashing
-    const insertOperation = () => {
-      if (isTextNode(targetNode) || transNodes.length > 1) {
-        targetNode.parentNode?.insertBefore(
-          translatedWrapperNode,
-          targetNode.nextSibling,
-        )
-      }
-      else {
-        targetNode.appendChild(translatedWrapperNode)
-      }
-    }
-    batchDOMOperation(insertOperation)
+    batchDOMOperation(placement.insert)
 
     const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode, translateTextForPage)
     const translatedText = realTranslatedText ? getDisplayTranslation(textContent, realTranslatedText) : realTranslatedText
