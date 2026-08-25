@@ -74,7 +74,7 @@ body:
         - OS: [e.g. macOS 14.5]
         - Browser: [e.g. Chrome 126, Edge 125]
         - Extension channel/version: [e.g. Chrome Web Store 1.2.3]
-        - Website: [e.g. https://readfrog.app, date/time observed]
+        - Website: [e.g. https://readbuddy.firevibe.top, date/time observed]
     validations:
       required: true
   - type: textarea

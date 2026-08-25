@@ -1,14 +1,12 @@
 import { z } from "zod"
 
 export const PRODUCTION_EXTENSION_ENV_DEFAULTS = {
-  WXT_API_URL: "https://api.readfrog.app",
-  WXT_WEBSITE_URL: "https://www.readfrog.app",
-  WXT_OFFICIAL_SITE_ORIGINS: "https://readfrog.app,https://www.readfrog.app",
-  WXT_AUTH_COOKIE_DOMAINS: "readfrog.app",
+  WXT_WEBSITE_URL: "https://readbuddy.firevibe.top",
+  WXT_OFFICIAL_SITE_ORIGINS: "https://readbuddy.firevibe.top",
+  WXT_AUTH_COOKIE_DOMAINS: "readbuddy.firevibe.top",
 } as const
 
 export const LOCAL_EXTENSION_ENV_DEFAULTS = {
-  WXT_API_URL: "https://localhost:4433",
   WXT_WEBSITE_URL: "https://localhost:8877",
   WXT_OFFICIAL_SITE_ORIGINS: "http://localhost:8888,https://localhost:8877",
   WXT_AUTH_COOKIE_DOMAINS: "localhost",
@@ -90,7 +88,6 @@ export function resolveExtensionEnv(rawEnv: RawExtensionEnv) {
 
   return {
     ...rawEnv,
-    WXT_API_URL: rawEnv.WXT_API_URL ?? defaults.WXT_API_URL,
     WXT_WEBSITE_URL: rawEnv.WXT_WEBSITE_URL ?? defaults.WXT_WEBSITE_URL,
     WXT_OFFICIAL_SITE_ORIGINS: rawEnv.WXT_OFFICIAL_SITE_ORIGINS ?? defaults.WXT_OFFICIAL_SITE_ORIGINS,
     WXT_AUTH_COOKIE_DOMAINS: rawEnv.WXT_AUTH_COOKIE_DOMAINS ?? defaults.WXT_AUTH_COOKIE_DOMAINS,
@@ -102,7 +99,6 @@ export function createExtensionClientEnvSchema(
   _skipRequiredProductionEnv = false,
 ) {
   return {
-    WXT_API_URL: strictUrlSchema,
     WXT_WEBSITE_URL: strictUrlSchema,
     WXT_OFFICIAL_SITE_ORIGINS: z.string().transform((value, ctx) =>
       parseCommaSeparatedEntries(value, ctx, strictOriginSchema),
