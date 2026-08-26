@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { HelpTooltip } from "@/components/help-tooltip"
 import { Field, FieldContent, FieldLabel } from "@/components/ui/base-ui/field"
 import { Switch } from "@/components/ui/base-ui/switch"
-import { isLLMProviderConfig } from "@/types/config/provider"
+import { isEnabledLLMProviderConfig } from "@/types/config/provider"
 import { configFieldsAtomMap } from "@/utils/atoms/config"
 import { getProviderConfigById } from "@/utils/config/helpers"
 import { i18n } from "@/utils/i18n"
@@ -17,7 +17,7 @@ export function AIContentAware() {
 
   const hasLLMProvider = useMemo(() => {
     const providerConfig = getProviderConfigById(providersConfig, translateConfig.providerId)
-    return providerConfig ? isLLMProviderConfig(providerConfig) : false
+    return providerConfig ? isEnabledLLMProviderConfig(providerConfig) : false
   }, [providersConfig, translateConfig.providerId])
 
   return (
@@ -27,7 +27,13 @@ export function AIContentAware() {
       description={(
         <>
           {i18n.t("options.translation.aiContentAware.description")}
-          <LLMStatusIndicator hasLLMProvider={hasLLMProvider} featureName={i18n.t("options.general.featureProviders.features.translate")} />
+          <LLMStatusIndicator
+            enabled={translateConfig.enableAIContentAware}
+            hasLLMProvider={hasLLMProvider}
+            disabledText={i18n.t("options.translation.aiContentAware.status.disabled")}
+            enabledText={i18n.t("options.translation.aiContentAware.status.enabled")}
+            noProviderText={i18n.t("options.translation.aiContentAware.status.noProvider")}
+          />
         </>
       )}
     >
@@ -40,6 +46,7 @@ export function AIContentAware() {
         </FieldContent>
         <Switch
           id="ai-content-aware-toggle"
+          aria-label={i18n.t("options.translation.aiContentAware.enable")}
           checked={translateConfig.enableAIContentAware}
           onCheckedChange={(checked) => {
             void setTranslateConfig(

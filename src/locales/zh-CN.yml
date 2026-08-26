@@ -320,16 +320,19 @@ options:
         description: 少于此词数的文本节点将不会被翻译。使用 Intl.Segmenter 进行跨语言准确分词。
       error: 数值必须在 $1 到 $2 之间
     nodeTranslationHotkey:
-      title: 悬停或长按翻译快捷键
+      title: 鼠标悬停翻译
       description: 自定义悬停翻译的修饰键，或使用鼠标长按翻译段落
-      enable: 启用
-    llmProviderConfigured: 已为$1选择 LLM 提供商
-    llmProviderNotConfigured: 没有为$1选择 LLM 提供商
+      enable: 启用鼠标悬停翻译
+      shortcut: 快捷键
     aiContentAware:
       title: AI 智能上下文翻译
       description: 通过向 AI 提供网页上下文来提高翻译质量
       enable: 启用 AI 智能上下文翻译
       enableDescription: AI 使用网页摘要来提高翻译准确性。需要 LLM 翻译提供商。刚开始翻译页面时会有延迟，并增加 API 费用。
+      status:
+        disabled: AI 智能上下文翻译已关闭
+        enabled: AI 智能上下文翻译已启用
+        noProvider: 请先选择 LLM Provider
   system:
     title: 系统
 

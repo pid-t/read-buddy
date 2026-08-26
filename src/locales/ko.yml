@@ -329,17 +329,20 @@ options:
           Intl.Segmenter를 사용합니다.
       error: 값은 $1에서 $2 사이여야 합니다
     nodeTranslationHotkey:
-      title: 호버 또는 길게 누르기 번역 단축키
+      title: 호버 번역
       description: 호버 번역 수정 키를 사용자 지정하거나 마우스 길게 누르기로 단락을 번역합니다
-      enable: 활성화
-    llmProviderConfigured: $1에 LLM 제공업체 선택됨
-    llmProviderNotConfigured: $1에 LLM 제공업체 미선택
+      enable: 호버 번역 활성화
+      shortcut: 단축키
     aiContentAware:
       title: AI 스마트 컨텍스트 번역
       description: AI에 웹페이지 컨텍스트를 제공하여 번역 품질을 향상시킵니다
       enable: AI 스마트 컨텍스트 번역 활성화
       enableDescription: AI가 웹페이지 요약을 사용하여 번역 정확도를 향상시킵니다. LLM 제공업체가 필요합니다. 번역
         시작 시 지연이 발생하고 API 비용이 증가합니다.
+      status:
+        disabled: AI 스마트 컨텍스트 번역이 비활성화됨
+        enabled: AI 스마트 컨텍스트 번역이 활성화됨
+        noProvider: 먼저 LLM 제공업체를 선택하세요
   system:
     title: 시스템
 

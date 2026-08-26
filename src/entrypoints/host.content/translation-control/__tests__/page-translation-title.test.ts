@@ -157,6 +157,28 @@ describe("pageTranslationManager title handling", () => {
     manager.stop()
   })
 
+  it("does not prime webpage context on start for a disabled LLM provider", async () => {
+    mockGetLocalConfig.mockResolvedValue({
+      ...DEFAULT_CONFIG,
+      providersConfig: DEFAULT_CONFIG.providersConfig.map(provider => provider.id === DEFAULT_CONFIG.translate.providerId
+        ? { ...provider, enabled: false }
+        : provider),
+      translate: {
+        ...DEFAULT_CONFIG.translate,
+        enableAIContentAware: true,
+      },
+    })
+    mockTranslateTextForPageTitle.mockResolvedValue("Translated Title")
+
+    const manager = new PageTranslationManager()
+    await manager.start()
+    await flushDomUpdates()
+
+    expect(mockGetOrCreateWebPageContext).not.toHaveBeenCalled()
+
+    manager.stop()
+  })
+
   it("translates the tab title on start and restores the latest source title on stop", async () => {
     mockTranslateTextForPageTitle
       .mockResolvedValueOnce("Translated Title")

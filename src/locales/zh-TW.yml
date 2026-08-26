@@ -321,16 +321,19 @@ options:
         description: 少於此詞數的文字節點將不會被翻譯。使用 Intl.Segmenter 進行跨語言準確分詞。
       error: 數值必須在 $1 到 $2 之間
     nodeTranslationHotkey:
-      title: 懸停或長按翻譯快速鍵
+      title: 滑鼠懸停翻譯
       description: 自訂懸停翻譯的修飾鍵，或使用滑鼠長按翻譯段落
-      enable: 啟用
-    llmProviderConfigured: 已為$1選擇 LLM 提供者
-    llmProviderNotConfigured: 沒有為$1選擇 LLM 提供者
+      enable: 啟用滑鼠懸停翻譯
+      shortcut: 快速鍵
     aiContentAware:
       title: AI 智慧上下文翻譯
       description: 透過向 AI 提供網頁上下文來提高翻譯品質
       enable: 啟用 AI 智慧上下文翻譯
       enableDescription: AI 使用網頁摘要來提高翻譯準確性。需要 LLM 翻譯提供者。剛開始翻譯頁面時會有延遲，並增加 API 費用。
+      status:
+        disabled: AI 智慧上下文翻譯已關閉
+        enabled: AI 智慧上下文翻譯已啟用
+        noProvider: 請先選擇 LLM 提供者
   system:
     title: 系統
 

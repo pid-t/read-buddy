@@ -372,12 +372,11 @@ options:
           Tüm dillerde doğru kelime sayımı için Intl.Segmenter kullanılır.
       error: Değer $1 ile $2 arasında olmalıdır
     nodeTranslationHotkey:
-      title: Üzerine Gelme veya Uzun Basma Çeviri Kısayolu
+      title: Üzerine Gelme Çevirisi
       description: Üzerine gelme için değiştirici tuşu özelleştirin veya
         paragrafları çevirmek için uzun basın
-      enable: Etkinleştir
-    llmProviderConfigured: $1 için LLM sağlayıcısı seçildi
-    llmProviderNotConfigured: $1 için LLM sağlayıcısı seçilmedi
+      enable: Üzerine gelme çevirisini etkinleştir
+      shortcut: Kısayol
     aiContentAware:
       title: AI Akıllı Bağlam Çevirisi
       description: AI'ya web sayfası bağlamı sağlayarak çeviri kalitesini
@@ -386,6 +385,10 @@ options:
       enableDescription: AI, çeviri doğruluğunu artırmak için web sayfası
         özetini kullanır. LLM sağlayıcısı gerektirir. Bir sayfayı çevirmeye
         başlarken gecikme ekler ve API maliyetlerini artırır.
+      status:
+        disabled: AI Akıllı Bağlam Çevirisi devre dışı
+        enabled: AI Akıllı Bağlam Çevirisi etkin
+        noProvider: Önce bir LLM sağlayıcısı seçin
   system:
     title: Sistem
 

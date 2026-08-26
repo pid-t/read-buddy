@@ -1,5 +1,5 @@
 import type { Config } from "@/types/config/config"
-import { isLLMProviderConfig } from "@/types/config/provider"
+import { isEnabledLLMProviderConfig } from "@/types/config/provider"
 import { getLocalConfig } from "@/utils/config/storage"
 import { CONTENT_WRAPPER_CLASS } from "@/utils/constants/dom-labels"
 import { resolveProviderConfig } from "@/utils/constants/feature-providers"
@@ -114,7 +114,7 @@ export class PageTranslationManager implements IPageTranslationManager {
 
     this.isPageTranslating = true
     await this.primeDocumentTitleContext(
-      config.translate.enableAIContentAware && isLLMProviderConfig(providerConfig),
+      config.translate.enableAIContentAware && isEnabledLLMProviderConfig(providerConfig),
     )
     this.startDocumentTitleTracking()
 

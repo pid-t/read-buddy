@@ -392,12 +392,11 @@ options:
           todos los idiomas.
       error: El valor debe estar entre $1 y $2
     nodeTranslationHotkey:
-      title: Atajo de traducción al pasar el cursor o mantener pulsado
+      title: Traducción al pasar el cursor
       description: Personaliza la tecla modificadora al pasar el cursor o usa
         pulsación larga para traducir párrafos
-      enable: Activar
-    llmProviderConfigured: Proveedor LLM seleccionado para $1
-    llmProviderNotConfigured: No se seleccionó ningún proveedor LLM para $1
+      enable: Activar traducción al pasar el cursor
+      shortcut: Atajo
     aiContentAware:
       title: Traducción con contexto inteligente de IA
       description: Mejora la calidad de la traducción proporcionando contexto de
@@ -406,6 +405,10 @@ options:
       enableDescription: La AI usa el resumen de la página web para mejorar la
         precisión de traducción. Requiere proveedor LLM. Añade latencia al
         empezar a traducir una página y aumenta los costes de API.
+      status:
+        disabled: La traducción con contexto inteligente de IA está desactivada
+        enabled: La traducción con contexto inteligente de IA está activada
+        noProvider: Selecciona primero un proveedor LLM
   system:
     title: Sistema
 

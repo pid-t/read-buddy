@@ -376,12 +376,11 @@ options:
           ngữ.
       error: Giá trị phải từ $1 đến $2
     nodeTranslationHotkey:
-      title: Phím tắt dịch khi di chuột hoặc nhấn giữ
+      title: Dịch khi di chuột
       description: Tùy chỉnh phím bổ trợ khi di chuột hoặc dùng nhấn giữ để dịch
         đoạn văn
-      enable: Bật
-    llmProviderConfigured: Đã chọn nhà cung cấp LLM cho $1
-    llmProviderNotConfigured: Chưa chọn nhà cung cấp LLM cho $1
+      enable: Bật dịch khi di chuột
+      shortcut: Phím tắt
     aiContentAware:
       title: Dịch ngữ cảnh thông minh AI
       description: Nâng cao chất lượng dịch bằng cách cung cấp ngữ cảnh trang
@@ -390,6 +389,10 @@ options:
       enableDescription: AI sử dụng tóm tắt trang web để cải thiện độ chính xác
         dịch. Yêu cầu nhà cung cấp LLM. Thêm độ trễ khi bắt đầu dịch trang và
         tăng chi phí API.
+      status:
+        disabled: Đã tắt tính năng dịch ngữ cảnh thông minh AI
+        enabled: Đã bật tính năng dịch ngữ cảnh thông minh AI
+        noProvider: Vui lòng chọn nhà cung cấp LLM trước
   system:
     title: Hệ thống
 

@@ -327,17 +327,20 @@ options:
           Intl.Segmenter を使用します。
       error: 値は $1 から $2 の間である必要があります
     nodeTranslationHotkey:
-      title: ホバーまたは長押し翻訳ショートカットキー
+      title: ホバー翻訳
       description: ホバー翻訳の修飾キーをカスタマイズするか、長押しで段落を翻訳します
-      enable: 有効化
-    llmProviderConfigured: $1の LLM プロバイダー選択済み
-    llmProviderNotConfigured: $1の LLM プロバイダー未選択
+      enable: ホバー翻訳を有効化
+      shortcut: ショートカット
     aiContentAware:
       title: AI スマートコンテキスト翻訳
       description: ウェブページのコンテキストを AI に提供して翻訳品質を向上させます
       enable: AI スマートコンテキスト翻訳を有効にする
       enableDescription: AI はウェブページの要約を使用して翻訳精度を向上させます。LLM
         プロバイダーが必要です。翻訳開始時に遅延が発生し、API コストが増加します。
+      status:
+        disabled: AI スマートコンテキスト翻訳は無効です
+        enabled: AI スマートコンテキスト翻訳は有効です
+        noProvider: 先に LLM プロバイダーを選択してください
   system:
     title: システム
 

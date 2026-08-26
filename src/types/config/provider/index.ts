@@ -31,6 +31,10 @@ export function isLLMProviderConfig(config: ProviderConfig): config is LLMProvid
   return isLLMProvider(config.provider)
 }
 
+export function isEnabledLLMProviderConfig(config: ProviderConfig): config is LLMProviderConfig {
+  return config.enabled && isLLMProviderConfig(config)
+}
+
 export function isCustomLLMProviderConfig(config: ProviderConfig): config is CustomLLMProviderConfig {
   return isCustomLLMProvider(config.provider)
 }

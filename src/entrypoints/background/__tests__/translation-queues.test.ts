@@ -361,6 +361,23 @@ describe("translation queue helpers", () => {
     )
   })
 
+  it("does not generate a webpage summary for a disabled LLM provider", async () => {
+    const { setUpWebPageTranslationQueue } = await import("../translation-queues")
+    await setUpWebPageTranslationQueue()
+
+    const handler = getRegisteredMessageHandler("getOrGenerateWebPageSummary")
+    const result = await handler({
+      data: {
+        webTitle: "Page title",
+        webContent: "page body",
+        providerConfig: { ...llmProvider, enabled: false },
+      },
+    })
+
+    expect(result).toBeNull()
+    expect(generateArticleSummaryMock).not.toHaveBeenCalled()
+  })
+
   it("exposes subtitle summary generation as a separate background handler", async () => {
     const { setUpSubtitlesTranslationQueue } = await import("../translation-queues")
     await setUpSubtitlesTranslationQueue()

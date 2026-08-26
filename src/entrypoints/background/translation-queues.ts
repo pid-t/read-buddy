@@ -3,7 +3,7 @@ import type { LLMProviderConfig, ProviderConfig } from "@/types/config/provider"
 import type { BatchQueueConfig, RequestQueueConfig } from "@/types/config/translate"
 import type { SubtitlePromptContext, WebPagePromptContext } from "@/types/content"
 import type { PromptResolver } from "@/utils/host/translate/api/ai"
-import { isLLMProviderConfig } from "@/types/config/provider"
+import { isEnabledLLMProviderConfig, isLLMProviderConfig } from "@/types/config/provider"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { BATCH_SEPARATOR, BATCH_SEPARATOR_LINE_PATTERN } from "@/utils/constants/prompt"
 import { generateArticleSummary } from "@/utils/content/summary"
@@ -270,7 +270,7 @@ export async function setUpWebPageTranslationQueue() {
   onMessage("getOrGenerateWebPageSummary", async (message) => {
     const { webTitle, webContent, providerConfig } = message.data
 
-    if (!isLLMProviderConfig(providerConfig) || !webTitle || !webContent) {
+    if (!isEnabledLLMProviderConfig(providerConfig) || !webTitle || !webContent) {
       return null
     }
 

@@ -237,6 +237,41 @@ describe("translate-text", () => {
       }))
     })
 
+    it("should not fetch webpage context for an AI-aware title with a disabled LLM provider", async () => {
+      const llmConfig = {
+        ...DEFAULT_CONFIG,
+        providersConfig: DEFAULT_CONFIG.providersConfig.map(provider => provider.id === "openai-default"
+          ? { ...provider, enabled: false }
+          : provider),
+        translate: {
+          ...DEFAULT_CONFIG.translate,
+          providerId: "openai-default",
+          enableAIContentAware: true,
+        },
+      }
+
+      mockGetConfigFromStorage.mockResolvedValue(llmConfig)
+      mockSendMessage.mockImplementation(async (type: string) => {
+        if (type === "enqueueTranslateRequest") {
+          return "translated page title"
+        }
+        return undefined
+      })
+
+      const result = await translateTextForPageTitle("Source Title To Translate")
+
+      expect(result).toBe("translated page title")
+      expect(mockGetOrCreateWebPageContext).not.toHaveBeenCalled()
+      expect(mockGetOrGenerateWebPageSummary).not.toHaveBeenCalled()
+      expect(mockSendMessage).toHaveBeenCalledWith("enqueueTranslateRequest", expect.objectContaining({
+        text: "Source Title To Translate",
+        webTitle: "Source Title To Translate",
+        webContent: undefined,
+        webDescription: undefined,
+        webSummary: undefined,
+      }))
+    })
+
     it("should forward document.title to regular page translations", async () => {
       const llmConfig = {
         ...DEFAULT_CONFIG,

@@ -1,6 +1,6 @@
 import { deepmerge } from "deepmerge-ts"
 import { useAtom } from "jotai"
-import { Field, FieldContent, FieldLabel } from "@/components/ui/base-ui/field"
+import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/base-ui/field"
 import {
   Select,
   SelectContent,
@@ -26,7 +26,7 @@ export function NodeTranslationHotkey() {
       title={i18n.t("options.translation.nodeTranslationHotkey.title")}
       description={i18n.t("options.translation.nodeTranslationHotkey.description")}
     >
-      <div className="flex flex-col gap-4">
+      <FieldGroup>
         <Field orientation="horizontal">
           <FieldContent className="self-center">
             <FieldLabel htmlFor="node-translation-hotkey-toggle">
@@ -43,37 +43,45 @@ export function NodeTranslationHotkey() {
             }}
           />
         </Field>
-        <Select
-          value={translateConfig.node.hotkey}
-          onValueChange={(value: typeof HOTKEYS[number] | null) => {
-            if (!value)
-              return
-            void setTranslateConfig(
-              deepmerge(translateConfig, { node: { hotkey: value } }),
-            )
-          }}
-          disabled={!translateConfig.node.enabled}
-        >
-          <SelectTrigger className={`w-full ${!translateConfig.node.enabled ? "opacity-50 pointer-events-none" : ""}`}>
-            <SelectValue render={<span />}>
-              {HOTKEY_ICONS[translateConfig.node.hotkey]}
-              {" "}
-              {i18n.t(`hotkey.${translateConfig.node.hotkey}`)}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {HOTKEYS.map(item => (
-                <SelectItem key={item} value={item}>
-                  {HOTKEY_ICONS[item]}
-                  {" "}
-                  {i18n.t(`hotkey.${item}`)}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+        <Field>
+          <FieldLabel htmlFor="node-translation-hotkey-select">
+            {i18n.t("options.translation.nodeTranslationHotkey.shortcut")}
+          </FieldLabel>
+          <Select
+            value={translateConfig.node.hotkey}
+            onValueChange={(value: typeof HOTKEYS[number] | null) => {
+              if (!value)
+                return
+              void setTranslateConfig(
+                deepmerge(translateConfig, { node: { hotkey: value } }),
+              )
+            }}
+            disabled={!translateConfig.node.enabled}
+          >
+            <SelectTrigger
+              id="node-translation-hotkey-select"
+              className={`w-full ${!translateConfig.node.enabled ? "opacity-50 pointer-events-none" : ""}`}
+            >
+              <SelectValue render={<span />}>
+                {HOTKEY_ICONS[translateConfig.node.hotkey]}
+                {" "}
+                {i18n.t(`hotkey.${translateConfig.node.hotkey}`)}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {HOTKEYS.map(item => (
+                  <SelectItem key={item} value={item}>
+                    {HOTKEY_ICONS[item]}
+                    {" "}
+                    {i18n.t(`hotkey.${item}`)}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </Field>
+      </FieldGroup>
     </ConfigCard>
   )
 }
