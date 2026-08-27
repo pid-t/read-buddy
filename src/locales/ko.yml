@@ -39,6 +39,9 @@ popup:
         action: 클릭하여 이중 언어로 전환
   aiSmartContext: AI 스마트 컨텍스트
   aiSmartContextDescription: 웹페이지 컨텍스트를 사용하여 번역 품질을 향상시킵니다. LLM 번역 제공자가 필요합니다.
+contextMenu:
+  enableTranslation: 번역 켜기
+  showOriginal: 원문 보기
 errorRecovery:
   title: 문제가 발생했습니다
   description: 복구 모드가 활성화되었습니다. 현재 설정을 백업으로 내보낸 뒤 설정을 초기화하고 다시 시도하세요.

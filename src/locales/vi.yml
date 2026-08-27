@@ -40,6 +40,9 @@ popup:
   aiSmartContext: Ngữ cảnh thông minh AI
   aiSmartContextDescription: Sử dụng ngữ cảnh trang web để cải thiện chất lượng
     dịch. Yêu cầu nhà cung cấp dịch LLM.
+contextMenu:
+  enableTranslation: Bật dịch
+  showOriginal: Hiển thị bản gốc
 errorRecovery:
   title: Đã xảy ra sự cố
   description: Chế độ khôi phục đang hoạt động. Bạn có thể xuất cài đặt hiện tại

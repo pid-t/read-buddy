@@ -41,6 +41,9 @@ popup:
   aiSmartContext: Contexto inteligente de IA
   aiSmartContextDescription: Usa el contexto de la página web para mejorar la
     calidad de la traducción. Requiere un proveedor de traducción LLM.
+contextMenu:
+  enableTranslation: Activar traducción
+  showOriginal: Mostrar original
 errorRecovery:
   title: Algo salió mal
   description: El modo de recuperación está activo. Puedes exportar tu

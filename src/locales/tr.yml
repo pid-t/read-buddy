@@ -41,6 +41,9 @@ popup:
   aiSmartContext: AI Akıllı Bağlam
   aiSmartContextDescription: Çeviri kalitesini artırmak için web sayfası
     bağlamını kullanır. LLM çeviri sağlayıcısı gerektirir.
+contextMenu:
+  enableTranslation: Çeviriyi etkinleştir
+  showOriginal: Orijinali göster
 errorRecovery:
   title: Bir sorun oluştu
   description: Kurtarma modu etkin. Geçerli ayarlarınızı yedek olarak dışa

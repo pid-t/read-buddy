@@ -40,6 +40,9 @@ popup:
   aiSmartContext: AI Smart Context
   aiSmartContextDescription: Uses webpage context to improve translation
     quality. Requires LLM translation provider.
+contextMenu:
+  enableTranslation: Enable Translation
+  showOriginal: Show Original
 errorRecovery:
   title: Something went wrong
   description: Recovery mode is active. You can export your current settings as

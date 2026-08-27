@@ -38,6 +38,9 @@ popup:
         action: 点击切换为双语对照
   aiSmartContext: AI 智能上下文
   aiSmartContextDescription: 结合网页上下文提升翻译效果。需要配置 LLM 翻译服务商。
+contextMenu:
+  enableTranslation: 开启翻译
+  showOriginal: 显示原文
 errorRecovery:
   title: 应用发生异常
   description: 已进入恢复模式。你可以先导出当前设置作为备份，再重置设置后重试。

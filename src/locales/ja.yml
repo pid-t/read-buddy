@@ -38,6 +38,9 @@ popup:
         action: クリックしてバイリンガルへ切り替え
   aiSmartContext: AI スマートコンテキスト
   aiSmartContextDescription: ウェブページのコンテキストを使用して翻訳品質を向上させます。LLM翻訳プロバイダーが必要です。
+contextMenu:
+  enableTranslation: 翻訳を有効にする
+  showOriginal: 原文を表示
 errorRecovery:
   title: 問題が発生しました
   description: 復旧モードが有効です。現在の設定をバックアップとしてエクスポートし、設定をリセットして再試行してください。

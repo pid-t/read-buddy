@@ -67,8 +67,10 @@ function getOnActivatedListener() {
 }
 
 async function setupSubject() {
-  const { translationMessage } = await import("../translation-signal")
+  const subject = await import("../translation-signal")
+  const { translationMessage } = subject
   translationMessage()
+  return subject
 }
 
 describe("translationMessage", () => {
@@ -263,6 +265,23 @@ describe("translationMessage", () => {
     }, 42)
   })
 
+  it("toggles from the current backend state for tab-level commands", async () => {
+    const { togglePageTranslationByTabId } = await setupSubject()
+
+    storageGetItemMock.mockResolvedValueOnce(undefined)
+    await expect(togglePageTranslationByTabId(42)).resolves.toBe(true)
+    expect(sendMessageMock).toHaveBeenCalledWith("askManagerToTogglePageTranslation", {
+      enabled: true,
+    }, 42)
+
+    storageGetItemMock.mockResolvedValueOnce({ enabled: true })
+    await expect(togglePageTranslationByTabId(42)).resolves.toBe(false)
+    expect(storageSetItemMock).toHaveBeenCalledWith(getTranslationStateKey(42), { enabled: false })
+    expect(sendMessageMock).toHaveBeenCalledWith("askManagerToTogglePageTranslation", {
+      enabled: false,
+    }, 42)
+  })
+
   it("publishes cached detected language and requests refresh when tabs are activated", async () => {
     await setupSubject()
     storageGetItemMock.mockImplementation(async (key: string) => {
@@ -325,6 +344,7 @@ describe("translationMessage", () => {
     })
 
     expect(storageRemoveItemMock).toHaveBeenCalledWith(getTranslationStateKey(42))
+    expect(sendMessageMock).toHaveBeenCalledWith("notifyTranslationStateChanged", { enabled: false }, 42)
   })
 
   it("does not clear translation state for iframe navigations", async () => {

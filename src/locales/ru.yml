@@ -40,6 +40,9 @@ popup:
   aiSmartContext: Умный контекст ИИ
   aiSmartContextDescription: Использует контекст веб-страницы для улучшения
     качества перевода. Требуется LLM-провайдер перевода.
+contextMenu:
+  enableTranslation: Включить перевод
+  showOriginal: Показать оригинал
 errorRecovery:
   title: Что-то пошло не так
   description: Активирован режим восстановления. Вы можете экспортировать

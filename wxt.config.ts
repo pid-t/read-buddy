@@ -37,6 +37,7 @@ export default defineConfig({
       "cookies",
       "scripting",
       "webNavigation",
+      "contextMenus",
     ],
     host_permissions: [
       "*://*/*", // Required for scripting.executeScript in any frame

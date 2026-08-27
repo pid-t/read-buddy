@@ -6,6 +6,7 @@ import { openOptionsPage } from "@/utils/navigation"
 import { runAiSegmentSubtitles } from "./ai-segmentation"
 import { dispatchBackgroundStreamPort } from "./background-stream"
 import { ensureInitializedConfig } from "./config"
+import { setupContextMenu } from "./context-menu"
 import { cleanupAllAiSegmentationCache, cleanupAllSummaryCache, cleanupAllTranslationCache } from "./db-cleanup"
 import { setupLLMGenerateTextMessageHandlers } from "./llm-generate-text"
 import { proxyFetch } from "./proxy-fetch"
@@ -21,6 +22,8 @@ export default defineBackground({
       await ensureInitializedConfig()
       logger.info("[Background] Extension initialized", { reason: details.reason })
     })
+
+    setupContextMenu()
 
     onMessage("openPage", async (message) => {
       const { url, active } = message.data
