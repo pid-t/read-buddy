@@ -2,6 +2,7 @@ import path from "node:path"
 import process from "node:process"
 import { defineConfig } from "wxt"
 import { z } from "zod"
+import { EXTENSION_PERMISSIONS } from "./src/env/manifest"
 import { createExtensionClientEnvSchema, isLocalPackagesEnabled, resolveExtensionEnv } from "./src/env/shared"
 
 const WXT_API_KEY_PATTERN = /^WXT_.*API_KEY/
@@ -31,16 +32,9 @@ export default defineConfig({
     ...(mode === "development" && (browser === "chrome" || browser === "edge") && {
       key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw2KhiXO2vySZtPu5pNSbyKhYavh8Be7gXmCZt8aJf6tQ/L3JK0qzL+3JSc/o20td3Jw+B2Dcw+EI93NAZr24xKnTNXQiJpuIuHb8xLXD0Ra/HrTVi4TJIhPdESogoG4uL6CD/F3TxfZJ2trX4Bt9cdAw1RGGeU+xU0g+YFfEka4ZUCpFAmTEw9H3/DU+nCp8yGaJWyiVgCTcFe38GZKEPt0iMJkTw956wz/iiafLx0pNG/RaztG9cAPoQOD2+SMFaeQ+b/G4OG17TYhzb09AhNBl6zSJ3jTKHSwuedCFwCce8Q/EchJfQZv71mjAE97bzwvkDYPCLj31Z5FE8HntMwIDAQAB",
     }),
-    permissions: [
-      "storage",
-      "tabs",
-      "cookies",
-      "scripting",
-      "webNavigation",
-      "contextMenus",
-    ],
+    permissions: [...EXTENSION_PERMISSIONS],
     host_permissions: [
-      "*://*/*", // Required for scripting.executeScript in any frame
+      "*://*/*", // Required by all-site content scripts and proxy requests to user-configured providers
     ],
     // Allow images/SVGs referenced by content-script UI <img> tags to be loaded from
     // moz-extension:// URLs on regular pages. Firefox enforces this more strictly.
