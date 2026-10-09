@@ -65,13 +65,16 @@ options:
   setAPIKeyWarning:
     please: 設定ページで
     page: APIキーを設定してください
+  defaultProvider:
+    title: デフォルトプロバイダー
+    description: この機能でデフォルトで使用するプロバイダーを選択します。
+    placeholder: プロバイダーを選択
+    noProviders: 先に翻訳プロバイダーを有効にしてください。
   apiProviders:
     title: APIプロバイダー
     description:
       翻訳および語彙分析機能用のAPIプロバイダーを設定。20以上の内蔵プロバイダーに加え、OpenAI互換APIもサポートしています。
     addProvider: プロバイダーを追加
-    badges:
-      featureCount: $1 件の機能
     dialog:
       title: 新しいプロバイダーを追加
       groups:
@@ -99,9 +102,8 @@ options:
           この操作は元に戻せません。このプロバイダーを使用している機能は、他の利用可能なプロバイダーに自動的に再割り当てされます。
         confirm: 削除
         cancel: キャンセル
-      atLeastOneLLMProvider: 最低1つのLLM翻訳プロバイダーが必要です。
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
-        by $2 feature(s).'
+      atLeastOneTranslationProvider: 少なくとも1つの翻訳プロバイダーを有効のままにする必要があります。
+      providerDisabledWithFallbacks: '"$1" を無効にしました。関連する $2 件の機能は別の利用可能なプロバイダーに切り替わりました。'
       duplicateProviderName: '重複するプロバイダー名 "$1"'
       models:
         translate:
@@ -114,7 +116,6 @@ options:
         apiKeyRequired: 先にAPIキーを追加してください
         searchModels: モデルを検索...
         noModelsFound: モデルが見つかりません
-      featureProviders: 機能プロバイダー
       advancedOptions: 詳細オプション
       providerSettingLabels:
         region: リージョン
@@ -176,13 +177,6 @@ options:
       title: インターフェース言語
       description: オプションページで使用する言語を選択します。
       label: インターフェース言語
-    featureProviders:
-      title: 機能プロバイダー
-      description: 各機能に使用するプロバイダーを選択
-      features:
-        translate: ページ翻訳
-        selectionTranslation: 選択翻訳
-        videoSubtitles: 字幕翻訳
     translationConfig:
       model:
         title: モデル

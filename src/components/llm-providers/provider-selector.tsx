@@ -25,6 +25,7 @@ interface ProviderSelectorProps {
   providers: ProviderConfig[]
   value: string
   onChange: (id: string) => void
+  ariaLabel?: string
   placeholder?: string
   className?: string
   disabled?: boolean
@@ -35,6 +36,7 @@ export default function ProviderSelector({
   providers,
   value,
   onChange,
+  ariaLabel,
   placeholder,
   className,
   disabled = false,
@@ -50,6 +52,7 @@ export default function ProviderSelector({
         providers={providers}
         currentProvider={currentProvider}
         onChange={onChange}
+        ariaLabel={ariaLabel}
         placeholder={placeholder}
         className={className}
         selectContentProps={selectContentProps}
@@ -64,6 +67,7 @@ export default function ProviderSelector({
       providers={providers}
       currentProvider={currentProvider}
       onChange={onChange}
+      ariaLabel={ariaLabel}
       placeholder={placeholder}
       className={className}
       selectContentProps={selectContentProps}
@@ -77,6 +81,7 @@ function TranslateGroupedSelect({
   providers,
   currentProvider,
   onChange,
+  ariaLabel,
   placeholder,
   className,
   theme,
@@ -86,6 +91,7 @@ function TranslateGroupedSelect({
   providers: ProviderConfig[]
   currentProvider: ProviderConfig | undefined
   onChange: (id: string) => void
+  ariaLabel?: string
   placeholder?: string
   className?: string
   selectContentProps?: ProviderSelectContentProps
@@ -106,7 +112,7 @@ function TranslateGroupedSelect({
       itemToStringValue={p => p.id}
       disabled={disabled || providers.length === 0}
     >
-      <SelectTrigger className={className} size="sm">
+      <SelectTrigger aria-label={ariaLabel} className={className} size="sm">
         <SelectValue placeholder={placeholder}>
           {(provider: ProviderConfig) => (
             <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />
@@ -139,6 +145,7 @@ function FlatSelect({
   providers,
   currentProvider,
   onChange,
+  ariaLabel,
   placeholder,
   className,
   theme,
@@ -148,6 +155,7 @@ function FlatSelect({
   providers: ProviderConfig[]
   currentProvider: ProviderConfig | undefined
   onChange: (id: string) => void
+  ariaLabel?: string
   placeholder?: string
   className?: string
   selectContentProps?: ProviderSelectContentProps
@@ -165,7 +173,7 @@ function FlatSelect({
       itemToStringValue={p => p.id}
       disabled={disabled || providers.length === 0}
     >
-      <SelectTrigger className={className} size="sm">
+      <SelectTrigger aria-label={ariaLabel} className={className} size="sm">
         <SelectValue placeholder={placeholder}>
           {(provider: ProviderConfig) => (
             <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />

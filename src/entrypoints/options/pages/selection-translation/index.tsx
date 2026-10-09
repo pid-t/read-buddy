@@ -1,29 +1,15 @@
-import type { ProviderConfig } from "@/types/config/provider"
 import { useAtom } from "jotai"
-import ProviderSelector from "@/components/llm-providers/provider-selector"
 import { TargetLanguageCombobox } from "@/components/target-language-combobox"
 import { Field, FieldContent, FieldLabel } from "@/components/ui/base-ui/field"
 import { Switch } from "@/components/ui/base-ui/switch"
-import { isAPIKeyOptionalProvider, isAPIProviderConfig, isTranslateProviderConfig } from "@/types/config/provider"
 import { configFieldsAtomMap } from "@/utils/atoms/config"
-import { filterEnabledProvidersConfig } from "@/utils/config/helpers"
 import { i18n } from "@/utils/i18n"
 import { ConfigCard } from "../../components/config-card"
+import { DefaultProviderConfig } from "../../components/default-provider-config"
 import { PageLayout } from "../../components/page-layout"
-import { SetApiKeyWarning } from "../../components/set-api-key-warning"
-
-function needsApiKeyWarning(provider: ProviderConfig | undefined): boolean {
-  return !!provider
-    && isAPIProviderConfig(provider)
-    && !isAPIKeyOptionalProvider(provider.provider)
-    && !provider.apiKey?.trim()
-}
 
 export function SelectionTranslationPage() {
   const [selectionConfig, setSelectionConfig] = useAtom(configFieldsAtomMap.selectionTranslation)
-  const [providersConfig] = useAtom(configFieldsAtomMap.providersConfig)
-  const providers = filterEnabledProvidersConfig(providersConfig).filter(isTranslateProviderConfig)
-  const provider = providersConfig.find(item => item.id === selectionConfig.providerId)
 
   return (
     <PageLayout title={i18n.t("options.selectionTranslation.title")}>
@@ -57,32 +43,14 @@ export function SelectionTranslationPage() {
         />
       </ConfigCard>
 
-      <ConfigCard
+      <DefaultProviderConfig
+        featureKey="selectionTranslation"
+        disabled={!selectionConfig.enabled}
         title={i18n.t("options.selectionTranslation.provider.title")}
         description={i18n.t("options.selectionTranslation.provider.description")}
-      >
-        <div className="space-y-2">
-          <Field>
-            <FieldLabel nativeLabel={false} render={<div className="flex flex-wrap" />}>
-              {i18n.t("options.selectionTranslation.provider.title")}
-              {needsApiKeyWarning(provider) && <SetApiKeyWarning />}
-            </FieldLabel>
-            <ProviderSelector
-              providers={providers}
-              value={selectionConfig.providerId}
-              onChange={providerId => void setSelectionConfig({ providerId })}
-              placeholder={i18n.t("options.selectionTranslation.provider.placeholder")}
-              className="w-full max-w-xs"
-              disabled={!selectionConfig.enabled}
-            />
-            {providers.length === 0 && (
-              <p className="text-sm text-muted-foreground">
-                {i18n.t("options.selectionTranslation.provider.noProviders")}
-              </p>
-            )}
-          </Field>
-        </div>
-      </ConfigCard>
+        placeholder={i18n.t("options.selectionTranslation.provider.placeholder")}
+        noProvidersMessage={i18n.t("options.selectionTranslation.provider.noProviders")}
+      />
     </PageLayout>
   )
 }

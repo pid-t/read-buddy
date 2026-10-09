@@ -65,12 +65,15 @@ options:
   setAPIKeyWarning:
     please: 請在
     page: 頁面設定 API 金鑰
+  defaultProvider:
+    title: 預設提供者
+    description: 選擇此功能預設使用的提供者。
+    placeholder: 選擇提供者
+    noProviders: 請先啟用一個翻譯提供者。
   apiProviders:
     title: API 提供者
     description: 設定用於翻譯和詞彙解析功能的 API 提供者。我們內建了 20 多個提供者，並支援任何 OpenAI 相容 API 提供者。
     addProvider: 新增提供者
-    badges:
-      featureCount: $1 個功能
     dialog:
       title: 新增提供者
       groups:
@@ -97,9 +100,8 @@ options:
         description: 此操作無法撤銷。使用此提供者的功能將自動重新分配到其他可用提供者。
         confirm: 刪除
         cancel: 取消
-      atLeastOneLLMProvider: 至少需要一個 LLM 翻譯提供者。
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
-        by $2 feature(s).'
+      atLeastOneTranslationProvider: 至少需要保留一個已啟用的翻譯提供者。
+      providerDisabledWithFallbacks: '已停用 "$1"，$2 個關聯功能已切換到其他可用提供者。'
       duplicateProviderName: '重複的提供者名稱 "$1"'
       models:
         translate:
@@ -112,7 +114,6 @@ options:
         apiKeyRequired: 請先新增 API 金鑰
         searchModels: 搜尋模型…
         noModelsFound: 找不到模型
-      featureProviders: 功能提供者
       advancedOptions: 進階選項
       providerSettingLabels:
         region: 區域
@@ -172,13 +173,6 @@ options:
       title: 介面語言
       description: 選擇選項頁面使用的語言。
       label: 介面語言
-    featureProviders:
-      title: 功能提供者
-      description: 為每個功能選擇使用的提供者
-      features:
-        translate: 網頁翻譯
-        selectionTranslation: 劃詞翻譯
-        videoSubtitles: 字幕翻譯
     translationConfig:
       model:
         title: 模型

@@ -87,6 +87,19 @@ export function resolveLanguageDetectionConfigForModeChange(
   }
 }
 
+export function findFeatureProviderFallback(
+  featureKey: FeatureKey,
+  currentProviderId: string,
+  providersConfig: ProvidersConfig,
+): string | undefined {
+  const def = FEATURE_PROVIDER_DEFS[featureKey]
+  return providersConfig.find(provider =>
+    provider.id !== currentProviderId
+    && provider.enabled
+    && def.isProvider(provider.provider),
+  )?.id
+}
+
 /**
  * Compute fallback provider assignments when a provider is deleted.
  * For each feature using the deleted provider, picks the first compatible remaining provider.
@@ -102,9 +115,9 @@ export function computeProviderFallbacksAfterDeletion(
     const currentId = def.getProviderId(config)
     if (currentId !== deletedProviderId)
       continue
-    const candidates = remainingProviders.filter(p => p.enabled && def.isProvider(p.provider))
-    if (candidates.length > 0)
-      updates[key] = candidates[0].id
+    const fallbackProviderId = findFeatureProviderFallback(key, deletedProviderId, remainingProviders)
+    if (fallbackProviderId)
+      updates[key] = fallbackProviderId
   }
   return updates
 }
@@ -138,4 +151,51 @@ export function computeLanguageDetectionFallbackAfterDeletion(
 
   const fallback = getEnabledLLMProvidersConfig(remainingProviders)[0]
   return fallback?.id
+}
+
+export type ProviderUnavailabilityPlan = {
+  status: "blocked"
+  missingFeature: FeatureKey
+} | {
+  status: "ready"
+  featureAssignments: Partial<Record<FeatureKey, string>>
+  languageDetection: Config["languageDetection"] | null
+  reassignedCount: number
+}
+
+export function computeProviderUnavailabilityPlan(
+  unavailableProviderId: string,
+  config: Config,
+  availableProviders: ProvidersConfig,
+): ProviderUnavailabilityPlan {
+  const missingFeature = findFeatureMissingProvider(availableProviders)
+  if (missingFeature) {
+    return {
+      status: "blocked",
+      missingFeature,
+    }
+  }
+
+  const featureAssignments = computeProviderFallbacksAfterDeletion(
+    unavailableProviderId,
+    config,
+    availableProviders,
+  )
+  const languageDetectionFallback = computeLanguageDetectionFallbackAfterDeletion(
+    unavailableProviderId,
+    config,
+    availableProviders,
+  )
+  const languageDetection = languageDetectionFallback === null
+    ? null
+    : languageDetectionFallback
+      ? { mode: "llm" as const, providerId: languageDetectionFallback }
+      : { mode: "basic" as const }
+
+  return {
+    status: "ready",
+    featureAssignments,
+    languageDetection,
+    reassignedCount: Object.keys(featureAssignments).length + (languageDetection ? 1 : 0),
+  }
 }

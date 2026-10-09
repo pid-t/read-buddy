@@ -1,4 +1,5 @@
 import { i18n } from "@/utils/i18n"
+import { DefaultProviderConfig } from "../../components/default-provider-config"
 import { PageLayout } from "../../components/page-layout"
 import { AIContentAware } from "./ai-content-aware"
 import { CustomTranslationStyle } from "./custom-translation-style"
@@ -16,6 +17,7 @@ import { TranslationMode } from "./translation-mode"
 export function TranslationPage() {
   return (
     <PageLayout title={i18n.t("options.translation.title")}>
+      <DefaultProviderConfig featureKey="translate" />
       <TranslationMode />
       <TranslateRange />
       <PageTranslationShortcut />

@@ -69,14 +69,17 @@ options:
   setAPIKeyWarning:
     please: Lütfen API Anahtarını
     page: sayfasında ayarlayın
+  defaultProvider:
+    title: Varsayılan sağlayıcı
+    description: Bu özellik için varsayılan sağlayıcıyı seçin.
+    placeholder: Bir sağlayıcı seçin
+    noProviders: Önce bir çeviri sağlayıcısını etkinleştirin.
   apiProviders:
     title: API Sağlayıcıları
     description: Çeviri ve kelime analizi işlevleri için API sağlayıcılarını
       buradan yapılandırın. 20'den fazla yerleşik sağlayıcımız var ve OpenAI
       uyumlu tüm API sağlayıcılarını destekliyoruz.
     addProvider: Sağlayıcı Ekle
-    badges:
-      featureCount: $1 özellik
     dialog:
       title: Yeni Sağlayıcı Ekle
       groups:
@@ -107,9 +110,9 @@ options:
           otomatik olarak başka bir mevcut sağlayıcıya yeniden atanacaktır.
         confirm: Sil
         cancel: İptal
-      atLeastOneLLMProvider: En az bir LLM çeviri sağlayıcısı gereklidir.
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
-        by $2 feature(s).'
+      atLeastOneTranslationProvider: En az bir çeviri sağlayıcısı etkin kalmalıdır.
+      providerDisabledWithFallbacks: '"$1" devre dışı bırakıldı. Bağlı $2 özellik
+        başka bir kullanılabilir sağlayıcıya geçirildi.'
       duplicateProviderName: 'Yinelenen sağlayıcı adı "$1"'
       models:
         translate:
@@ -122,7 +125,6 @@ options:
         apiKeyRequired: Lütfen önce API anahtarı ekleyin
         searchModels: Model ara...
         noModelsFound: Model bulunamadı
-      featureProviders: Özellik Sağlayıcıları
       advancedOptions: Gelişmiş Seçenekler
       providerSettingLabels:
         region: Bölge
@@ -206,13 +208,6 @@ options:
       title: Arayüz dili
       description: Seçenekler sayfasında kullanılacak dili seçin.
       label: Arayüz dili
-    featureProviders:
-      title: Özellik Sağlayıcıları
-      description: Her özellik için kullanılacak sağlayıcıyı seçin
-      features:
-        translate: Sayfa Çevirisi
-        selectionTranslation: Seçim Çevirisi
-        videoSubtitles: Altyazı Çevirisi
     translationConfig:
       model:
         title: Model

@@ -69,14 +69,17 @@ options:
   setAPIKeyWarning:
     please: Please set API Key on
     page: page
+  defaultProvider:
+    title: Default Provider
+    description: Choose the provider used by default for this feature.
+    placeholder: Select a provider
+    noProviders: Enable a translation provider first.
   apiProviders:
     title: API Providers
     description: Configure API providers for translation and vocabulary insight.
       We have 20+ built-in providers and support any OpenAI-compatible API
       provider.
     addProvider: Add Provider
-    badges:
-      featureCount: $1 features
     dialog:
       title: Add New Provider
       groups:
@@ -107,9 +110,10 @@ options:
           will be automatically reassigned to another available provider.
         confirm: Delete
         cancel: Cancel
-      atLeastOneLLMProvider: At least one LLM translation provider is required.
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
-        by $2 feature(s).'
+      atLeastOneTranslationProvider: At least one translation provider must remain
+        enabled.
+      providerDisabledWithFallbacks: '"$1" was disabled. $2 linked feature(s) switched
+        to another available provider.'
       duplicateProviderName: 'Duplicate provider name "$1"'
       models:
         translate:
@@ -122,7 +126,6 @@ options:
         apiKeyRequired: Please add API key first
         searchModels: Search models...
         noModelsFound: No models found
-      featureProviders: Feature Providers
       advancedOptions: Advanced Options
       providerSettingLabels:
         region: Region
@@ -204,13 +207,6 @@ options:
       title: Interface Language
       description: Choose the language used on the options page.
       label: Interface language
-    featureProviders:
-      title: Feature Providers
-      description: Choose which provider to use for each feature
-      features:
-        translate: Page Translation
-        selectionTranslation: Selection Translation
-        videoSubtitles: Subtitle Translation
     translationConfig:
       model:
         title: Model

@@ -69,14 +69,17 @@ options:
   setAPIKeyWarning:
     please: Пожалуйста, установите API-ключ на странице
     page: настроек
+  defaultProvider:
+    title: Провайдер по умолчанию
+    description: Выберите провайдера по умолчанию для этой функции.
+    placeholder: Выберите провайдера
+    noProviders: Сначала включите провайдера перевода.
   apiProviders:
     title: API-провайдеры
     description: Настройте API-провайдеров для функций перевода и анализа слов.
       У нас более 20 встроенных провайдеров и поддержка любых OpenAI-совместимых
       API.
     addProvider: Добавить провайдера
-    badges:
-      featureCount: $1 функций
     dialog:
       title: Добавить нового провайдера
       groups:
@@ -108,9 +111,10 @@ options:
           провайдеру.
         confirm: Удалить
         cancel: Отмена
-      atLeastOneLLMProvider: Требуется как минимум один LLM-провайдер перевода.
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
-        by $2 feature(s).'
+      atLeastOneTranslationProvider: Хотя бы один провайдер перевода должен оставаться
+        включённым.
+      providerDisabledWithFallbacks: 'Провайдер "$1" отключён. Связанные функции
+        ($2) переключены на другого доступного провайдера.'
       duplicateProviderName: 'Дублирующееся имя провайдера "$1"'
       models:
         translate:
@@ -123,7 +127,6 @@ options:
         apiKeyRequired: Сначала добавьте API ключ
         searchModels: Поиск моделей...
         noModelsFound: Модели не найдены
-      featureProviders: Поставщики функций
       advancedOptions: Расширенные настройки
       providerSettingLabels:
         region: Регион
@@ -209,13 +212,6 @@ options:
       title: Язык интерфейса
       description: Выберите язык страницы настроек.
       label: Язык интерфейса
-    featureProviders:
-      title: Провайдеры функций
-      description: Выберите провайдера для каждой функции
-      features:
-        translate: Перевод страницы
-        selectionTranslation: Перевод выделения
-        videoSubtitles: Перевод субтитров
     translationConfig:
       model:
         title: Модель

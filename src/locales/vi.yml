@@ -68,14 +68,17 @@ options:
   setAPIKeyWarning:
     please: Vui lòng đặt API Key trên trang
     page: cài đặt
+  defaultProvider:
+    title: Nhà cung cấp mặc định
+    description: Chọn nhà cung cấp mặc định cho tính năng này.
+    placeholder: Chọn nhà cung cấp
+    noProviders: Hãy bật một nhà cung cấp dịch trước.
   apiProviders:
     title: Nhà cung cấp API
     description: Cấu hình các nhà cung cấp API cho chức năng dịch và phân tích
       từ vựng tại đây. Chúng tôi có hơn 20 nhà cung cấp tích hợp sẵn và hỗ trợ
       mọi API tương thích OpenAI.
     addProvider: Thêm nhà cung cấp
-    badges:
-      featureCount: $1 tính năng
     dialog:
       title: Thêm nhà cung cấp mới
       groups:
@@ -106,9 +109,10 @@ options:
           cung cấp này sẽ được tự động chuyển sang nhà cung cấp khả dụng khác.
         confirm: Xóa
         cancel: Hủy
-      atLeastOneLLMProvider: Cần ít nhất một nhà cung cấp dịch LLM.
-      providerInUseCannotDisable: 'Cannot disable "$1" because it is currently used
-        by $2 feature(s).'
+      atLeastOneTranslationProvider: Phải duy trì ít nhất một nhà cung cấp dịch đang
+        bật.
+      providerDisabledWithFallbacks: 'Đã tắt "$1". $2 tính năng liên kết đã chuyển
+        sang nhà cung cấp khả dụng khác.'
       duplicateProviderName: 'Tên nhà cung cấp trùng lặp "$1"'
       models:
         translate:
@@ -121,7 +125,6 @@ options:
         apiKeyRequired: Vui lòng thêm khóa API trước
         searchModels: Tìm kiếm mô hình...
         noModelsFound: Không tìm thấy mô hình
-      featureProviders: Nhà cung cấp tính năng
       advancedOptions: Tùy chọn nâng cao
       providerSettingLabels:
         region: Khu vực
@@ -209,13 +212,6 @@ options:
       title: Ngôn ngữ giao diện
       description: Chọn ngôn ngữ dùng trên trang tùy chọn.
       label: Ngôn ngữ giao diện
-    featureProviders:
-      title: Nhà cung cấp tính năng
-      description: Chọn nhà cung cấp sử dụng cho mỗi tính năng
-      features:
-        translate: Dịch trang
-        selectionTranslation: Dịch văn bản chọn
-        videoSubtitles: Dịch phụ đề
     translationConfig:
       model:
         title: Mô hình

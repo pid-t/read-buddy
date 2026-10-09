@@ -5,6 +5,7 @@ import { buildFeatureProviderPatch } from "@/utils/constants/feature-providers"
 import {
   computeLanguageDetectionFallbackAfterDeletion,
   computeProviderFallbacksAfterDeletion,
+  computeProviderUnavailabilityPlan,
   findFeatureMissingProvider,
   resolveLanguageDetectionConfigForModeChange,
 } from "../helpers"
@@ -212,6 +213,80 @@ describe("feature providers", () => {
       )
 
       expect(result).toBe("google-default")
+    })
+  })
+
+  describe("computeProviderUnavailabilityPlan", () => {
+    it("reassigns affected features and language detection", () => {
+      const config = {
+        ...DEFAULT_CONFIG,
+        translate: {
+          ...DEFAULT_CONFIG.translate,
+          providerId: "openai-default",
+        },
+        selectionTranslation: {
+          ...DEFAULT_CONFIG.selectionTranslation,
+          providerId: "openai-default",
+        },
+        languageDetection: {
+          mode: "llm" as const,
+          providerId: "openai-default",
+        },
+      }
+      const availableProviders = DEFAULT_CONFIG.providersConfig.map(provider =>
+        provider.id === "openai-default" ? { ...provider, enabled: false } : provider,
+      )
+
+      expect(computeProviderUnavailabilityPlan(
+        "openai-default",
+        config,
+        availableProviders,
+      )).toEqual({
+        status: "ready",
+        featureAssignments: {
+          translate: "microsoft-translate-default",
+          selectionTranslation: "microsoft-translate-default",
+        },
+        languageDetection: {
+          mode: "llm",
+          providerId: "google-default",
+        },
+        reassignedCount: 3,
+      })
+    })
+
+    it("blocks when no enabled translation provider remains", () => {
+      expect(computeProviderUnavailabilityPlan(
+        "openai-default",
+        DEFAULT_CONFIG,
+        [{ ...getProviderById("openai-default"), enabled: false }],
+      )).toEqual({
+        status: "blocked",
+        missingFeature: "translate",
+      })
+    })
+
+    it("returns language detection to basic mode when no llm provider remains", () => {
+      const config = {
+        ...DEFAULT_CONFIG,
+        languageDetection: {
+          mode: "llm" as const,
+          providerId: "openai-default",
+        },
+      }
+
+      expect(computeProviderUnavailabilityPlan(
+        "openai-default",
+        config,
+        [getProviderById("microsoft-translate-default")],
+      )).toEqual({
+        status: "ready",
+        featureAssignments: {},
+        languageDetection: {
+          mode: "basic",
+        },
+        reassignedCount: 1,
+      })
     })
   })
 })

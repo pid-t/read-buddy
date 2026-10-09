@@ -1,5 +1,5 @@
 import { useStore } from "@tanstack/react-form"
-import { useAtom, useAtomValue, useSetAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import {
@@ -15,14 +15,8 @@ import {
 } from "@/components/ui/base-ui/alert-dialog"
 import { Button } from "@/components/ui/base-ui/button"
 import { isAPIProviderConfig, isLLMProvider, isTranslateProvider } from "@/types/config/provider"
-import { configAtom, configFieldsAtomMap, writeConfigAtom } from "@/utils/atoms/config"
-import { providerConfigAtom } from "@/utils/atoms/provider"
-import {
-  computeLanguageDetectionFallbackAfterDeletion,
-  computeProviderFallbacksAfterDeletion,
-  findFeatureMissingProvider,
-} from "@/utils/config/helpers"
-import { buildFeatureProviderPatch } from "@/utils/constants/feature-providers"
+import { configFieldsAtomMap } from "@/utils/atoms/config"
+import { makeProviderUnavailableAtom, providerConfigAtom } from "@/utils/atoms/provider"
 import { i18n } from "@/utils/i18n"
 import { cn } from "@/utils/styles/utils"
 import { selectedProviderIdAtom } from "../atoms"
@@ -31,7 +25,6 @@ import { APIKeyField } from "./api-key-field"
 import { BaseURLField } from "./base-url-field"
 import { AdvancedOptionsSection } from "./components/advanced-options-section"
 import { ConfigHeader } from "./config-header"
-import { FeatureProviderSection } from "./feature-provider-section"
 import { formOpts, useAppForm } from "./form"
 import { ProviderHeadersField } from "./provider-headers-field"
 import { ProviderOptionsField } from "./provider-options-field"
@@ -44,8 +37,7 @@ export function ProviderConfigForm() {
   const [selectedProviderId, setSelectedProviderId] = useAtom(selectedProviderIdAtom)
   const [providerConfig, setProviderConfig] = useAtom(providerConfigAtom(selectedProviderId ?? ""))
   const [allProvidersConfig, setAllProvidersConfig] = useAtom(configFieldsAtomMap.providersConfig)
-  const setConfig = useSetAtom(writeConfigAtom)
-  const config = useAtomValue(configAtom)
+  const makeProviderUnavailable = useSetAtom(makeProviderUnavailableAtom)
 
   const specificFormOpts = {
     ...formOpts,
@@ -80,34 +72,13 @@ export function ProviderConfigForm() {
   }
 
   const handleDelete = async () => {
-    const updatedAllProviders = allProvidersConfig.filter(provider => provider.id !== providerConfig.id)
-
-    const unsatisfied = findFeatureMissingProvider(updatedAllProviders)
-    if (unsatisfied) {
-      toast.error(i18n.t("options.apiProviders.form.atLeastOneLLMProvider")) // TODO: make this word more general
+    const plan = await makeProviderUnavailable({ providerId: providerConfig.id, operation: "delete" })
+    if (plan.status === "blocked") {
+      toast.error(i18n.t("options.apiProviders.form.atLeastOneTranslationProvider"))
       return
     }
 
-    const fallbacks = computeProviderFallbacksAfterDeletion(providerConfig.id, config, updatedAllProviders)
-    let patch = buildFeatureProviderPatch(fallbacks)
-
-    const ldFallback = computeLanguageDetectionFallbackAfterDeletion(providerConfig.id, config, updatedAllProviders)
-    if (ldFallback !== null) {
-      patch = {
-        ...patch,
-        languageDetection: {
-          ...config.languageDetection,
-          providerId: ldFallback,
-        },
-      }
-    }
-
-    if (Object.keys(patch).length > 0) {
-      await setConfig(patch)
-    }
-
-    await setAllProvidersConfig(updatedAllProviders)
-    setSelectedProviderId(chooseNextProviderConfig(updatedAllProviders)?.id)
+    setSelectedProviderId(chooseNextProviderConfig(plan.providersConfig)?.id)
   }
 
   return (
@@ -141,7 +112,6 @@ export function ProviderConfigForm() {
           {isTranslateProviderType && (
             <TranslateModelSelector form={form} />
           )}
-          <FeatureProviderSection form={form} />
           {isLLM && (
             <AdvancedOptionsSection>
               <TemperatureField form={form} />

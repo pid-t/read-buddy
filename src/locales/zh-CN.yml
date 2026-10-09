@@ -65,12 +65,15 @@ options:
   setAPIKeyWarning:
     please: 请在
     page: 页设置 API Key
+  defaultProvider:
+    title: 默认提供商
+    description: 选择此功能默认使用的提供商。
+    placeholder: 选择提供商
+    noProviders: 请先启用一个翻译提供商。
   apiProviders:
     title: API 提供商
     description: 配置用于翻译和词汇解析功能的 API 提供商。我们内置了 20 多个提供商，并支持任何 OpenAI 兼容 API 提供商。
     addProvider: 添加提供商
-    badges:
-      featureCount: $1 个功能
     dialog:
       title: 添加新提供商
       groups:
@@ -97,8 +100,8 @@ options:
         description: 此操作无法撤销。使用此提供商的功能将自动重新分配到其他可用提供商。
         confirm: 删除
         cancel: 取消
-      atLeastOneLLMProvider: 至少需要一个 LLM 翻译提供商。
-      providerInUseCannotDisable: '无法禁用 "$1"，它当前正被 $2 个功能使用。'
+      atLeastOneTranslationProvider: 至少需要保留一个已启用的翻译提供商。
+      providerDisabledWithFallbacks: '已停用 "$1"，$2 个关联功能已切换到其他可用提供商。'
       duplicateProviderName: '重复的提供商名称 "$1"'
       models:
         translate:
@@ -111,7 +114,6 @@ options:
         apiKeyRequired: 请先添加 API 密钥
         searchModels: 搜索模型...
         noModelsFound: 未找到模型
-      featureProviders: 功能提供商
       advancedOptions: 高级选项
       providerSettingLabels:
         region: 区域
@@ -171,13 +173,6 @@ options:
       title: 界面语言
       description: 选择选项页面使用的语言。
       label: 界面语言
-    featureProviders:
-      title: 功能提供商
-      description: 为每个功能选择使用的提供商
-      features:
-        translate: 网页翻译
-        selectionTranslation: 划词翻译
-        videoSubtitles: 字幕翻译
     translationConfig:
       model:
         title: 模型

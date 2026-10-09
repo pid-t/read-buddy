@@ -6,16 +6,13 @@ import { toast } from "sonner"
 import ProviderIcon from "@/components/provider-icon"
 import { useTheme } from "@/components/providers/theme-provider"
 import { SortableList } from "@/components/sortable-list"
-import { Badge } from "@/components/ui/base-ui/badge"
 import { Button } from "@/components/ui/base-ui/button"
 import { Dialog, DialogTrigger } from "@/components/ui/base-ui/dialog"
 import { Switch } from "@/components/ui/base-ui/switch"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/base-ui/tooltip"
 import { isAPIProviderConfig } from "@/types/config/provider"
-import { configAtom, configFieldsAtomMap } from "@/utils/atoms/config"
-import { providerConfigAtom } from "@/utils/atoms/provider"
+import { configFieldsAtomMap } from "@/utils/atoms/config"
+import { makeProviderUnavailableAtom, providerConfigAtom } from "@/utils/atoms/provider"
 import { getAPIProvidersConfig } from "@/utils/config/helpers"
-import { FEATURE_KEYS, FEATURE_PROVIDER_DEFS, getFeatureLabelI18nKey } from "@/utils/constants/feature-providers"
 import { API_PROVIDER_ITEMS } from "@/utils/constants/providers"
 import { i18n } from "@/utils/i18n"
 import { cn } from "@/utils/styles/utils"
@@ -113,59 +110,38 @@ function ProviderCard({ providerConfig }: { providerConfig: APIProviderConfig })
   const { theme } = useTheme()
   const [selectedProviderId, setSelectedProviderId] = useAtom(selectedProviderIdAtom)
   const setProviderConfig = useSetAtom(providerConfigAtom(id))
-  const config = useAtomValue(configAtom)
+  const makeProviderUnavailable = useSetAtom(makeProviderUnavailableAtom)
 
-  const assignedFeatures = FEATURE_KEYS
-    .filter(key => FEATURE_PROVIDER_DEFS[key].getProviderId(config) === id)
-  const isLanguageDetectionProvider = config.languageDetection.mode === "llm"
-    && config.languageDetection.providerId === id
-  const totalAssigned = assignedFeatures.length + (isLanguageDetectionProvider ? 1 : 0)
-
-  const handleProviderEnabledChange = (checked: boolean) => {
-    if (!checked && enabled && totalAssigned > 0) {
-      toast.error(i18n.t("options.apiProviders.form.providerInUseCannotDisable", [name, totalAssigned]))
+  const handleProviderEnabledChange = async (checked: boolean) => {
+    if (checked) {
+      await setProviderConfig({ ...providerConfig, enabled: true })
       return
     }
 
-    void setProviderConfig({ ...providerConfig, enabled: checked })
+    const plan = await makeProviderUnavailable({ providerId: id, operation: "disable" })
+    if (plan.status === "blocked") {
+      toast.error(i18n.t("options.apiProviders.form.atLeastOneTranslationProvider"))
+      return
+    }
+
+    if (enabled && plan.reassignedCount > 0) {
+      toast.success(i18n.t("options.apiProviders.form.providerDisabledWithFallbacks", [name, plan.reassignedCount]))
+    }
   }
 
   return (
     <div
       className={cn(
-        "rounded-xl p-3 border bg-card relative",
+        "rounded-xl p-3 border bg-card",
         selectedProviderId === id && "border-primary",
       )}
       onClick={() => setSelectedProviderId(id)}
     >
-      {totalAssigned > 0 && (
-        <div className="absolute -top-2 right-2 flex items-center justify-center gap-1">
-          <Tooltip>
-            <TooltipTrigger
-              render={(
-                <Badge className="bg-blue-500 cursor-default" size="sm" />
-              )}
-            >
-              {i18n.t("options.apiProviders.badges.featureCount", [totalAssigned])}
-            </TooltipTrigger>
-            <TooltipContent>
-              <ul className="list-disc list-inside marker:text-green-500">
-                {assignedFeatures.map(key => (
-                  <li key={key}>{i18n.t(getFeatureLabelI18nKey(key))}</li>
-                ))}
-                {isLanguageDetectionProvider && (
-                  <li>{i18n.t("options.general.languageDetection.title")}</li>
-                )}
-              </ul>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      )}
       <div className="flex items-center justify-between gap-2">
         <ProviderIcon logo={API_PROVIDER_ITEMS[provider].logo(theme)} name={name} size="base" textClassName="text-sm" />
         <Switch
           checked={enabled}
-          onCheckedChange={handleProviderEnabledChange}
+          onCheckedChange={checked => void handleProviderEnabledChange(checked)}
           onPointerDown={e => e.stopPropagation()}
           onClick={e => e.stopPropagation()}
         />

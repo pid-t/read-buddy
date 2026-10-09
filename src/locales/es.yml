@@ -72,14 +72,17 @@ options:
   setAPIKeyWarning:
     please: Configura la clave API en
     page: página
+  defaultProvider:
+    title: Proveedor predeterminado
+    description: Elige el proveedor predeterminado para esta función.
+    placeholder: Selecciona un proveedor
+    noProviders: Activa primero un proveedor de traducción.
   apiProviders:
     title: Proveedores de API
     description: Configura proveedores de API para traducción e información de
       vocabulario. Tenemos más de 20 proveedores integrados y admitimos
       cualquier proveedor de API compatible con OpenAI.
     addProvider: Añadir proveedor
-    badges:
-      featureCount: $1 funciones
     dialog:
       title: Añadir nuevo proveedor
       groups:
@@ -111,10 +114,10 @@ options:
           disponible.
         confirm: Eliminar
         cancel: Cancelar
-      atLeastOneLLMProvider: Se requiere al menos un proveedor de traducción
-        LLM.
-      providerInUseCannotDisable: 'No se puede desactivar "$1" porque actualmente
-        lo usan $2 función(es).'
+      atLeastOneTranslationProvider: Debe permanecer habilitado al menos un proveedor
+        de traducción.
+      providerDisabledWithFallbacks: 'Se desactivó "$1". $2 función(es) vinculada(s)
+        cambiaron a otro proveedor disponible.'
       duplicateProviderName: 'Nombre de proveedor duplicado "$1"'
       models:
         translate:
@@ -127,7 +130,6 @@ options:
         apiKeyRequired: Añade primero una clave API
         searchModels: Buscar modelos...
         noModelsFound: No se encontraron modelos
-      featureProviders: Proveedores de funciones
       advancedOptions: Opciones avanzadas
       providerSettingLabels:
         region: Región
@@ -219,13 +221,6 @@ options:
       title: Idioma de la interfaz
       description: Elige el idioma usado en la página de opciones.
       label: Idioma de la interfaz
-    featureProviders:
-      title: Proveedores de funciones
-      description: Elige qué proveedor usar para cada función
-      features:
-        translate: Traducción de página
-        selectionTranslation: Traducción de selección
-        videoSubtitles: Traducción de subtítulos
     translationConfig:
       model:
         title: Modelo

@@ -15,7 +15,6 @@ const messages = vi.hoisted((): Record<string, string> => ({
   "options.translation.aiContentAware.status.disabled": "AI 智能上下文翻译已关闭",
   "options.translation.aiContentAware.status.enabled": "AI 智能上下文翻译已启用",
   "options.translation.aiContentAware.status.noProvider": "请先选择 LLM Provider",
-  "options.general.featureProviders.features.translate": "网页翻译",
 }))
 
 vi.mock("@/utils/i18n", () => ({

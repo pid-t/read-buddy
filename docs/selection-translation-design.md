@@ -162,7 +162,7 @@ selectionTranslation: {
 
 新安装使用上述值。v1 到 v2 的迁移从旧配置动态继承目标语言和 Provider。v2 到 v3 的迁移为旧配置补入缺失的 Google Translate 与 Microsoft Translate Provider，并保留已有 Provider 的状态和顺序。
 
-### 5.2 Feature Provider 集成
+### 5.2 默认 Provider 集成
 
 `FEATURE_KEYS` 新增 `"selectionTranslation"`，定义如下：
 
@@ -174,14 +174,13 @@ selectionTranslation: {
 }
 ```
 
-同时新增 `FEATURE_KEY_I18N_MAP.selectionTranslation`。该集成带来以下一致性：
+该内部映射带来以下一致性：
 
 - Config Schema 校验 Provider 存在、类型兼容且启用。
 - 删除当前 Provider 时自动选择首个兼容 Provider。
-- Provider 配置页能显示“划词翻译”使用关系。
-- Provider 禁用保护覆盖划词翻译。
+- 停用当前 Provider 时原子迁移到首个兼容 Provider。
 
-“通用 > 功能提供商”页面继续展示网页翻译与字幕翻译。划词翻译 Provider 在自己的设置页呈现，减少重复入口。
+划词翻译 Provider 在自己的设置页呈现，与网页翻译和字幕翻译采用一致的任务归属。
 
 ### 5.3 配置迁移
 
@@ -275,7 +274,6 @@ selectionTranslation.popover.loading
 selectionTranslation.popover.retry
 selectionTranslation.popover.copy
 selectionTranslation.errors.*
-options.general.featureProviders.features.selectionTranslation
 ```
 
 涉及 `en`、`zh-CN`、`zh-TW`、`ja`、`ko`、`es`、`ru`、`tr`、`vi`。
