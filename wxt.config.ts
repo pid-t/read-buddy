@@ -53,7 +53,8 @@ export default defineConfig({
       },
       browser_specific_settings: {
         gecko: {
-          id: "{bd311a81-4530-4fcc-9178-74006155461b}",
+          // ReadBuddy's own AMO identity; keep stable across future releases.
+          id: "{bc0a196a-3cd9-490e-a63f-5cac6f65372a}",
           strict_min_version: "112.0",
           data_collection_permissions: {
             required: ["none"],
