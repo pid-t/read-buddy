@@ -1,7 +1,7 @@
 {
   "name": "read-buddy",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "packageManager": "pnpm@10.33.4",
   "description": "伴读(ReadBuddy) browser extension for web page and YouTube subtitle translation",
