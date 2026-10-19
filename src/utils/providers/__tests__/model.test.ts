@@ -116,7 +116,9 @@ describe("getModelById", () => {
     expect(result).toBe("openrouter-model")
     expect(createOpenRouterMock).toHaveBeenCalledWith(expect.objectContaining({
       apiKey: "test-key",
-      headers: DEFAULT_PROVIDER_HEADERS.openrouter,
+      headers: expect.objectContaining({
+        "X-OpenRouter-Title": "Read Buddy",
+      }),
     }))
     expect(openRouterLanguageModelMock).toHaveBeenCalledWith("x-ai/grok-4-fast:free")
   })
@@ -164,7 +166,7 @@ describe("getModelById", () => {
           },
           headers: {
             "HTTP-Referer": "https://example.com",
-            "X-Title": "Read Frog",
+            "X-Title": "Read Buddy",
           },
         },
       ],
@@ -180,7 +182,7 @@ describe("getModelById", () => {
       apiKey: "custom-key",
       headers: {
         "HTTP-Referer": "https://example.com",
-        "X-Title": "Read Frog",
+        "X-Title": "Read Buddy",
       },
     }))
     expect(openAICompatibleLanguageModelMock).toHaveBeenCalledWith("huihui-hy-mt1.5-1.8b-abliterated")

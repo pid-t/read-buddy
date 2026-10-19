@@ -1,5 +1,4 @@
 import type { LLMProviderTypes } from "@/types/config/provider"
-import { APP_NAME } from "@read-frog/definitions"
 import { env } from "@/env"
 
 export const DEFAULT_PROVIDER_HEADERS: Partial<Record<LLMProviderTypes, Record<string, string>>> = {
@@ -8,7 +7,7 @@ export const DEFAULT_PROVIDER_HEADERS: Partial<Record<LLMProviderTypes, Record<s
   },
   openrouter: {
     "HTTP-Referer": env.WXT_WEBSITE_URL,
-    "X-OpenRouter-Title": APP_NAME,
+    "X-OpenRouter-Title": "Read Buddy",
   },
 }
 
