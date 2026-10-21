@@ -32,6 +32,23 @@ interface ProviderSelectorProps {
   selectContentProps?: ProviderSelectContentProps
 }
 
+// Base UI calls the value render function with the raw value, which is null when
+// the current selection is not part of `providers` (for example a pure translate
+// provider shown in a list of enabled LLMs). Fall back to the placeholder then.
+function renderProviderValue(
+  provider: ProviderConfig | null,
+  theme: Theme,
+  placeholder?: string,
+) {
+  if (!provider) {
+    return placeholder ?? null
+  }
+
+  return (
+    <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />
+  )
+}
+
 export default function ProviderSelector({
   providers,
   value,
@@ -114,9 +131,7 @@ function TranslateGroupedSelect({
     >
       <SelectTrigger aria-label={ariaLabel} className={className} size="sm">
         <SelectValue placeholder={placeholder}>
-          {(provider: ProviderConfig) => (
-            <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />
-          )}
+          {(provider: ProviderConfig | null) => renderProviderValue(provider, theme, placeholder)}
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="min-w-fit py-1" {...selectContentProps}>
@@ -175,9 +190,7 @@ function FlatSelect({
     >
       <SelectTrigger aria-label={ariaLabel} className={className} size="sm">
         <SelectValue placeholder={placeholder}>
-          {(provider: ProviderConfig) => (
-            <ProviderIcon logo={PROVIDER_ITEMS[provider.provider].logo(theme)} name={provider.name} size="sm" />
-          )}
+          {(provider: ProviderConfig | null) => renderProviderValue(provider, theme, placeholder)}
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="min-w-fit py-1" {...selectContentProps}>
