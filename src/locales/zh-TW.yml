@@ -291,10 +291,17 @@ options:
         translationOnly: 僅顯示翻譯
     translateRange:
       title: 翻譯範圍
-      description: 選擇是僅翻譯主要內容還是翻譯頁面上的所有內容。
+      description: 選擇要翻譯的內容，可搭配 AI 過濾。
+      label: 翻譯內容
       range:
-        main: 主要內容
-        all: 全部內容
+        main: 略過常見導覽區域
+        all: 整頁內容
+      rangeDescription:
+        main: 根據網頁結構略過頁首、頁尾和導覽，文章內部的相關內容仍會保留。
+        all: 包含內文、導覽、頁首和頁尾等可翻譯內容。
+      summary:
+        main: 目前：依網頁結構略過常見導覽區域。
+        all: 目前：翻譯整頁內容。
     pageTranslationShortcut:
       title: 網頁翻譯快速鍵
       description: 自訂翻譯整個網頁的快速鍵
@@ -331,6 +338,21 @@ options:
         disabled: AI 智慧上下文翻譯已關閉
         enabled: AI 智慧上下文翻譯已啟用
         noProvider: 請先選擇 LLM 提供者
+    smartFilter:
+      description: 在所選內容中略過選單和按鈕，保留內文、留言。
+      enable: AI 過濾選單和按鈕
+      followProvider: 使用網頁翻譯模型
+      followProviderDescription: 關閉後可單獨選擇過濾模型。
+      provider: 過濾模型
+      providerPlaceholder: 選擇已啟用的 AI 模型
+      costDescription: 傳送少量網頁內容給 AI，可能產生費用。
+      behaviorTitle: 運作方式
+      behaviorDescription: AI 僅過濾所選內容。模型無法使用、請求失敗或逾時時，依所選範圍翻譯；部分內容可能保留雙語顯示。
+      status:
+        noProvider: AI 過濾暫時無法使用，請選擇已啟用的 AI 模型。
+      summary:
+        main: 目前：略過常見導覽，並啟用 AI 過濾。
+        all: 目前：整頁翻譯，AI 過濾選單和按鈕。
   system:
     title: 系統
 

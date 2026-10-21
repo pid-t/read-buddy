@@ -1,16 +1,20 @@
 import { deepmerge } from "deepmerge-ts"
 import { useAtom } from "jotai"
-import { Field, FieldLabel } from "@/components/ui/base-ui/field"
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/base-ui/field"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/base-ui/select"
 import { pageTranslateRangeSchema } from "@/types/config/translate"
 import { configFieldsAtomMap } from "@/utils/atoms/config"
 import { i18n } from "@/utils/i18n"
 import { ConfigCard } from "../../components/config-card"
+import { AISmartFilter } from "./ai-smart-filter"
 
 export function TranslateRange() {
   return (
     <ConfigCard id="translate-range" title={i18n.t("options.translation.translateRange.title")} description={i18n.t("options.translation.translateRange.description")}>
-      <TranslateRangeSelector />
+      <FieldGroup>
+        <TranslateRangeSelector />
+        <AISmartFilter />
+      </FieldGroup>
     </ConfigCard>
   )
 }
@@ -20,7 +24,7 @@ function TranslateRangeSelector() {
   return (
     <Field>
       <FieldLabel nativeLabel={false} render={<div />}>
-        {i18n.t("options.translation.translateRange.title")}
+        {i18n.t("options.translation.translateRange.label")}
       </FieldLabel>
       <Select
         value={translateConfig.page.range}
@@ -32,7 +36,7 @@ function TranslateRangeSelector() {
           )
         }}
       >
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" aria-label={i18n.t("options.translation.translateRange.label")}>
           <SelectValue>
             {i18n.t(
               `options.translation.translateRange.range.${translateConfig.page.range}`,
@@ -51,6 +55,9 @@ function TranslateRangeSelector() {
           </SelectGroup>
         </SelectContent>
       </Select>
+      <FieldDescription>
+        {i18n.t(`options.translation.translateRange.rangeDescription.${translateConfig.page.range}`)}
+      </FieldDescription>
     </Field>
   )
 }

@@ -339,10 +339,17 @@ options:
         translationOnly: Chỉ bản dịch
     translateRange:
       title: Phạm vi dịch
-      description: Chọn chỉ dịch nội dung chính hay tất cả nội dung trên trang.
+      description: Chọn nội dung cần dịch và dùng bộ lọc AI khi cần.
+      label: Nội dung cần dịch
       range:
-        main: Nội dung chính
-        all: Tất cả nội dung
+        main: Bỏ qua các vùng điều hướng phổ biến
+        all: Toàn bộ trang
+      rangeDescription:
+        main: "Bỏ qua đầu trang, chân trang và vùng điều hướng dựa trên cấu trúc trang. Giữ lại nội dung liên quan bên trong bài viết."
+        all: "Bao gồm nội dung có thể dịch như phần thân, điều hướng, đầu trang và chân trang."
+      summary:
+        main: "Hiện tại: bỏ qua vùng điều hướng phổ biến theo cấu trúc trang."
+        all: "Hiện tại: dịch toàn bộ trang."
     pageTranslationShortcut:
       title: Phím tắt dịch trang
       description: Tùy chỉnh phím tắt để dịch toàn bộ trang web
@@ -392,6 +399,21 @@ options:
         disabled: Đã tắt tính năng dịch ngữ cảnh thông minh AI
         enabled: Đã bật tính năng dịch ngữ cảnh thông minh AI
         noProvider: Vui lòng chọn nhà cung cấp LLM trước
+    smartFilter:
+      description: "Bỏ qua menu và nút trong nội dung đã chọn, giữ lại bài viết và bình luận."
+      enable: Lọc menu và nút bằng AI
+      followProvider: Dùng mô hình dịch trang
+      followProviderDescription: Tắt để chọn mô hình lọc riêng.
+      provider: Mô hình lọc
+      providerPlaceholder: Chọn mô hình AI đã bật
+      costDescription: "Gửi một ít nội dung trang đến AI, có thể phát sinh phí."
+      behaviorTitle: Cách hoạt động
+      behaviorDescription: "AI chỉ lọc nội dung đã chọn. Khi mô hình không khả dụng, yêu cầu thất bại hoặc hết thời gian chờ, bản dịch dùng phạm vi đã chọn. Một số nội dung có thể giữ dạng song ngữ."
+      status:
+        noProvider: Bộ lọc AI không khả dụng. Hãy chọn mô hình AI đã bật.
+      summary:
+        main: "Hiện tại: bỏ qua điều hướng phổ biến và áp dụng bộ lọc AI."
+        all: "Hiện tại: dịch toàn bộ trang và lọc menu, nút bằng AI."
   system:
     title: Hệ thống
 

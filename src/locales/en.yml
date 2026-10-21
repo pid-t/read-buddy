@@ -334,12 +334,18 @@ options:
         bilingual: Bilingual
         translationOnly: Translation Only
     translateRange:
-      title: Translate Range
-      description: Select whether to translate only the main content or all
-        content on the page.
+      title: Translation scope
+      description: "Choose what to translate, with optional AI filtering."
+      label: Content to translate
       range:
-        main: Main Content
-        all: All Content
+        main: Skip common navigation areas
+        all: Entire page
+      rangeDescription:
+        main: "Skip headers, footers, and navigation based on page structure. Related content within articles is kept."
+        all: "Include translatable content such as the body, navigation, headers, and footers."
+      summary:
+        main: "Current: skip common navigation areas based on page structure."
+        all: "Current: translate the entire page."
     pageTranslationShortcut:
       title: Page Translation Shortcut
       description: Customize the shortcut key for translating entire web pages
@@ -388,6 +394,21 @@ options:
         disabled: AI Smart Context Translation is disabled
         enabled: AI Smart Context Translation is enabled
         noProvider: Please select an LLM provider first
+    smartFilter:
+      description: Skip menus and buttons within the selected content. Keep articles and comments.
+      enable: Filter menus and buttons with AI
+      followProvider: Use page translation model
+      followProviderDescription: Turn off to choose a separate filtering model.
+      provider: Filtering model
+      providerPlaceholder: Select an enabled AI model
+      costDescription: Sends small page samples to AI. Usage charges may apply.
+      behaviorTitle: How it works
+      behaviorDescription: "AI filters only the selected content. If the model is unavailable or a request fails or times out, translation uses the selected scope. Some content may remain bilingual."
+      status:
+        noProvider: AI filtering is unavailable. Select an enabled AI model.
+      summary:
+        main: "Current: skip common navigation and apply AI filtering."
+        all: "Current: translate the entire page, with AI filtering menus and buttons."
   system:
     title: System
 

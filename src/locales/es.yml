@@ -351,12 +351,18 @@ options:
         bilingual: Bilingüe
         translationOnly: Solo traducción
     translateRange:
-      title: Rango de traducción
-      description: Selecciona si traducir solo el contenido principal o todo el
-        contenido de la página.
+      title: Ámbito de traducción
+      description: Elige qué traducir y aplica el filtro con IA si lo necesitas.
+      label: Contenido que traducir
       range:
-        main: Contenido principal
-        all: Todo el contenido
+        main: Omitir áreas de navegación habituales
+        all: Página completa
+      rangeDescription:
+        main: "Omite encabezados, pies de página y navegación según la estructura de la página. Conserva el contenido relacionado dentro de los artículos."
+        all: "Incluye el contenido traducible del cuerpo, la navegación, los encabezados y los pies de página."
+      summary:
+        main: "Actual: omitir la navegación habitual según la estructura de la página."
+        all: "Actual: traducir toda la página."
     pageTranslationShortcut:
       title: Atajo de traducción de página
       description: Personaliza la tecla de atajo para traducir páginas web
@@ -407,6 +413,21 @@ options:
         disabled: La traducción con contexto inteligente de IA está desactivada
         enabled: La traducción con contexto inteligente de IA está activada
         noProvider: Selecciona primero un proveedor LLM
+    smartFilter:
+      description: Omite menús y botones del contenido seleccionado y conserva artículos y comentarios.
+      enable: Filtrar menús y botones con IA
+      followProvider: Usar el modelo de traducción de páginas
+      followProviderDescription: Desactiva esta opción para elegir otro modelo para el filtro.
+      provider: Modelo para el filtro
+      providerPlaceholder: Selecciona un modelo de IA habilitado
+      costDescription: Envía pequeñas muestras de la página a la IA. Puede generar costes.
+      behaviorTitle: Cómo funciona
+      behaviorDescription: "La IA solo filtra el contenido seleccionado. Si el modelo no está disponible o la solicitud falla o agota el tiempo, se usa el ámbito elegido. Parte del contenido puede mantenerse en ambos idiomas."
+      status:
+        noProvider: El filtro con IA no está disponible. Selecciona un modelo de IA habilitado.
+      summary:
+        main: "Actual: omitir la navegación habitual y aplicar el filtro con IA."
+        all: "Actual: traducir toda la página y filtrar menús y botones con IA."
   system:
     title: Sistema
 

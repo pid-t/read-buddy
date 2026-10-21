@@ -333,12 +333,18 @@ options:
         bilingual: İki Dilli
         translationOnly: Yalnızca Çeviri
     translateRange:
-      title: Çeviri Kapsamı
-      description: Sayfadaki yalnızca ana içeriğin mi yoksa tüm içeriğin mi
-        çevrileceğini seçin.
+      title: Çeviri kapsamı
+      description: Çevrilecek içeriği seçin ve gerekirse yapay zekâ filtresini kullanın.
+      label: Çevrilecek içerik
       range:
-        main: Ana İçerik
-        all: Tüm İçerik
+        main: Yaygın gezinme alanlarını atla
+        all: Sayfanın tamamı
+      rangeDescription:
+        main: "Sayfa yapısına göre üstbilgi, altbilgi ve gezinme alanlarını atlar. Makale içindeki ilgili içerik korunur."
+        all: "Gövde, gezinme, üstbilgi ve altbilgi gibi çevrilebilir içerikleri kapsar."
+      summary:
+        main: "Geçerli: sayfa yapısına göre yaygın gezinme alanlarını atla."
+        all: "Geçerli: tüm sayfayı çevir."
     pageTranslationShortcut:
       title: Sayfa Çeviri Kısayolu
       description: Tüm web sayfalarını çevirmek için kısayol tuşunu özelleştirin
@@ -387,6 +393,21 @@ options:
         disabled: AI Akıllı Bağlam Çevirisi devre dışı
         enabled: AI Akıllı Bağlam Çevirisi etkin
         noProvider: Önce bir LLM sağlayıcısı seçin
+    smartFilter:
+      description: "Seçilen içerikte menüleri ve düğmeleri atlar, makaleleri ve yorumları korur."
+      enable: Menüleri ve düğmeleri yapay zekâyla filtrele
+      followProvider: Sayfa çeviri modelini kullan
+      followProviderDescription: Ayrı bir filtreleme modeli seçmek için kapatın.
+      provider: Filtreleme modeli
+      providerPlaceholder: Etkin bir yapay zekâ modeli seçin
+      costDescription: Yapay zekâya küçük sayfa örnekleri gönderilir. Ücret oluşabilir.
+      behaviorTitle: Nasıl çalışır
+      behaviorDescription: "Yapay zekâ yalnızca seçilen içeriği filtreler. Model kullanılamıyorsa, istek başarısızsa veya zaman aşımına uğrarsa seçilen kapsam çevrilir. Bazı içerikler iki dilde kalabilir."
+      status:
+        noProvider: Yapay zekâ filtresi kullanılamıyor. Etkin bir yapay zekâ modeli seçin.
+      summary:
+        main: "Geçerli: yaygın gezinme alanlarını atla ve yapay zekâ filtresini uygula."
+        all: "Geçerli: tüm sayfayı çevir, menüleri ve düğmeleri yapay zekâyla filtrele."
   system:
     title: Sistem
 
