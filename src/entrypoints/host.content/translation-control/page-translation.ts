@@ -13,14 +13,12 @@ import { hasNoWalkAncestor, isDontWalkIntoAndDontTranslateAsChildElement, isDont
 import { deepQueryTopLevelSelector } from "@/utils/host/dom/find"
 import { walkAndLabelElement } from "@/utils/host/dom/traversal"
 import { collectSmartRegions, createSmartFilterDecision, createSmartFilterPageState, isComposedDescendant } from "@/utils/host/smart-filter"
-import { logSmartFilterDiagnostic } from "@/utils/host/smart-filter/diagnostics"
 import { removeAllTranslatedWrapperNodes, translateWalkedElement } from "@/utils/host/translate/node-manipulation"
 import { validateTranslationConfigAndToast } from "@/utils/host/translate/translate-text"
 import { translateTextForPageTitle } from "@/utils/host/translate/translate-variants"
 import { getOrCreateWebPageContext } from "@/utils/host/translate/webpage-context"
 import { logger } from "@/utils/logger"
 import { sendMessage } from "@/utils/message"
-import { resolveModelId } from "@/utils/providers/model-id"
 
 type SimpleIntersectionOptions = Omit<IntersectionObserverInit, "threshold"> & {
   threshold?: number
@@ -86,8 +84,6 @@ export class PageTranslationManager implements IPageTranslationManager {
   private smartFilterSkipIds: string[] = []
   private smartFilterInvalidatedRegionIds = new Set<string>()
   private smartFilterRegionSignatures = new Map<string, string>()
-  private smartFilterDiagnosticRequestId: string | null = null
-  private smartFilterRequestStartedAt: number | null = null
   private smartFilterCache: { key: string, skipIds: string[] } | null = null
 
   constructor(intersectionOptions: SimpleIntersectionOptions = {}) {
@@ -648,10 +644,7 @@ export class PageTranslationManager implements IPageTranslationManager {
 
     const requestId = getRandomUUID()
     const version = ++this.smartFilterVersion
-    const startedAt = Date.now()
     this.smartFilterRequestId = requestId
-    this.smartFilterDiagnosticRequestId = requestId
-    this.smartFilterRequestStartedAt = startedAt
     this.smartFilterCollection = collection
     this.smartFilterSkipIds = []
     this.smartFilterInvalidatedRegionIds.clear()
@@ -659,19 +652,8 @@ export class PageTranslationManager implements IPageTranslationManager {
       [...collection.nodeById].map(([id, node]) => [id, node.textContent ?? ""]),
     )
     this.smartFilterState = this.buildSmartFilterState()
-    logSmartFilterDiagnostic("request-start", {
-      requestId,
-      provider: providerConfig.provider,
-      providerId,
-      model: resolveModelId(providerConfig.model) ?? null,
-      regions: collection.regions.map(region => ({
-        id: region.id,
-        tag: region.tag,
-        role: region.role,
-      })),
-    })
     this.smartFilterDeadlineTimer = setTimeout(() => {
-      this.finishSmartFilter(version, [], requestId, "timeout")
+      this.finishSmartFilter(version, [], "timeout")
     }, Math.max(0, deadline - Date.now()))
 
     void this.requestSmartFilter(collection.regions, requestId, deadline, version, cacheKey)
@@ -693,51 +675,25 @@ export class PageTranslationManager implements IPageTranslationManager {
       this.finishSmartFilter(
         version,
         result?.skipIds ?? [],
-        requestId,
         result?.status ?? "success",
-        result?.errorCode,
         cacheKey,
       )
     }
     catch (error) {
       if (version === this.smartFilterVersion)
         logger.warn("Smart filter classification failed", error)
-      this.finishSmartFilter(version, [], requestId, "error", "message_error")
+      this.finishSmartFilter(version, [], "error")
     }
-  }
-
-  private getSmartFilterDuration(): number | null {
-    return this.smartFilterRequestStartedAt === null
-      ? null
-      : Date.now() - this.smartFilterRequestStartedAt
   }
 
   private finishSmartFilter(
     version: number,
     skipIds: string[],
-    requestId: string,
     outcome: SmartFilterClassifyStatus,
-    errorCode?: string,
     cacheKey?: string,
   ): void {
-    const durationMs = this.getSmartFilterDuration()
-
-    if (version !== this.smartFilterVersion) {
-      logSmartFilterDiagnostic("request-end", {
-        requestId,
-        outcome: "stale",
-        durationMs,
-        skipIds,
-        ...(errorCode ? { errorCode } : {}),
-      })
-      logSmartFilterDiagnostic("result-apply", {
-        requestId,
-        keptSkipIds: [],
-        discardedChangedRegion: [],
-        discardedStaleVersion: skipIds,
-      })
+    if (version !== this.smartFilterVersion)
       return
-    }
 
     this.smartFilterVersion++
     if (this.smartFilterDeadlineTimer) {
@@ -747,7 +703,6 @@ export class PageTranslationManager implements IPageTranslationManager {
 
     // A sampled region may change before the observer callback runs.
     this.markChangedSampledRegions()
-    const discardedChangedRegion = skipIds.filter(id => this.smartFilterInvalidatedRegionIds.has(id))
     const appliedSkipIds = skipIds.filter(id => !this.smartFilterInvalidatedRegionIds.has(id))
     if (outcome === "success" && cacheKey && this.smartFilterInvalidatedRegionIds.size === 0)
       this.smartFilterCache = { key: cacheKey, skipIds: [...appliedSkipIds] }
@@ -756,20 +711,6 @@ export class PageTranslationManager implements IPageTranslationManager {
     this.smartFilterRequestId = null
     this.smartFilterSkipIds = appliedSkipIds
     this.smartFilterRegionSignatures.clear()
-
-    logSmartFilterDiagnostic("request-end", {
-      requestId,
-      outcome,
-      durationMs,
-      skipIds,
-      ...(errorCode ? { errorCode } : {}),
-    })
-    logSmartFilterDiagnostic("result-apply", {
-      requestId,
-      keptSkipIds: appliedSkipIds,
-      discardedChangedRegion,
-      discardedStaleVersion: [],
-    })
 
     if (!this.isPageTranslating) {
       this.smartFilterState = null
@@ -797,18 +738,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     }
 
     const requestId = this.smartFilterRequestId
-    if (requestId) {
-      logSmartFilterDiagnostic("request-end", {
-        requestId,
-        outcome: "cancel",
-        durationMs: this.getSmartFilterDuration(),
-        skipIds: [],
-      })
-    }
-
     this.smartFilterRequestId = null
-    this.smartFilterDiagnosticRequestId = null
-    this.smartFilterRequestStartedAt = null
     this.smartFilterCollection = null
     this.smartFilterState = null
     this.smartFilterPendingTargets.clear()
@@ -868,11 +798,6 @@ export class PageTranslationManager implements IPageTranslationManager {
       return []
 
     const rescanTargets = new Set<HTMLElement>()
-    const invalidations: Array<{
-      type: MutationRecord["type"]
-      targetTag: string
-      affectedRegionIds: string[]
-    }> = []
     let changed = false
     for (const record of records) {
       if (this.isExtensionMutationRecord(record))
@@ -884,36 +809,22 @@ export class PageTranslationManager implements IPageTranslationManager {
         : recordTarget instanceof ShadowRoot && isHTMLElement(recordTarget.host)
           ? recordTarget.host
           : recordTarget.parentElement
-      const affectedRegionIds: string[] = []
+      let affected = false
       for (const [id, node] of collection.nodeById) {
         if (this.smartFilterInvalidatedRegionIds.has(id))
           continue
 
         if (this.isSmartFilterRegionAffectedByMutation(node, record, target)) {
           this.smartFilterInvalidatedRegionIds.add(id)
-          affectedRegionIds.push(id)
+          affected = true
           changed = true
           if (node.isConnected)
             rescanTargets.add(node)
         }
       }
 
-      if (affectedRegionIds.length > 0) {
-        if (target)
-          rescanTargets.add(target)
-        invalidations.push({
-          type: record.type,
-          targetTag: (target?.tagName ?? record.target.nodeName).toLowerCase(),
-          affectedRegionIds,
-        })
-      }
-    }
-
-    if (invalidations.length > 0) {
-      logSmartFilterDiagnostic("regions-invalidated", {
-        requestId: this.smartFilterDiagnosticRequestId,
-        mutations: invalidations,
-      })
+      if (affected && target)
+        rescanTargets.add(target)
     }
 
     if (changed) {

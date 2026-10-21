@@ -16,14 +16,12 @@ const {
   mockTranslateTextForPage,
   mockTranslateTextForPageTitle,
   mockValidateTranslationConfigAndToast,
-  mockLogSmartFilterDiagnostic,
 } = vi.hoisted(() => ({
   mockGetLocalConfig: vi.fn(),
   mockSendMessage: vi.fn(),
   mockTranslateTextForPage: vi.fn(),
   mockTranslateTextForPageTitle: vi.fn(),
   mockValidateTranslationConfigAndToast: vi.fn(),
-  mockLogSmartFilterDiagnostic: vi.fn(),
 }))
 
 vi.mock("@/utils/config/storage", () => ({
@@ -32,10 +30,6 @@ vi.mock("@/utils/config/storage", () => ({
 
 vi.mock("@/utils/message", () => ({
   sendMessage: mockSendMessage,
-}))
-
-vi.mock("@/utils/host/smart-filter/diagnostics", () => ({
-  logSmartFilterDiagnostic: mockLogSmartFilterDiagnostic,
 }))
 
 vi.mock("@/utils/host/translate/translate-text", () => ({
@@ -279,11 +273,6 @@ describe("page translation smart filter", () => {
 
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
     expect(nav.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
-    expect(mockLogSmartFilterDiagnostic).toHaveBeenCalledWith("request-end", expect.objectContaining({
-      requestId: request.requestId,
-      outcome: "success",
-      skipIds: [navRegionId],
-    }))
   })
 
   it("keeps a nav region pending and skipped when unrelated siblings are added to body", async () => {
@@ -527,10 +516,6 @@ describe("page translation smart filter", () => {
     await vi.advanceTimersByTimeAsync(0)
     flushBatchedOperations()
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
-    expect(mockLogSmartFilterDiagnostic).toHaveBeenCalledWith("request-end", expect.objectContaining({
-      requestId: classifyRequests[0].requestId,
-      outcome: "timeout",
-    }))
 
     classifyDeferreds[0].resolve({ skipIds: ["r1"], status: "success" })
     await vi.advanceTimersByTimeAsync(0)
@@ -546,7 +531,7 @@ describe("page translation smart filter", () => {
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
   })
 
-  it("records a background model error and keeps the fallback translation", async () => {
+  it("keeps the fallback translation after a background model error", async () => {
     document.body.innerHTML = "<p id=\"body\">Readable body text</p>"
     const body = document.getElementById("body")!
     mockGetLocalConfig.mockResolvedValue(createConfig(true))
@@ -559,12 +544,6 @@ describe("page translation smart filter", () => {
     classifyDeferreds[0].resolve({ skipIds: [], status: "error", errorCode: "model_error" })
     await flushDomUpdates()
     await flushDomUpdates()
-
-    expect(mockLogSmartFilterDiagnostic).toHaveBeenCalledWith("request-end", expect.objectContaining({
-      requestId: classifyRequests[0].requestId,
-      outcome: "error",
-      errorCode: "model_error",
-    }))
 
     const observer = intersectionObservers[0]
     await observer.triggerIntersect(body)
@@ -600,10 +579,6 @@ describe("page translation smart filter", () => {
 
     manager.stop()
     expect(cancelRequests).toEqual([{ requestId: firstRequest.requestId }])
-    expect(mockLogSmartFilterDiagnostic).toHaveBeenCalledWith("request-end", expect.objectContaining({
-      requestId: firstRequest.requestId,
-      outcome: "cancel",
-    }))
 
     await manager.start()
     await flushDomUpdates()
