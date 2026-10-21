@@ -21,9 +21,7 @@ import { translateTextForPage } from "../translate-variants"
 import { setTranslationDirAndLang } from "../translation-attributes"
 import { createSpinnerInside, getTranslatedTextAndRemoveSpinner } from "../ui/spinner"
 import { isNumericContent } from "../ui/translation-utils"
-import { MARK_ATTRIBUTES_REGEX, originalContentMap, translatingNodes } from "./translation-state"
-
-const HTML_COMMENT_RE = /<!--[\s\S]*?-->/g
+import { originalContentMap, translatingNodes } from "./translation-state"
 
 interface WrapperPlacement {
   backgroundReferenceNode: TransNode
@@ -263,30 +261,13 @@ export async function translateNodeTranslationOnlyMode(
     if (await shouldFilterSmallParagraph(innerTextContent, config))
       return
 
-    const cleanTextContent = (content: string): string => {
-      if (!content)
-        return content
-
-      let cleanedContent = content.replace(MARK_ATTRIBUTES_REGEX, "")
-      cleanedContent = cleanedContent.replace(HTML_COMMENT_RE, " ")
-
-      return cleanedContent
-    }
-
     // Only save originalContent when there's no existing translation wrapper
     const hasExistingWrapperInParent = parentNode.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
     if (!originalContentMap.has(parentNode) && !hasExistingWrapperInParent) {
       originalContentMap.set(parentNode, parentNode.innerHTML)
     }
 
-    const getStringFormatFromNode = (node: Element | Text) => {
-      if (isTextNode(node)) {
-        return node.textContent
-      }
-      return node.outerHTML
-    }
-
-    const textContent = cleanTextContent(transNodes.map(getStringFormatFromNode).join(""))
+    const textContent = innerTextContent
     if (!textContent)
       return
 

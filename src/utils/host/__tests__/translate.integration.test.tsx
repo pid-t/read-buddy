@@ -642,6 +642,37 @@ describe("translate", () => {
         expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
         expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
       })
+      it("translation only mode: should send readable text without link and superscript tags", async () => {
+        vi.mocked(translateTextForPage).mockClear()
+        vi.mocked(translateTextForPage).mockResolvedValueOnce(MOCK_TRANSLATION)
+
+        render(
+          <div data-testid="test-node">
+            Open the
+            {" "}
+            <a href="https://example.com/docs">docs</a>
+            {" for details"}
+            <sup>1</sup>
+            .
+          </div>,
+        )
+        const node = screen.getByTestId("test-node")
+        await removeOrShowPageTranslation("translationOnly", true)
+
+        expect(translateTextForPage).toHaveBeenCalledWith("Open the docs for details1.")
+        const wrapper = expectTranslationWrapper(node, "translationOnly")
+        expect(wrapper?.textContent).toBe(MOCK_TRANSLATION)
+        expect(wrapper?.querySelector("a")).toBeNull()
+        expect(wrapper?.querySelector("sup")).toBeNull()
+
+        await removeOrShowPageTranslation("translationOnly", true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe("Open the docs for details1.")
+        const restoredLink = node.querySelector("a")
+        expect(restoredLink).toHaveAttribute("href", "https://example.com/docs")
+        expect(restoredLink?.textContent).toBe("docs")
+        expect(node.querySelector("sup")?.textContent).toBe("1")
+      })
     })
     describe("inline nodes + block node + inline nodes", () => {
       it("bilingual mode: should insert three wrappers", async () => {
