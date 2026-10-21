@@ -41,6 +41,9 @@ tsconfig.local.json
 
 docs/*
 !docs/selection-translation-design.md
+!docs/smart-page-translation-design.md
+!docs/smart-page-translation-review.md
+!docs/smart-page-translation-tasks.md
 
 /repos
 
