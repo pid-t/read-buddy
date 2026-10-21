@@ -9,6 +9,7 @@ import { areSamePageTranslationOrigin } from "@/utils/url"
 import { setupUrlChangeListener } from "./listen"
 import { mountHostToast } from "./mount-host-toast"
 import { bindTranslationShortcutKey } from "./translation-control/bind-translation-shortcut"
+import { watchTranslationConfigChanges } from "./translation-control/handle-config-change"
 import { registerNodeTranslationTriggers } from "./translation-control/node-translation"
 import { PageTranslationManager } from "./translation-control/page-translation"
 
@@ -27,6 +28,8 @@ export async function bootstrapHostContent(ctx: ContentScriptContext, initialCon
     rootMargin: `${preloadConfig.margin}px`,
     threshold: preloadConfig.threshold,
   })
+
+  const unwatchConfigChanges = watchTranslationConfigChanges(manager)
 
   const cleanupPageTranslationTriggers = manager.registerPageTranslationTriggers()
 
@@ -103,6 +106,7 @@ export async function bootstrapHostContent(ctx: ContentScriptContext, initialCon
     teardownNodeTranslation()
     cleanupPageTranslationTriggers()
     cleanupTranslationShortcut()
+    unwatchConfigChanges()
     cleanupTranslationStateListener()
     cleanupFrameTranslationStateListener()
     cleanupDetectedLanguageRefreshListener()

@@ -1,3 +1,4 @@
+import type { SmartFilterPageState } from "../../smart-filter/page-state"
 import type { Config } from "@/types/config/config"
 import type { TranslationMode } from "@/types/config/translate"
 import type { TransNode } from "@/types/dom"
@@ -71,13 +72,14 @@ export async function translateNodes(
   toggle: boolean = false,
   config: Config,
   forceBlockTranslation: boolean = false,
+  smartFilter?: SmartFilterPageState,
 ): Promise<void> {
   const translationMode = config.translate.mode
   if (translationMode === "translationOnly") {
-    await translateNodeTranslationOnlyMode(nodes, walkId, config, toggle)
+    await translateNodeTranslationOnlyMode(nodes, walkId, config, toggle, smartFilter)
   }
   else if (translationMode === "bilingual") {
-    await translateNodesBilingualMode(nodes, walkId, config, toggle, forceBlockTranslation)
+    await translateNodesBilingualMode(nodes, walkId, config, toggle, forceBlockTranslation, smartFilter)
   }
 }
 
@@ -87,8 +89,9 @@ export async function translateNodesBilingualMode(
   config: Config,
   toggle: boolean = false,
   forceBlockTranslation: boolean = false,
+  smartFilter?: SmartFilterPageState,
 ): Promise<void> {
-  const transNodes = nodes.filter(node => isTransNode(node))
+  const transNodes = nodes.filter((node): node is TransNode => isTransNode(node) && !smartFilter?.isNodeSkipped(node))
   if (transNodes.length === 0) {
     return
   }
@@ -102,7 +105,7 @@ export async function translateNodesBilingualMode(
     const lastNode = transNodes.at(-1)!
     const targetNode
       = transNodes.length === 1 && isBlockTransNode(lastNode) && isHTMLElement(lastNode)
-        ? await unwrapDeepestOnlyHTMLChild(lastNode)
+        ? await unwrapDeepestOnlyHTMLChild(lastNode, smartFilter)
         : lastNode
 
     const existedTranslatedWrapper = findPreviousTranslatedWrapperInside(targetNode, walkId)
@@ -113,12 +116,12 @@ export async function translateNodesBilingualMode(
       }
       else {
         nodes.forEach(node => translatingNodes.delete(node))
-        void translateNodesBilingualMode(nodes, walkId, config, toggle)
+        void translateNodesBilingualMode(nodes, walkId, config, toggle, forceBlockTranslation, smartFilter)
         return
       }
     }
 
-    const textContent = transNodes.map(node => extractTextContent(node, config)).join("").trim()
+    const textContent = transNodes.map(node => extractTextContent(node, config, smartFilter)).join("").trim()
     if (!textContent || isNumericContent(textContent))
       return
 
@@ -173,6 +176,7 @@ export async function translateNodeTranslationOnlyMode(
   walkId: string,
   config: Config,
   toggle: boolean = false,
+  smartFilter?: SmartFilterPageState,
 ): Promise<void> {
   const isTransNodeAndNotTranslatedWrapper = (node: Node): node is TransNode => {
     if (isHTMLElement(node) && node.classList.contains(CONTENT_WRAPPER_CLASS))
@@ -180,8 +184,20 @@ export async function translateNodeTranslationOnlyMode(
     return isTransNode(node)
   }
 
-  const outerTransNodes = nodes.filter(isTransNode)
+  const outerTransNodes = nodes.filter((node): node is TransNode => isTransNode(node) && !smartFilter?.isNodeSkipped(node))
   if (outerTransNodes.length === 0) {
+    return
+  }
+
+  // Keep original nodes and events when this unit contains an AI skip or a
+  // pending classification. Mark the wrapper as bilingual so cleanup takes the
+  // existing non-destructive restore path.
+  const outerParentElement = outerTransNodes[0].parentElement
+  if (outerParentElement && smartFilter && (
+    smartFilter.containsSkippedNode(outerParentElement)
+    || smartFilter.containsPendingNode(outerParentElement)
+  )) {
+    await translateNodesBilingualMode(nodes, walkId, config, toggle, false, smartFilter)
     return
   }
 
@@ -197,7 +213,6 @@ export async function translateNodeTranslationOnlyMode(
   // </div>,
   // Only save originalContent when there's no existing translation wrapper
   // If wrapper exists, we're removing translation and should restore from saved content
-  const outerParentElement = outerTransNodes[0].parentElement
   const hasExistingWrapper = outerParentElement?.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
   if (outerParentElement && !originalContentMap.has(outerParentElement) && !hasExistingWrapper) {
     originalContentMap.set(outerParentElement, outerParentElement.innerHTML)
@@ -206,9 +221,11 @@ export async function translateNodeTranslationOnlyMode(
   let transNodes: TransNode[] = []
   let allChildNodes: ChildNode[] = []
   if (outerTransNodes.length === 1 && isHTMLElement(outerTransNodes[0])) {
-    const unwrappedHTMLChild = await unwrapDeepestOnlyHTMLChild(outerTransNodes[0])
+    const unwrappedHTMLChild = await unwrapDeepestOnlyHTMLChild(outerTransNodes[0], smartFilter)
     allChildNodes = [...unwrappedHTMLChild.childNodes]
-    transNodes = allChildNodes.filter(isTransNodeAndNotTranslatedWrapper)
+    transNodes = allChildNodes
+      .filter(isTransNodeAndNotTranslatedWrapper)
+      .filter(node => !smartFilter?.isNodeSkipped(node))
   }
   else {
     transNodes = outerTransNodes
@@ -249,12 +266,12 @@ export async function translateNodeTranslationOnlyMode(
         // same nodes array, we ensure the translation uses the newly created DOM elements since the
         // function will re-query and find the correct parent and child nodes from the restored DOM.
         nodes.forEach(node => translatingNodes.delete(node))
-        void translateNodeTranslationOnlyMode(nodes, walkId, config, toggle)
+        void translateNodeTranslationOnlyMode(nodes, walkId, config, toggle, smartFilter)
         return
       }
     }
 
-    const innerTextContent = transNodes.map(node => extractTextContent(node, config)).join("")
+    const innerTextContent = transNodes.map(node => extractTextContent(node, config, smartFilter)).join("")
     if (!innerTextContent.trim() || isNumericContent(innerTextContent))
       return
 

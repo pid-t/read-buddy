@@ -15,6 +15,7 @@ const {
   mockRegisterNodeTranslationTriggers,
   mockSendMessage,
   mockSetupUrlChangeListener,
+  mockWatchTranslationConfigChanges,
 } = vi.hoisted(() => ({
   messageHandlers: new Map<string, (msg?: any) => any>(),
   managerInstances: [] as Array<{
@@ -32,6 +33,7 @@ const {
   mockRegisterNodeTranslationTriggers: vi.fn(),
   mockSendMessage: vi.fn(),
   mockSetupUrlChangeListener: vi.fn(),
+  mockWatchTranslationConfigChanges: vi.fn(),
 }))
 
 vi.mock("@/utils/content/page-language", () => ({
@@ -65,6 +67,10 @@ vi.mock("../mount-host-toast", () => ({
 
 vi.mock("../translation-control/bind-translation-shortcut", () => ({
   bindTranslationShortcutKey: mockBindTranslationShortcutKey,
+}))
+
+vi.mock("../translation-control/handle-config-change", () => ({
+  watchTranslationConfigChanges: mockWatchTranslationConfigChanges,
 }))
 
 vi.mock("../translation-control/node-translation", () => ({
@@ -127,6 +133,7 @@ describe("bootstrapHostContent URL changes", () => {
     mockMountHostToast.mockReturnValue(vi.fn())
     mockRegisterNodeTranslationTriggers.mockReturnValue(vi.fn())
     mockBindTranslationShortcutKey.mockResolvedValue(vi.fn())
+    mockWatchTranslationConfigChanges.mockReturnValue(vi.fn())
     mockOnMessage.mockImplementation((name: string, handler: (msg?: any) => any) => {
       messageHandlers.set(name, handler)
       return vi.fn()
@@ -138,6 +145,20 @@ describe("bootstrapHostContent URL changes", () => {
 
       return Promise.resolve(undefined)
     })
+  })
+
+  it("registers the config change listener for the manager and removes it on invalidation", async () => {
+    const unwatchConfigChanges = vi.fn()
+    mockWatchTranslationConfigChanges.mockReturnValue(unwatchConfigChanges)
+
+    const { ctx, invalidate } = createContentScriptContext()
+    await bootstrapHostContent(ctx, null)
+
+    expect(mockWatchTranslationConfigChanges).toHaveBeenCalledWith(managerInstances[0])
+    expect(unwatchConfigChanges).not.toHaveBeenCalled()
+
+    invalidate()
+    expect(unwatchConfigChanges).toHaveBeenCalledOnce()
   })
 
   it("refreshes active page translation on same-origin SPA navigation without disabling the session", async () => {

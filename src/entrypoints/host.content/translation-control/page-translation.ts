@@ -1,18 +1,26 @@
 import type { Config } from "@/types/config/config"
+import type { SmartFilterClassifyStatus } from "@/types/smart-filter"
+import type { SmartFilterPageState } from "@/utils/host/smart-filter/page-state"
+import type { SmartRegionCollection } from "@/utils/host/smart-filter/types"
 import { isEnabledLLMProviderConfig } from "@/types/config/provider"
+import { getProviderConfigById } from "@/utils/config/helpers"
 import { getLocalConfig } from "@/utils/config/storage"
 import { CONTENT_WRAPPER_CLASS } from "@/utils/constants/dom-labels"
 import { resolveProviderConfig } from "@/utils/constants/feature-providers"
 import { getRandomUUID } from "@/utils/crypto-polyfill"
+import { flushBatchedOperations } from "@/utils/host/dom/batch-dom"
 import { hasNoWalkAncestor, isDontWalkIntoAndDontTranslateAsChildElement, isDontWalkIntoButTranslateAsChildElement, isHTMLElement } from "@/utils/host/dom/filter"
 import { deepQueryTopLevelSelector } from "@/utils/host/dom/find"
 import { walkAndLabelElement } from "@/utils/host/dom/traversal"
+import { collectSmartRegions, createSmartFilterDecision, createSmartFilterPageState, isComposedDescendant } from "@/utils/host/smart-filter"
+import { logSmartFilterDiagnostic } from "@/utils/host/smart-filter/diagnostics"
 import { removeAllTranslatedWrapperNodes, translateWalkedElement } from "@/utils/host/translate/node-manipulation"
 import { validateTranslationConfigAndToast } from "@/utils/host/translate/translate-text"
 import { translateTextForPageTitle } from "@/utils/host/translate/translate-variants"
 import { getOrCreateWebPageContext } from "@/utils/host/translate/webpage-context"
 import { logger } from "@/utils/logger"
 import { sendMessage } from "@/utils/message"
+import { resolveModelId } from "@/utils/providers/model-id"
 
 type SimpleIntersectionOptions = Omit<IntersectionObserverInit, "threshold"> & {
   threshold?: number
@@ -51,6 +59,7 @@ interface IPageTranslationManager {
 export class PageTranslationManager implements IPageTranslationManager {
   private static readonly MAX_DURATION = 500
   private static readonly MOVE_THRESHOLD = 30 * 30
+  private static readonly SMART_FILTER_DURATION_MS = 2_000
   private static readonly DEFAULT_INTERSECTION_OPTIONS: SimpleIntersectionOptions = {
     root: null,
     rootMargin: "600px",
@@ -67,6 +76,18 @@ export class PageTranslationManager implements IPageTranslationManager {
   private lastSourceTitle: string | null = null
   private lastAppliedTranslatedTitle: string | null = null
   private titleRequestVersion = 0
+  private smartFilterState: SmartFilterPageState | null = null
+  private smartFilterCollection: SmartRegionCollection | null = null
+  private smartFilterRequestId: string | null = null
+  private smartFilterVersion = 0
+  private smartFilterDeadlineTimer: ReturnType<typeof setTimeout> | null = null
+  private smartFilterPendingTargets = new Set<HTMLElement>()
+  private smartFilterPreloadMargin = 0
+  private smartFilterSkipIds: string[] = []
+  private smartFilterInvalidatedRegionIds = new Set<string>()
+  private smartFilterRegionSignatures = new Map<string, string>()
+  private smartFilterDiagnosticRequestId: string | null = null
+  private smartFilterRequestStartedAt: number | null = null
 
   constructor(intersectionOptions: SimpleIntersectionOptions = {}) {
     if (intersectionOptions.threshold !== undefined) {
@@ -113,6 +134,9 @@ export class PageTranslationManager implements IPageTranslationManager {
     })
 
     this.isPageTranslating = true
+    this.smartFilterPreloadMargin = config.translate.page.preload.margin
+    this.cancelSmartFilter()
+    this.beginSmartFilter(config)
     await this.primeDocumentTitleContext(
       config.translate.enableAIContentAware && isEnabledLLMProviderConfig(providerConfig),
     )
@@ -131,7 +155,29 @@ export class PageTranslationManager implements IPageTranslationManager {
                 logger.error("Global config is not initialized")
                 return
               }
-              void translateWalkedElement(entry.target, walkId, currentConfig)
+              if (!this.isPageTranslating || this.walkId !== walkId)
+                return
+
+              const smartFilter = this.smartFilterState
+              if (smartFilter && (
+                smartFilter.isNodePending(entry.target)
+                || smartFilter.containsPendingNode(entry.target)
+              )) {
+                this.smartFilterPendingTargets.add(entry.target)
+                continue
+              }
+
+              if (smartFilter?.isNodeSkipped(entry.target)) {
+                observer.unobserve(entry.target)
+                continue
+              }
+
+              if (smartFilter) {
+                void translateWalkedElement(entry.target, walkId, currentConfig, false, smartFilter)
+              }
+              else {
+                void translateWalkedElement(entry.target, walkId, currentConfig)
+              }
             }
           }
           observer.unobserve(entry.target)
@@ -175,6 +221,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     }
 
     this.isPageTranslating = false
+    this.cancelSmartFilter()
     this.walkId = null
     this.walkBlockedElementsCache = new WeakSet()
     this.stopDocumentTitleTracking()
@@ -186,7 +233,8 @@ export class PageTranslationManager implements IPageTranslationManager {
     this.mutationObservers.forEach(observer => observer.disconnect())
     this.mutationObservers = []
 
-    void removeAllTranslatedWrapperNodes()
+    removeAllTranslatedWrapperNodes()
+    flushBatchedOperations()
   }
 
   registerPageTranslationTriggers(): () => void {
@@ -493,13 +541,23 @@ export class PageTranslationManager implements IPageTranslationManager {
   }
 
   private async handleMutationRecords(records: MutationRecord[]): Promise<void> {
+    const rescanTargets = this.invalidateSmartFilterRegionsFromMutations(records)
+
     const config = await getLocalConfig()
     if (!config) {
       logger.error("Global config is not initialized")
       return
     }
 
+    for (const target of rescanTargets) {
+      if (target.isConnected)
+        void this.observeTopLevelParagraphs(target, config)
+    }
+
     for (const rec of records) {
+      if (this.isExtensionMutationRecord(rec))
+        continue
+
       if (rec.type === "childList") {
         rec.addedNodes.forEach((node) => {
           if (isHTMLElement(node)) {
@@ -547,5 +605,413 @@ export class PageTranslationManager implements IPageTranslationManager {
         this.observeIsolatedDescendantsMutations(child)
       }
     }
+  }
+
+  private beginSmartFilter(config: Config): void {
+    const { smartFilter } = config.translate.page
+    if (!smartFilter.enableAI || !document.body)
+      return
+
+    const providerId = smartFilter.providerId ?? config.translate.providerId
+    const providerConfig = getProviderConfigById(config.providersConfig, providerId)
+    if (!providerConfig || !isEnabledLLMProviderConfig(providerConfig))
+      return
+
+    const deadline = Date.now() + PageTranslationManager.SMART_FILTER_DURATION_MS
+    const collection = collectSmartRegions(document.body, config, {
+      shouldCollect: element => this.isElementInPreloadRange(element),
+    })
+    if (collection.regions.length === 0 || Date.now() >= deadline)
+      return
+
+    const requestId = getRandomUUID()
+    const version = ++this.smartFilterVersion
+    const startedAt = Date.now()
+    this.smartFilterRequestId = requestId
+    this.smartFilterDiagnosticRequestId = requestId
+    this.smartFilterRequestStartedAt = startedAt
+    this.smartFilterCollection = collection
+    this.smartFilterSkipIds = []
+    this.smartFilterInvalidatedRegionIds.clear()
+    this.smartFilterRegionSignatures = new Map(
+      [...collection.nodeById].map(([id, node]) => [id, node.textContent ?? ""]),
+    )
+    this.smartFilterState = this.buildSmartFilterState()
+    logSmartFilterDiagnostic("request-start", {
+      requestId,
+      provider: providerConfig.provider,
+      providerId,
+      model: resolveModelId(providerConfig.model) ?? null,
+      regions: collection.regions.map(region => ({
+        id: region.id,
+        tag: region.tag,
+        role: region.role,
+      })),
+    })
+    this.smartFilterDeadlineTimer = setTimeout(() => {
+      this.finishSmartFilter(version, [], requestId, "timeout")
+    }, Math.max(0, deadline - Date.now()))
+
+    void this.requestSmartFilter(collection.regions, requestId, deadline, version)
+  }
+
+  private async requestSmartFilter(
+    regions: SmartRegionCollection["regions"],
+    requestId: string,
+    deadline: number,
+    version: number,
+  ): Promise<void> {
+    try {
+      const result = await sendMessage("classifySmartFilterRegions", {
+        requestId,
+        regions,
+        deadline,
+      })
+      this.finishSmartFilter(
+        version,
+        result?.skipIds ?? [],
+        requestId,
+        result?.status ?? "success",
+        result?.errorCode,
+      )
+    }
+    catch (error) {
+      if (version === this.smartFilterVersion)
+        logger.warn("Smart filter classification failed", error)
+      this.finishSmartFilter(version, [], requestId, "error", "message_error")
+    }
+  }
+
+  private getSmartFilterDuration(): number | null {
+    return this.smartFilterRequestStartedAt === null
+      ? null
+      : Date.now() - this.smartFilterRequestStartedAt
+  }
+
+  private finishSmartFilter(
+    version: number,
+    skipIds: string[],
+    requestId: string,
+    outcome: SmartFilterClassifyStatus,
+    errorCode?: string,
+  ): void {
+    const durationMs = this.getSmartFilterDuration()
+
+    if (version !== this.smartFilterVersion) {
+      logSmartFilterDiagnostic("request-end", {
+        requestId,
+        outcome: "stale",
+        durationMs,
+        skipIds,
+        ...(errorCode ? { errorCode } : {}),
+      })
+      logSmartFilterDiagnostic("result-apply", {
+        requestId,
+        keptSkipIds: [],
+        discardedChangedRegion: [],
+        discardedStaleVersion: skipIds,
+      })
+      return
+    }
+
+    this.smartFilterVersion++
+    if (this.smartFilterDeadlineTimer) {
+      clearTimeout(this.smartFilterDeadlineTimer)
+      this.smartFilterDeadlineTimer = null
+    }
+
+    // A sampled region may change before the observer callback runs.
+    this.markChangedSampledRegions()
+    const discardedChangedRegion = skipIds.filter(id => this.smartFilterInvalidatedRegionIds.has(id))
+    const appliedSkipIds = skipIds.filter(id => !this.smartFilterInvalidatedRegionIds.has(id))
+    const pendingTargets = [...this.smartFilterPendingTargets]
+    this.smartFilterPendingTargets.clear()
+    this.smartFilterRequestId = null
+    this.smartFilterSkipIds = appliedSkipIds
+    this.smartFilterRegionSignatures.clear()
+
+    logSmartFilterDiagnostic("request-end", {
+      requestId,
+      outcome,
+      durationMs,
+      skipIds,
+      ...(errorCode ? { errorCode } : {}),
+    })
+    logSmartFilterDiagnostic("result-apply", {
+      requestId,
+      keptSkipIds: appliedSkipIds,
+      discardedChangedRegion,
+      discardedStaleVersion: [],
+    })
+
+    if (!this.isPageTranslating) {
+      this.smartFilterState = null
+      this.smartFilterCollection = null
+      this.smartFilterSkipIds = []
+      this.smartFilterInvalidatedRegionIds.clear()
+      return
+    }
+
+    this.smartFilterState = this.buildSmartFilterState()
+
+    if (this.smartFilterSkipIds.length === 0) {
+      this.smartFilterCollection = null
+      this.smartFilterInvalidatedRegionIds.clear()
+    }
+
+    void this.resumePendingTargets(pendingTargets, this.smartFilterVersion)
+  }
+
+  private cancelSmartFilter(): void {
+    this.smartFilterVersion++
+    if (this.smartFilterDeadlineTimer) {
+      clearTimeout(this.smartFilterDeadlineTimer)
+      this.smartFilterDeadlineTimer = null
+    }
+
+    const requestId = this.smartFilterRequestId
+    if (requestId) {
+      logSmartFilterDiagnostic("request-end", {
+        requestId,
+        outcome: "cancel",
+        durationMs: this.getSmartFilterDuration(),
+        skipIds: [],
+      })
+    }
+
+    this.smartFilterRequestId = null
+    this.smartFilterDiagnosticRequestId = null
+    this.smartFilterRequestStartedAt = null
+    this.smartFilterCollection = null
+    this.smartFilterState = null
+    this.smartFilterPendingTargets.clear()
+    this.smartFilterSkipIds = []
+    this.smartFilterInvalidatedRegionIds.clear()
+    this.smartFilterRegionSignatures.clear()
+
+    if (requestId) {
+      void sendMessage("cancelSmartFilterClassification", { requestId })
+        .catch(error => logger.warn("Failed to cancel smart filter classification", error))
+    }
+  }
+
+  private buildSmartFilterState(): SmartFilterPageState | null {
+    const collection = this.smartFilterCollection
+    if (!collection)
+      return null
+
+    const pendingNodes: HTMLElement[] = []
+    if (this.smartFilterRequestId) {
+      for (const [id, node] of collection.nodeById) {
+        if (!this.smartFilterInvalidatedRegionIds.has(id) && node.isConnected)
+          pendingNodes.push(node)
+      }
+    }
+
+    const validSkipIds = this.smartFilterSkipIds.filter(id => !this.smartFilterInvalidatedRegionIds.has(id))
+    const decision = validSkipIds.length > 0
+      ? createSmartFilterDecision(collection, { skipIds: validSkipIds })
+      : null
+
+    if ((!decision || decision.skipIds.length === 0) && pendingNodes.length === 0)
+      return null
+
+    return createSmartFilterPageState({
+      decision: decision?.skipIds.length ? decision : null,
+      pendingNodes,
+    })
+  }
+
+  /** Detect sampled content that changed before its classification returned. */
+  private markChangedSampledRegions(): void {
+    const collection = this.smartFilterCollection
+    if (!collection)
+      return
+
+    for (const [id, node] of collection.nodeById) {
+      const signature = this.smartFilterRegionSignatures.get(id)
+      if (signature === undefined || !node.isConnected || (node.textContent ?? "") !== signature)
+        this.smartFilterInvalidatedRegionIds.add(id)
+    }
+  }
+
+  private invalidateSmartFilterRegionsFromMutations(records: MutationRecord[]): HTMLElement[] {
+    const collection = this.smartFilterCollection
+    if (!collection)
+      return []
+
+    const rescanTargets = new Set<HTMLElement>()
+    const invalidations: Array<{
+      type: MutationRecord["type"]
+      targetTag: string
+      affectedRegionIds: string[]
+    }> = []
+    let changed = false
+    for (const record of records) {
+      if (this.isExtensionMutationRecord(record))
+        continue
+
+      const recordTarget = record.target
+      const target = isHTMLElement(recordTarget)
+        ? recordTarget
+        : recordTarget instanceof ShadowRoot && isHTMLElement(recordTarget.host)
+          ? recordTarget.host
+          : recordTarget.parentElement
+      const affectedRegionIds: string[] = []
+      for (const [id, node] of collection.nodeById) {
+        if (this.smartFilterInvalidatedRegionIds.has(id))
+          continue
+
+        if (this.isSmartFilterRegionAffectedByMutation(node, record, target)) {
+          this.smartFilterInvalidatedRegionIds.add(id)
+          affectedRegionIds.push(id)
+          changed = true
+          if (node.isConnected)
+            rescanTargets.add(node)
+        }
+      }
+
+      if (affectedRegionIds.length > 0) {
+        if (target)
+          rescanTargets.add(target)
+        invalidations.push({
+          type: record.type,
+          targetTag: (target?.tagName ?? record.target.nodeName).toLowerCase(),
+          affectedRegionIds,
+        })
+      }
+    }
+
+    if (invalidations.length > 0) {
+      logSmartFilterDiagnostic("regions-invalidated", {
+        requestId: this.smartFilterDiagnosticRequestId,
+        mutations: invalidations,
+      })
+    }
+
+    if (changed) {
+      this.smartFilterState = this.buildSmartFilterState()
+      if (!this.smartFilterState && !this.smartFilterRequestId) {
+        this.smartFilterCollection = null
+        this.smartFilterSkipIds = []
+        this.smartFilterInvalidatedRegionIds.clear()
+      }
+    }
+
+    return [...rescanTargets]
+  }
+
+  /**
+   * Decide whether a mutation affects a sampled region. A changed container
+   * only invalidates its sampled ancestors and itself; a sampled descendant is
+   * affected only when the added or removed nodes actually intersect it. Adding
+   * an unrelated sibling under a shared parent keeps the descendant's state.
+   */
+  private isSmartFilterRegionAffectedByMutation(
+    node: HTMLElement,
+    record: MutationRecord,
+    target: HTMLElement | null,
+  ): boolean {
+    if (!node.isConnected)
+      return true
+    if (!target)
+      return false
+    if (node === target)
+      return true
+
+    // The mutation changed content inside this sampled region.
+    if (isComposedDescendant(target, node))
+      return true
+
+    if (!isComposedDescendant(node, target))
+      return false
+
+    // Attribute changes on a container may reveal or hide its descendants, so
+    // keep the existing ancestor invalidation for non-childList records.
+    if (record.type !== "childList")
+      return true
+
+    for (const changedNode of [...record.addedNodes, ...record.removedNodes]) {
+      if (changedNode === node
+        || isComposedDescendant(changedNode, node)
+        || isComposedDescendant(node, changedNode)) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  private isExtensionMutationRecord(record: MutationRecord): boolean {
+    if (this.isInsideTranslatedContent(record.target))
+      return true
+
+    if (record.type !== "childList")
+      return false
+
+    const addedNodes = [...record.addedNodes]
+    const removedNodes = [...record.removedNodes]
+    const allAddedTranslated = addedNodes.length > 0 && addedNodes.every(node => this.isInsideTranslatedContent(node))
+    const allRemovedTranslated = removedNodes.length > 0 && removedNodes.every(node => this.isInsideTranslatedContent(node))
+
+    return allAddedTranslated || (addedNodes.length === 0 && allRemovedTranslated)
+  }
+
+  private isInsideTranslatedContent(node: Node): boolean {
+    if (isHTMLElement(node))
+      return node.classList.contains(CONTENT_WRAPPER_CLASS) || node.closest(`.${CONTENT_WRAPPER_CLASS}`) !== null
+
+    const parent = node.parentNode
+    return parent !== null && isHTMLElement(parent) && parent.closest(`.${CONTENT_WRAPPER_CLASS}`) !== null
+  }
+
+  private async resumePendingTargets(targets: HTMLElement[], version: number): Promise<void> {
+    if (!this.isPageTranslating || targets.length === 0)
+      return
+
+    const observer = this.intersectionObserver
+    const walkId = this.walkId
+    const config = await getLocalConfig()
+    if (!config || !observer || !walkId || !this.isPageTranslating || version !== this.smartFilterVersion)
+      return
+
+    const smartFilter = this.smartFilterState
+    for (const target of targets) {
+      if (!target.isConnected || target.closest(`.${CONTENT_WRAPPER_CLASS}`)) {
+        observer.unobserve(target)
+        continue
+      }
+
+      if (smartFilter?.isNodeSkipped(target)) {
+        observer.unobserve(target)
+        continue
+      }
+
+      // Keep offscreen units under the existing intersection observation.
+      if (!this.isElementInPreloadRange(target))
+        continue
+
+      observer.unobserve(target)
+      if (smartFilter) {
+        void translateWalkedElement(target, walkId, config, false, smartFilter)
+      }
+      else {
+        void translateWalkedElement(target, walkId, config)
+      }
+    }
+  }
+
+  private isElementInPreloadRange(element: HTMLElement): boolean {
+    if (!element.isConnected)
+      return false
+
+    const rect = element.getBoundingClientRect()
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0
+    const margin = this.smartFilterPreloadMargin
+    return rect.bottom >= -margin
+      && rect.top <= viewportHeight + margin
+      && rect.right >= -margin
+      && rect.left <= viewportWidth + margin
   }
 }

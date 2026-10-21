@@ -1,3 +1,4 @@
+import type { SmartFilterPageState } from "../smart-filter/page-state"
 import type { Config } from "@/types/config/config"
 import type { TransNode } from "@/types/dom"
 import {
@@ -19,7 +20,10 @@ import {
 
 const NON_NEWLINE_WHITESPACE_RE = /[^\S\n]/
 
-export function extractTextContent(node: TransNode, config: Config): string {
+export function extractTextContent(node: TransNode, config: Config, smartFilter?: SmartFilterPageState): string {
+  if (smartFilter?.isNodeSkipped(node))
+    return ""
+
   if (isTextNode(node)) {
     const text = node.textContent ?? ""
     const trimmed = text.trim()
@@ -53,7 +57,7 @@ export function extractTextContent(node: TransNode, config: Config): string {
   return childNodes.reduce((text: string, child: Node): string => {
     // TODO: support SVGElement in the future
     if (isTextNode(child) || isHTMLElement(child)) {
-      return text + extractTextContent(child, config)
+      return text + extractTextContent(child, config, smartFilter)
     }
     return text
   }, "")
