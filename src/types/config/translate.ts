@@ -84,6 +84,12 @@ export const pageTranslationShortcutSchema = z.string().superRefine((shortcut, c
   }
 })
 
+export const smartFilterConfigSchema = z.object({
+  enableAI: z.boolean(),
+  providerId: z.string().nullable(),
+})
+export type SmartFilterConfig = z.infer<typeof smartFilterConfigSchema>
+
 export const translateConfigSchema = z.object({
   providerId: z.string().nonempty(),
   mode: translationModeSchema,
@@ -102,6 +108,7 @@ export const translateConfigSchema = z.object({
     minWordsPerNode: z.number().min(MIN_WORDS_PER_NODE),
     enableTargetLanguageSkip: z.boolean(),
     skipLanguages: z.array(langCodeISO6393Schema),
+    smartFilter: smartFilterConfigSchema,
   }),
   enableAIContentAware: z.boolean(),
   customPromptsConfig: customPromptsConfigSchema,

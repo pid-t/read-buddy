@@ -10,13 +10,18 @@ const migratedProvidersConfig = [
   DEFAULT_PROVIDER_CONFIG["google-translate"],
 ]
 
+const { smartFilter: _smartFilter, ...v003PageConfig } = DEFAULT_CONFIG.translate.page
 const migratedConfig = {
   ...DEFAULT_CONFIG,
+  translate: {
+    ...DEFAULT_CONFIG.translate,
+    page: v003PageConfig,
+  },
   providersConfig: migratedProvidersConfig,
 }
 
 // Keep the legacy export used by the API-key sanitization tests.
-export const configExample = DEFAULT_CONFIG
+export const configExample = migratedConfig
 
 export const testSeries: TestSeriesObject = {
   default: {

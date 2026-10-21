@@ -10,7 +10,7 @@ export const CONFIG_STORAGE_KEY = "config"
 
 export const THEME_STORAGE_KEY = "theme"
 export const DEFAULT_DETECTED_CODE = "eng" as const
-export const CONFIG_SCHEMA_VERSION = 3
+export const CONFIG_SCHEMA_VERSION = 4
 
 export const DEFAULT_CONFIG: Config = {
   uiLocale: undefined,
@@ -41,6 +41,10 @@ export const DEFAULT_CONFIG: Config = {
       minWordsPerNode: DEFAULT_MIN_WORDS_PER_NODE,
       enableTargetLanguageSkip: true,
       skipLanguages: [],
+      smartFilter: {
+        enableAI: false,
+        providerId: null,
+      },
     },
     enableAIContentAware: false,
     customPromptsConfig: DEFAULT_TRANSLATE_PROMPTS_CONFIG,

@@ -4,8 +4,13 @@ import { DEFAULT_CONFIG } from "@/utils/constants/config"
 const LEGACY_FREE_PROVIDER_TYPES = new Set(["google-translate", "microsoft-translate"])
 const legacyProvidersConfig = DEFAULT_CONFIG.providersConfig.filter(provider => !LEGACY_FREE_PROVIDER_TYPES.has(provider.provider))
 const { selectionTranslation: _selectionTranslation, ...v001ConfigWithProviders } = DEFAULT_CONFIG
+const { smartFilter: _smartFilter, ...v001PageConfig } = DEFAULT_CONFIG.translate.page
 const v001Config = {
   ...v001ConfigWithProviders,
+  translate: {
+    ...DEFAULT_CONFIG.translate,
+    page: v001PageConfig,
+  },
   providersConfig: legacyProvidersConfig,
 }
 
