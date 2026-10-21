@@ -17,7 +17,7 @@ export default function TranslateProviderField() {
   }, [providersConfig])
 
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_148px] items-center gap-3">
+    <div className="grid grid-cols-2 items-center gap-8">
       <span className="text-[13px] font-medium flex items-center gap-1.5">
         {i18n.t("translateService.title")}
         <HelpTooltip>
@@ -28,7 +28,8 @@ export default function TranslateProviderField() {
         providers={providers}
         value={translateConfig.providerId}
         onChange={id => void setTranslateConfig({ providerId: id })}
-        className="h-8! w-full cursor-pointer pr-1.5 pl-2.5"
+        ariaLabel={i18n.t("translateService.title")}
+        className="h-8! w-full cursor-pointer rounded-lg! pr-2.5 pl-2.5 shadow-none [&_[data-slot=select-value]_span]:text-[13px] motion-reduce:transition-none"
         selectContentProps={{
           align: "end",
           collisionAvoidance: {

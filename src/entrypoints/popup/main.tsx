@@ -42,7 +42,8 @@ function HydrateAtoms({
 
 async function initApp() {
   const root = document.getElementById("root")!
-  root.className = "text-base antialiased w-[400px] bg-background"
+  document.body.classList.add("readbuddy-popup")
+  root.className = "text-[13px] antialiased w-[400px] max-w-full bg-background"
 
   const [configValue, themeMode, activeTab] = await Promise.all([
     getLocalConfig(),

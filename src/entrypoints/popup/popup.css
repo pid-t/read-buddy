@@ -1,0 +1,170 @@
+/* Color roles sampled from https://usemagpie.ai/ in light and dark modes. */
+.readbuddy-popup {
+  --popup-bg: #fafafa;
+  --popup-surface: #f1f1f2;
+  --popup-card: #ffffff;
+  --popup-ink: #111112;
+  --popup-muted: #4a4a50;
+  --popup-line: #e4e4e7;
+  --popup-control-hover: #f1f1f2;
+  --popup-control-pressed: #e8e8eb;
+  --popup-border-hover: #b8b8bf;
+  --popup-action: #111112;
+  --popup-action-hover: #2d2d2e;
+  --popup-action-pressed: #070708;
+  --popup-action-ink: #fafafa;
+  --popup-action-key: #ffffff1a;
+  --popup-focus: #85858c;
+  --rf-background: var(--popup-bg);
+  --rf-foreground: var(--popup-ink);
+  --rf-card: var(--popup-card);
+  --rf-card-foreground: var(--popup-ink);
+  --rf-popover: var(--popup-card);
+  --rf-popover-foreground: var(--popup-ink);
+  --rf-primary: var(--popup-action);
+  --rf-primary-foreground: var(--popup-action-ink);
+  --rf-secondary: var(--popup-surface);
+  --rf-secondary-foreground: var(--popup-muted);
+  --rf-muted: var(--popup-surface);
+  --rf-muted-foreground: var(--popup-muted);
+  --rf-accent: var(--popup-control-hover);
+  --rf-accent-foreground: var(--popup-ink);
+  --rf-border: var(--popup-line);
+  --rf-input: var(--popup-line);
+  --rf-ring: var(--popup-focus);
+  --rf-radius: 8px;
+
+  background: var(--popup-bg);
+  color: var(--popup-ink);
+}
+
+.dark .readbuddy-popup {
+  --popup-bg: #0b0b0c;
+  --popup-surface: #121214;
+  --popup-card: #161618;
+  --popup-ink: #f2f2f3;
+  --popup-muted: #b3b3ba;
+  --popup-line: #26262a;
+  --popup-control-hover: #202024;
+  --popup-control-pressed: #26262a;
+  --popup-border-hover: #494950;
+  --popup-action: #f2f2f3;
+  --popup-action-hover: #d6d6d7;
+  --popup-action-pressed: #c8c8cc;
+  --popup-action-ink: #0b0b0c;
+  --popup-action-key: #0000000d;
+  --popup-focus: #b3b3ba;
+}
+
+.popup-surface {
+  background: var(--popup-bg);
+  color: var(--popup-ink);
+}
+
+.popup-footer {
+  background: var(--popup-surface);
+  border-color: var(--popup-line);
+}
+
+.popup-surface button {
+  touch-action: manipulation;
+  transition-property: background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: 110ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.popup-surface button:not(:disabled):not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+.popup-surface button:active:not(:disabled):not([aria-disabled="true"]) {
+  translate: none;
+  transform: translateY(1px) scale(0.98);
+  transition-duration: 50ms;
+}
+
+.popup-surface button:focus-visible {
+  outline: 2px solid var(--popup-focus);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+.popup-surface button[aria-expanded="true"] > svg {
+  transform: rotate(180deg);
+}
+
+.popup-surface button[aria-haspopup] > svg {
+  transition: transform 110ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.popup-surface button[aria-haspopup] {
+  background: var(--popup-card);
+  border-color: var(--popup-line);
+}
+
+.popup-surface button[aria-haspopup]:hover:not(:disabled) {
+  background: var(--popup-control-hover);
+  border-color: var(--popup-border-hover);
+}
+
+.popup-surface button[aria-haspopup]:is(:active, [aria-expanded="true"]):not(:disabled) {
+  background: var(--popup-control-pressed);
+  border-color: var(--popup-border-hover);
+}
+
+.popup-surface .popup-translate-button {
+  border-radius: 10px;
+  background: var(--popup-action);
+  color: var(--popup-action-ink);
+  transition-property: box-shadow, opacity, transform;
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 18%),
+    0 2px 3px rgb(0 0 0 / 16%);
+}
+
+.popup-surface .popup-translate-button:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--popup-action-hover);
+  transform: translateY(-1px);
+}
+
+.popup-surface .popup-translate-button:active:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--popup-action-pressed);
+  transform: translateY(1px) scale(0.98);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 20%);
+}
+
+.popup-surface .popup-translate-button[aria-busy="true"] {
+  cursor: progress;
+}
+
+.popup-surface .popup-translate-button [data-slot="kbd"] {
+  background: var(--popup-action-key);
+  color: inherit;
+}
+
+.popup-action-spinner {
+  animation: popup-action-spin 700ms linear infinite;
+}
+
+@keyframes popup-action-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup-surface button,
+  .popup-surface button[aria-haspopup] > svg {
+    transition: none;
+  }
+
+  .popup-surface button {
+    transition: none !important;
+    transform: none !important;
+    translate: none !important;
+  }
+
+  .popup-action-spinner {
+    animation: none;
+  }
+}
