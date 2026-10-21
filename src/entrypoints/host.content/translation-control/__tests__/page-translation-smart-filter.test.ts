@@ -177,6 +177,47 @@ describe("page translation smart filter", () => {
     vi.useRealTimers()
   })
 
+  it.each(["bilingual", "translationOnly"] as const)("reuses AI filtering when %s translation is toggled back on", async (mode) => {
+    document.body.innerHTML = `<nav id="nav"><a>Home</a></nav><main><p id="body">Readable body text</p></main>`
+    const config = createConfig(true)
+    config.translate = { ...config.translate, mode }
+    mockGetLocalConfig.mockResolvedValue(config)
+    manager = new PageTranslationManager()
+    await manager.start()
+    const navId = classifyRequests[0].regions.find(region => region.text.includes("Home"))!.id
+    classifyDeferreds[0].resolve({ skipIds: [navId], status: "success" })
+    await flushDomUpdates()
+    await intersectionObservers[0].triggerIntersect(document.getElementById("body")!)
+    await flushDomUpdates()
+    flushBatchedOperations()
+    manager.stop()
+
+    await manager.start()
+    expect(classifyRequests).toHaveLength(1)
+    const observer = intersectionObservers.at(-1)!
+    await observer.triggerIntersect(document.getElementById("nav")!)
+    await observer.triggerIntersect(document.getElementById("body")!)
+    await flushDomUpdates()
+    flushBatchedOperations()
+    expect(document.getElementById("nav")!.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
+    expect(document.getElementById("body")!.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toHaveTextContent("translation")
+  })
+
+  it.each(["content", "config"])("repeats AI filtering after %s changes", async (change) => {
+    document.body.innerHTML = `<p id="body">Readable body text</p>`
+    manager = new PageTranslationManager()
+    await manager.start()
+    classifyDeferreds[0].resolve({ skipIds: [], status: "success" })
+    await flushDomUpdates()
+    manager.stop()
+    if (change === "content")
+      document.getElementById("body")!.textContent = "Changed body text"
+    else
+      mockGetLocalConfig.mockResolvedValue({ ...createConfig(true), language: { ...DEFAULT_CONFIG.language, targetCode: "jpn" } })
+    await manager.start()
+    expect(classifyRequests).toHaveLength(2)
+  })
+
   it("waits for classification, keeps offscreen units on normal translation and applies nav skips", async () => {
     document.body.innerHTML = `
       <main id="content">
@@ -495,6 +536,14 @@ describe("page translation smart filter", () => {
     await vi.advanceTimersByTimeAsync(0)
     flushBatchedOperations()
     expect(body.querySelectorAll(`.${CONTENT_WRAPPER_CLASS}`)).toHaveLength(1)
+
+    manager.stop()
+    await manager.start()
+    expect(classifyRequests).toHaveLength(1)
+    await intersectionObservers.at(-1)!.triggerIntersect(body)
+    await vi.advanceTimersByTimeAsync(0)
+    flushBatchedOperations()
+    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
   })
 
   it("records a background model error and keeps the fallback translation", async () => {
@@ -523,6 +572,14 @@ describe("page translation smart filter", () => {
     flushBatchedOperations()
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
     expect(classifyRequests).toHaveLength(1)
+
+    manager.stop()
+    await manager.start()
+    expect(classifyRequests).toHaveLength(1)
+    await intersectionObservers.at(-1)!.triggerIntersect(body)
+    await flushDomUpdates()
+    flushBatchedOperations()
+    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
   })
 
   it("cancels on stop and ignores stale results after restart", async () => {
@@ -550,19 +607,16 @@ describe("page translation smart filter", () => {
 
     await manager.start()
     await flushDomUpdates()
-    expect(classifyRequests).toHaveLength(2)
+    expect(classifyRequests).toHaveLength(1)
 
     const secondObserver = intersectionObservers[1]
     await secondObserver.triggerIntersect(body)
     await flushDomUpdates()
-    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
+    flushBatchedOperations()
+    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
 
     // The first request belongs to the stopped session and must be discarded.
     classifyDeferreds[0].resolve({ skipIds: ["r1"], status: "success" })
-    await flushDomUpdates()
-    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
-
-    classifyDeferreds[1].resolve({ skipIds: [], status: "success" })
     await flushDomUpdates()
     flushBatchedOperations()
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()

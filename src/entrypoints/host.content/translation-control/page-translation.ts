@@ -88,6 +88,7 @@ export class PageTranslationManager implements IPageTranslationManager {
   private smartFilterRegionSignatures = new Map<string, string>()
   private smartFilterDiagnosticRequestId: string | null = null
   private smartFilterRequestStartedAt: number | null = null
+  private smartFilterCache: { key: string, skipIds: string[] } | null = null
 
   constructor(intersectionOptions: SimpleIntersectionOptions = {}) {
     if (intersectionOptions.threshold !== undefined) {
@@ -609,20 +610,41 @@ export class PageTranslationManager implements IPageTranslationManager {
 
   private beginSmartFilter(config: Config): void {
     const { smartFilter } = config.translate.page
-    if (!smartFilter.enableAI || !document.body)
+    if (!smartFilter.enableAI || !document.body) {
+      this.smartFilterCache = null
       return
+    }
 
     const providerId = smartFilter.providerId ?? config.translate.providerId
     const providerConfig = getProviderConfigById(config.providersConfig, providerId)
-    if (!providerConfig || !isEnabledLLMProviderConfig(providerConfig))
+    if (!providerConfig || !isEnabledLLMProviderConfig(providerConfig)) {
+      this.smartFilterCache = null
       return
+    }
 
     const deadline = Date.now() + PageTranslationManager.SMART_FILTER_DURATION_MS
     const collection = collectSmartRegions(document.body, config, {
       shouldCollect: element => this.isElementInPreloadRange(element),
     })
-    if (collection.regions.length === 0 || Date.now() >= deadline)
+    if (collection.regions.length === 0 || Date.now() >= deadline) {
+      this.smartFilterCache = null
       return
+    }
+
+    const cacheKey = JSON.stringify([
+      window.location.href, config.translate, config.language, providerConfig,
+      collection.regions, [...collection.nodeById.values()].map(node => node.textContent),
+    ])
+    if (this.smartFilterCache?.key === cacheKey) {
+      this.smartFilterCollection = collection
+      this.smartFilterSkipIds = [...this.smartFilterCache.skipIds]
+      this.smartFilterState = this.buildSmartFilterState()
+      if (this.smartFilterSkipIds.length === 0)
+        this.smartFilterCollection = null
+      return
+    }
+    // Remember the attempt so toggling back never retries a missing result.
+    this.smartFilterCache = { key: cacheKey, skipIds: [] }
 
     const requestId = getRandomUUID()
     const version = ++this.smartFilterVersion
@@ -652,7 +674,7 @@ export class PageTranslationManager implements IPageTranslationManager {
       this.finishSmartFilter(version, [], requestId, "timeout")
     }, Math.max(0, deadline - Date.now()))
 
-    void this.requestSmartFilter(collection.regions, requestId, deadline, version)
+    void this.requestSmartFilter(collection.regions, requestId, deadline, version, cacheKey)
   }
 
   private async requestSmartFilter(
@@ -660,6 +682,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     requestId: string,
     deadline: number,
     version: number,
+    cacheKey: string,
   ): Promise<void> {
     try {
       const result = await sendMessage("classifySmartFilterRegions", {
@@ -673,6 +696,7 @@ export class PageTranslationManager implements IPageTranslationManager {
         requestId,
         result?.status ?? "success",
         result?.errorCode,
+        cacheKey,
       )
     }
     catch (error) {
@@ -694,6 +718,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     requestId: string,
     outcome: SmartFilterClassifyStatus,
     errorCode?: string,
+    cacheKey?: string,
   ): void {
     const durationMs = this.getSmartFilterDuration()
 
@@ -724,6 +749,8 @@ export class PageTranslationManager implements IPageTranslationManager {
     this.markChangedSampledRegions()
     const discardedChangedRegion = skipIds.filter(id => this.smartFilterInvalidatedRegionIds.has(id))
     const appliedSkipIds = skipIds.filter(id => !this.smartFilterInvalidatedRegionIds.has(id))
+    if (outcome === "success" && cacheKey && this.smartFilterInvalidatedRegionIds.size === 0)
+      this.smartFilterCache = { key: cacheKey, skipIds: [...appliedSkipIds] }
     const pendingTargets = [...this.smartFilterPendingTargets]
     this.smartFilterPendingTargets.clear()
     this.smartFilterRequestId = null
