@@ -5,6 +5,8 @@ import { DEFAULT_CONFIG } from "@/utils/constants/config"
 const onMessageMock = vi.fn()
 const ensureInitializedConfigMock = vi.fn()
 const executeTranslateMock = vi.fn()
+const executeInlineSmartFilterTranslationMock = vi.fn()
+const isInlineSmartFilterResultErrorMock = vi.fn()
 const generateArticleSummaryMock = vi.fn()
 const articleSummaryCacheGetMock = vi.fn()
 const articleSummaryCachePutMock = vi.fn()
@@ -21,6 +23,11 @@ vi.mock("../config", () => ({
 
 vi.mock("@/utils/host/translate/execute-translate", () => ({
   executeTranslate: executeTranslateMock,
+}))
+
+vi.mock("@/utils/host/translate/api/inline-smart-filter", () => ({
+  executeInlineSmartFilterTranslation: executeInlineSmartFilterTranslationMock,
+  isInlineSmartFilterResultError: isInlineSmartFilterResultErrorMock,
 }))
 
 vi.mock("@/utils/content/summary", () => ({
@@ -97,6 +104,9 @@ describe("translation queue helpers", () => {
     })
 
     executeTranslateMock.mockResolvedValue("translated subtitle")
+    executeInlineSmartFilterTranslationMock.mockReset()
+    isInlineSmartFilterResultErrorMock.mockReset()
+    isInlineSmartFilterResultErrorMock.mockImplementation(error => (error as { inlineFormat?: boolean })?.inlineFormat === true)
     generateArticleSummaryMock.mockResolvedValue("Generated summary")
     articleSummaryCacheGetMock.mockResolvedValue(undefined)
     articleSummaryCachePutMock.mockResolvedValue(undefined)
@@ -288,6 +298,211 @@ describe("translation queue helpers", () => {
         },
       }),
     )
+  })
+
+  it("runs merged filtering in one batch and caches explicit skips", async () => {
+    ensureInitializedConfigMock.mockResolvedValue({
+      ...DEFAULT_CONFIG,
+      translate: {
+        ...DEFAULT_CONFIG.translate,
+        batchQueueConfig: { maxCharactersPerBatch: 1000, maxItemsPerBatch: 10 },
+      },
+    })
+    executeInlineSmartFilterTranslationMock.mockResolvedValue(["", "translated body"])
+
+    const { setUpWebPageTranslationQueue } = await import("../translation-queues")
+    await setUpWebPageTranslationQueue()
+
+    const handler = getRegisteredMessageHandler("enqueueTranslateRequest")
+    const inlineSmartFilter = {
+      strategyVersion: 1,
+      hint: { tag: "a", role: null, ancestors: [{ tag: "nav", role: "navigation" }] },
+    }
+    const requests = [
+      handler({
+        data: {
+          text: "Home",
+          langConfig: DEFAULT_CONFIG.language,
+          providerConfig: llmProvider,
+          scheduleAt: Date.now(),
+          hash: "inline-hash-nav",
+          inlineSmartFilter,
+        },
+      }),
+      handler({
+        data: {
+          text: "Readable body text",
+          langConfig: DEFAULT_CONFIG.language,
+          providerConfig: llmProvider,
+          scheduleAt: Date.now(),
+          hash: "inline-hash-body",
+          inlineSmartFilter,
+        },
+      }),
+    ]
+
+    await expect(Promise.all(requests)).resolves.toEqual(["", "translated body"])
+    expect(executeInlineSmartFilterTranslationMock).toHaveBeenCalledTimes(1)
+    expect(executeTranslateMock).not.toHaveBeenCalled()
+    expect(translationCachePutMock).toHaveBeenCalledWith(expect.objectContaining({
+      key: "inline-hash-nav",
+      translation: "",
+    }))
+    expect(translationCachePutMock).toHaveBeenCalledWith(expect.objectContaining({
+      key: "inline-hash-body",
+      translation: "translated body",
+    }))
+  })
+
+  it("returns a cached empty skip for merged translation", async () => {
+    translationCacheGetMock.mockResolvedValueOnce({
+      key: "cached-skip-hash",
+      translation: "",
+    })
+
+    const { setUpWebPageTranslationQueue } = await import("../translation-queues")
+    await setUpWebPageTranslationQueue()
+
+    const handler = getRegisteredMessageHandler("enqueueTranslateRequest")
+    const result = await handler({
+      data: {
+        text: "Home",
+        langConfig: DEFAULT_CONFIG.language,
+        providerConfig: llmProvider,
+        scheduleAt: Date.now(),
+        hash: "cached-skip-hash",
+        inlineSmartFilter: {
+          strategyVersion: 1,
+          hint: { tag: "a", role: null, ancestors: [] },
+        },
+      },
+    })
+
+    expect(result).toBe("")
+    expect(executeInlineSmartFilterTranslationMock).not.toHaveBeenCalled()
+  })
+
+  it("falls back to normal batch translation once when merged results are malformed", async () => {
+    ensureInitializedConfigMock.mockResolvedValue({
+      ...DEFAULT_CONFIG,
+      translate: {
+        ...DEFAULT_CONFIG.translate,
+        batchQueueConfig: { maxCharactersPerBatch: 1000, maxItemsPerBatch: 10 },
+      },
+    })
+    const formatError = Object.assign(new Error("malformed result"), { inlineFormat: true })
+    executeInlineSmartFilterTranslationMock.mockRejectedValue(formatError)
+    executeTranslateMock.mockResolvedValue("First translation\n\n%%\n\nSecond translation")
+
+    const { setUpWebPageTranslationQueue } = await import("../translation-queues")
+    await setUpWebPageTranslationQueue()
+
+    const handler = getRegisteredMessageHandler("enqueueTranslateRequest")
+    const inlineSmartFilter = {
+      strategyVersion: 1,
+      hint: { tag: "p", role: null, ancestors: [] },
+    }
+    const requests = ["first", "second"].map((text, index) => handler({
+      data: {
+        text,
+        langConfig: DEFAULT_CONFIG.language,
+        providerConfig: llmProvider,
+        scheduleAt: Date.now(),
+        hash: `fallback-hash-${index}`,
+        inlineSmartFilter,
+      },
+    }))
+
+    await expect(Promise.all(requests)).resolves.toEqual(["First translation", "Second translation"])
+    expect(executeInlineSmartFilterTranslationMock).toHaveBeenCalledTimes(1)
+    expect(executeTranslateMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("turns a failed merged fallback into a non-retryable error without individual fallback", async () => {
+    ensureInitializedConfigMock.mockResolvedValue({
+      ...DEFAULT_CONFIG,
+      translate: {
+        ...DEFAULT_CONFIG.translate,
+        batchQueueConfig: { maxCharactersPerBatch: 1000, maxItemsPerBatch: 10 },
+      },
+    })
+    const formatError = Object.assign(new Error("malformed result"), { inlineFormat: true })
+    executeInlineSmartFilterTranslationMock.mockRejectedValue(formatError)
+    executeTranslateMock.mockRejectedValue(new Error("network down"))
+
+    const { setUpWebPageTranslationQueue } = await import("../translation-queues")
+    await setUpWebPageTranslationQueue()
+
+    const handler = getRegisteredMessageHandler("enqueueTranslateRequest")
+    await expect(handler({
+      data: {
+        text: "first",
+        langConfig: DEFAULT_CONFIG.language,
+        providerConfig: llmProvider,
+        scheduleAt: Date.now(),
+        hash: "failed-fallback-hash",
+        inlineSmartFilter: {
+          strategyVersion: 1,
+          hint: { tag: "p", role: null, ancestors: [] },
+        },
+      },
+    })).rejects.toThrow("Inline smart filter fallback failed: network down")
+    expect(executeTranslateMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("preserves fallback error metadata and the queue-stop policy", async () => {
+    ensureInitializedConfigMock.mockResolvedValue({
+      ...DEFAULT_CONFIG,
+      translate: {
+        ...DEFAULT_CONFIG.translate,
+        batchQueueConfig: { maxCharactersPerBatch: 1000, maxItemsPerBatch: 10 },
+      },
+    })
+    const { attachRequestErrorMeta, defaultRequestRetryPolicy, getRequestErrorMeta } = await import("@/utils/request/retry-policy")
+    const formatError = Object.assign(new Error("malformed result"), { inlineFormat: true })
+    executeInlineSmartFilterTranslationMock.mockRejectedValue(formatError)
+    executeTranslateMock.mockRejectedValue(attachRequestErrorMeta(new Error("Unauthorized"), {
+      statusCode: 401,
+      responseHeaders: { "www-authenticate": "Bearer realm=\"test\"" },
+    }))
+
+    const { setUpWebPageTranslationQueue } = await import("../translation-queues")
+    await setUpWebPageTranslationQueue()
+
+    const handler = getRegisteredMessageHandler("enqueueTranslateRequest")
+    let failure: unknown
+    try {
+      await handler({
+        data: {
+          text: "first",
+          langConfig: DEFAULT_CONFIG.language,
+          providerConfig: llmProvider,
+          scheduleAt: Date.now(),
+          hash: "metadata-fallback-hash",
+          inlineSmartFilter: {
+            strategyVersion: 1,
+            hint: { tag: "p", role: null, ancestors: [] },
+          },
+        },
+      })
+    }
+    catch (error) {
+      failure = error
+    }
+
+    expect(executeInlineSmartFilterTranslationMock).toHaveBeenCalledTimes(1)
+    expect(executeTranslateMock).toHaveBeenCalledTimes(1)
+    expect(getRequestErrorMeta(failure)).toMatchObject({
+      statusCode: 401,
+      isRetryable: false,
+      responseHeaders: { "www-authenticate": "Bearer realm=\"test\"" },
+    })
+    expect(defaultRequestRetryPolicy.decide(failure, {
+      retryCount: 0,
+      maxRetries: 2,
+      baseRetryDelayMs: 1000,
+      now: Date.now(),
+    })).toEqual({ action: "fail", failQueue: true })
   })
 
   it("normalizes cached Google translations before returning them", async () => {

@@ -394,20 +394,14 @@ options:
         enabled: AI Akıllı Bağlam Çevirisi etkin
         noProvider: Önce bir LLM sağlayıcısı seçin
     smartFilter:
-      description: "Seçilen içerikte menüleri ve düğmeleri atlar, makaleleri ve yorumları korur."
+      description: "Sayfa çevirisiyle aynı istekte menüleri ve düğmeleri atlar, makaleleri ve yorumları korur."
       enable: Menüleri ve düğmeleri yapay zekâyla filtrele
-      followProvider: Sayfa çeviri modelini kullan
-      followProviderDescription: Ayrı bir filtreleme modeli seçmek için kapatın.
-      provider: Filtreleme modeli
-      providerPlaceholder: Etkin bir yapay zekâ modeli seçin
-      costDescription: Yapay zekâya küçük sayfa örnekleri gönderilir. Ücret oluşabilir.
-      behaviorTitle: Nasıl çalışır
-      behaviorDescription: "Yapay zekâ yalnızca seçilen içeriği filtreler. Model kullanılamıyorsa, istek başarısızsa veya zaman aşımına uğrarsa seçilen kapsam çevrilir. Bazı içerikler iki dilde kalabilir."
       status:
-        noProvider: Yapay zekâ filtresi kullanılamıyor. Etkin bir yapay zekâ modeli seçin.
+        noProvider: Yapay zekâ filtresi için sayfa çevirisi etkin bir yapay zekâ modeli kullanmalıdır.
       summary:
         main: "Geçerli: yaygın gezinme alanlarını atla ve yapay zekâ filtresini uygula."
         all: "Geçerli: tüm sayfayı çevir, menüleri ve düğmeleri yapay zekâyla filtrele."
+
   system:
     title: Sistem
 

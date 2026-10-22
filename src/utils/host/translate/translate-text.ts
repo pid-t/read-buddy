@@ -2,6 +2,7 @@ import type { LangCodeISO6393, LangLevel } from "@read-frog/definitions"
 import type { Config } from "@/types/config/config"
 import type { ProviderConfig } from "@/types/config/provider"
 import type { WebPagePromptContext } from "@/types/content"
+import type { InlineSmartFilterRequestContext } from "@/types/smart-filter"
 import { LANG_CODE_TO_EN_NAME } from "@read-frog/definitions"
 import { toast } from "sonner"
 import { isAPIKeyOptionalProvider, isAPIProviderConfig, isLLMProviderConfig } from "@/types/config/provider"
@@ -118,6 +119,7 @@ export interface TranslateTextOptions {
   enableAIContentAware?: boolean
   extraHashTags?: string[]
   webPageContext?: WebPagePromptContext
+  inlineSmartFilter?: InlineSmartFilterRequestContext
 }
 
 /**
@@ -132,6 +134,7 @@ export async function translateTextCore(options: TranslateTextOptions): Promise<
     enableAIContentAware = false,
     extraHashTags = [],
     webPageContext,
+    inlineSmartFilter,
   } = options
 
   const preparedText = prepareTranslationText(text)
@@ -152,6 +155,11 @@ export async function translateTextCore(options: TranslateTextOptions): Promise<
   // Add extra hash tags for cache differentiation
   hashComponents.push(...extraHashTags)
 
+  if (inlineSmartFilter) {
+    hashComponents.push(`inlineSmartFilterV:${inlineSmartFilter.strategyVersion}`)
+    hashComponents.push(`inlineSmartFilterHint:${JSON.stringify(inlineSmartFilter.hint)}`)
+  }
+
   return await sendMessage("enqueueTranslateRequest", {
     text: preparedText,
     langConfig,
@@ -162,6 +170,7 @@ export async function translateTextCore(options: TranslateTextOptions): Promise<
     webDescription: normalizedWebPageContext?.webDescription,
     webContent: normalizedWebPageContext?.webContent,
     webSummary: normalizedWebPageContext?.webSummary,
+    inlineSmartFilter,
   })
 }
 

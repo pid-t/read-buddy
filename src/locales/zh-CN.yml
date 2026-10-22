@@ -339,25 +339,14 @@ options:
         enabled: AI 智能上下文翻译已启用
         noProvider: 请先选择 LLM Provider
     smartFilter:
-      description: 在所选内容中跳过菜单和按钮，保留正文、评论。
+      description: 使用网页翻译模型，在同一次请求中跳过菜单和按钮，保留正文、评论。
       enable: AI 过滤菜单和按钮
-      waiting: 正在识别内容
-      translateNow: 跳过筛选
-      close: 关闭网页翻译
-      timeoutSeconds: 筛选超时（秒）
-      timeoutDescription: 超时后按所选范围继续翻译。
-      followProvider: 使用网页翻译模型
-      followProviderDescription: 关闭后可单独选择过滤模型。
-      provider: 过滤模型
-      providerPlaceholder: 选择已启用的 AI 模型
-      costDescription: 发送少量页面内容给 AI，可能产生费用。
-      behaviorTitle: 工作方式
-      behaviorDescription: AI 仅过滤所选内容。模型不可用、请求失败或超时时，按所选范围翻译；部分内容可能保留双语显示。
       status:
-        noProvider: AI 过滤暂不可用，请选择已启用的 AI 模型。
+        noProvider: AI 过滤需要网页翻译使用已启用的 AI 模型。
       summary:
         main: 当前：跳过常见导航，并启用 AI 过滤。
         all: 当前：整页翻译，AI 过滤菜单和按钮。
+
   system:
     title: 系统
 

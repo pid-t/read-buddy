@@ -44,6 +44,7 @@ docs/*
 !docs/smart-page-translation-design.md
 !docs/smart-page-translation-review.md
 !docs/smart-page-translation-tasks.md
+!docs/inline-smart-page-translation-implementation.md
 
 /repos
 

@@ -1,4 +1,3 @@
-import type { SmartFilterPageState } from "../../smart-filter/page-state"
 import type { Config } from "@/types/config/config"
 import {
   BLOCK_ATTRIBUTE,
@@ -14,12 +13,9 @@ export async function translateWalkedElement(
   walkId: string,
   config: Config,
   toggle: boolean = false,
-  smartFilter?: SmartFilterPageState,
+  inlineSmartFilter: boolean = false,
 ): Promise<void> {
   if (!element.isConnected)
-    return
-
-  if (smartFilter?.isNodeSkipped(element))
     return
 
   if (!toggle && element.querySelector(`.${CONTENT_WRAPPER_CLASS}`))
@@ -45,26 +41,18 @@ export async function translateWalkedElement(
     const isFlexParent = computedStyle.display.includes("flex")
 
     if (!hasBlockNodeChild) {
-      promises.push(translateNodes([element], walkId, toggle, config, false, smartFilter))
+      promises.push(translateNodes([element], walkId, toggle, config, false, inlineSmartFilter))
     }
     else {
       // prevent children change during iteration
       const children = [...element.childNodes]
       let consecutiveInlineNodes: ChildNode[] = []
       for (const child of children) {
-        if (smartFilter?.isNodeSkipped(child)) {
-          if (consecutiveInlineNodes.length) {
-            promises.push(translateNodes(consecutiveInlineNodes, walkId, toggle, config, !isFlexParent, smartFilter))
-            consecutiveInlineNodes = []
-          }
-          continue
-        }
-
         if (isTransNode(child) && isBlockTransNode(child) && !isTextNode(child)) {
           // force the children to be block translation style unless the parent is a flex parent
-          promises.push(translateNodes(consecutiveInlineNodes, walkId, toggle, config, !isFlexParent, smartFilter))
+          promises.push(translateNodes(consecutiveInlineNodes, walkId, toggle, config, !isFlexParent, inlineSmartFilter))
           consecutiveInlineNodes = []
-          promises.push(translateWalkedElement(child, walkId, config, toggle, smartFilter))
+          promises.push(translateWalkedElement(child, walkId, config, toggle, inlineSmartFilter))
         }
         else {
           consecutiveInlineNodes.push(child)
@@ -72,21 +60,21 @@ export async function translateWalkedElement(
       }
 
       if (consecutiveInlineNodes.length) {
-        promises.push(translateNodes(consecutiveInlineNodes, walkId, toggle, config, !isFlexParent, smartFilter))
+        promises.push(translateNodes(consecutiveInlineNodes, walkId, toggle, config, !isFlexParent, inlineSmartFilter))
         consecutiveInlineNodes = []
       }
     }
   }
   else {
     for (const child of element.childNodes) {
-      if (isHTMLElement(child) && !smartFilter?.isNodeSkipped(child)) {
-        promises.push(translateWalkedElement(child, walkId, config, toggle, smartFilter))
+      if (isHTMLElement(child)) {
+        promises.push(translateWalkedElement(child, walkId, config, toggle, inlineSmartFilter))
       }
     }
     if (element.shadowRoot) {
       for (const child of element.shadowRoot.children) {
-        if (isHTMLElement(child) && !smartFilter?.isNodeSkipped(child)) {
-          promises.push(translateWalkedElement(child, walkId, config, toggle, smartFilter))
+        if (isHTMLElement(child)) {
+          promises.push(translateWalkedElement(child, walkId, config, toggle, inlineSmartFilter))
         }
       }
     }

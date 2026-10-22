@@ -1,24 +1,21 @@
-import type { SmartRegion } from "@/utils/host/smart-filter/types"
+/** Bumped when the inline filtering rules or prompt contract change. */
+export const INLINE_SMART_FILTER_STRATEGY_VERSION = 1
 
-export interface SmartFilterClassifyRequest {
-  requestId: string
-  regions: SmartRegion[]
-  /** Hash of page/config/provider inputs used to scope the per-tab result cache. */
-  cacheKey?: string
-  /** Absolute deadline in epoch milliseconds, including network and model time. */
-  deadline: number
+/** Serialized structure of one translation unit. DOM nodes stay in the content script. */
+export interface InlineSmartFilterAncestorHint {
+  tag: string
+  role: string | null
+  classes?: string[]
 }
 
-export type SmartFilterClassifyStatus = "success" | "error" | "timeout" | "cancel"
-
-export interface SmartFilterClassifyResponse {
-  skipIds: string[]
-  /** Diagnostic outcome of the background classification. */
-  status?: SmartFilterClassifyStatus
-  /** Stable diagnostic code for a failed classification. */
-  errorCode?: string
+export interface InlineSmartFilterUnitHint {
+  tag: string
+  role: string | null
+  ancestors: InlineSmartFilterAncestorHint[]
 }
 
-export interface SmartFilterCancelRequest {
-  requestId: string
+/** Optional marker attached only by automatic page translation. */
+export interface InlineSmartFilterRequestContext {
+  strategyVersion: number
+  hint: InlineSmartFilterUnitHint
 }

@@ -1,5 +1,6 @@
 import type { LangCodeISO6393 } from "@read-frog/definitions"
 import type { Config } from "@/types/config/config"
+import type { InlineSmartFilterRequestContext } from "@/types/smart-filter"
 import { isEnabledLLMProviderConfig } from "@/types/config/provider"
 import { resolveProviderConfig } from "@/utils/constants/feature-providers"
 import { detectLanguage } from "@/utils/content/language"
@@ -59,6 +60,7 @@ async function translateTextUsingPageConfig(
   options: {
     extraHashTags?: string[]
     webPageContext?: { webTitle?: string | null, webDescription?: string | null, webContent?: string | null, webSummary?: string | null }
+    inlineSmartFilter?: InlineSmartFilterRequestContext
   } = {},
 ): Promise<string> {
   const preparedText = prepareTranslationText(text)
@@ -97,20 +99,26 @@ async function translateTextUsingPageConfig(
     enableAIContentAware: config.translate.enableAIContentAware,
     extraHashTags: options.extraHashTags,
     webPageContext: options.webPageContext,
+    inlineSmartFilter: options.inlineSmartFilter,
   })
 }
 
 /**
  * Page translation — uses FEATURE_PROVIDER_DEFS['translate'].
  * Includes skip-language logic (page translation only).
+ * `inlineSmartFilter` is only passed by automatic page translation.
  */
-export async function translateTextForPage(text: string): Promise<string> {
+export async function translateTextForPage(
+  text: string,
+  options: { inlineSmartFilter?: InlineSmartFilterRequestContext } = {},
+): Promise<string> {
   const config = await getConfigOrThrow()
   const providerConfig = resolveProviderConfig(config, "translate")
   const webPageContext = await getWebPagePromptContext(providerConfig, config.translate.enableAIContentAware, true)
 
   return translateTextUsingPageConfig(config, text, {
     webPageContext,
+    inlineSmartFilter: options.inlineSmartFilter,
   })
 }
 

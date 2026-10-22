@@ -1,3 +1,4 @@
+import type { Config } from "@/types/config/config"
 import { describe, expect, it } from "vitest"
 import { configSchema } from "@/types/config/config"
 import { CONFIG_SCHEMA_VERSION, DEFAULT_CONFIG } from "@/utils/constants/config"
@@ -10,23 +11,24 @@ describe("migrateConfig", () => {
   it("ships the AI smart filter disabled by default", () => {
     expect(DEFAULT_CONFIG.translate.page.smartFilter).toEqual({
       enableAI: false,
-      providerId: null,
-      timeoutSeconds: 10,
     })
   })
 
-  it("defaults and validates the smart filter timeout for existing configs", () => {
-    const legacyConfig = structuredClone(DEFAULT_CONFIG)
-    delete (legacyConfig.translate.page.smartFilter as { timeoutSeconds?: number }).timeoutSeconds
+  it("keeps legacy smart filter fields readable but strips them from the current config", () => {
+    const legacyConfig = structuredClone(DEFAULT_CONFIG) as Config & {
+      translate: { page: { smartFilter: Record<string, unknown> } }
+    }
+    legacyConfig.translate.page.smartFilter = {
+      enableAI: true,
+      providerId: "openai-default",
+      timeoutSeconds: 30,
+    }
 
-    expect(configSchema.parse(legacyConfig).translate.page.smartFilter.timeoutSeconds).toBe(10)
-    expect(configSchema.safeParse({ ...legacyConfig, translate: {
-      ...legacyConfig.translate,
-      page: {
-        ...legacyConfig.translate.page,
-        smartFilter: { ...legacyConfig.translate.page.smartFilter, timeoutSeconds: 1.5 },
-      },
-    } }).success).toBe(false)
+    const parsed = configSchema.parse(legacyConfig)
+
+    expect(parsed.translate.page.smartFilter).toEqual({ enableAI: true })
+    expect(parsed.translate.providerId).toBe(DEFAULT_CONFIG.translate.providerId)
+    expect(parsed.language).toEqual(DEFAULT_CONFIG.language)
   })
 
   it("should throw ConfigVersionTooNewError when schema version is newer than current", async () => {

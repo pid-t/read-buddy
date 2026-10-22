@@ -12,6 +12,13 @@ const migratedProvidersConfig = [
 
 const migratedConfig = {
   ...DEFAULT_CONFIG,
+  translate: {
+    ...DEFAULT_CONFIG.translate,
+    page: {
+      ...DEFAULT_CONFIG.translate.page,
+      smartFilter: { enableAI: false, providerId: null },
+    },
+  },
   providersConfig: migratedProvidersConfig,
 }
 

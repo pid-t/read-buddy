@@ -339,25 +339,14 @@ options:
         enabled: AI 智慧上下文翻譯已啟用
         noProvider: 請先選擇 LLM 提供者
     smartFilter:
-      description: 在所選內容中略過選單和按鈕，保留內文、留言。
+      description: 使用網頁翻譯模型，在同一次請求中略過選單和按鈕，保留內文、留言。
       enable: AI 過濾選單和按鈕
-      waiting: 正在識別內容
-      translateNow: 略過篩選
-      close: 關閉網頁翻譯
-      timeoutSeconds: 篩選逾時（秒）
-      timeoutDescription: 逾時後依所選範圍繼續翻譯。
-      followProvider: 使用網頁翻譯模型
-      followProviderDescription: 關閉後可單獨選擇過濾模型。
-      provider: 過濾模型
-      providerPlaceholder: 選擇已啟用的 AI 模型
-      costDescription: 傳送少量網頁內容給 AI，可能產生費用。
-      behaviorTitle: 運作方式
-      behaviorDescription: AI 僅過濾所選內容。模型無法使用、請求失敗或逾時時，依所選範圍翻譯；部分內容可能保留雙語顯示。
       status:
-        noProvider: AI 過濾暫時無法使用，請選擇已啟用的 AI 模型。
+        noProvider: AI 過濾需要網頁翻譯使用已啟用的 AI 模型。
       summary:
         main: 目前：略過常見導覽，並啟用 AI 過濾。
         all: 目前：整頁翻譯，AI 過濾選單和按鈕。
+
   system:
     title: 系統
 

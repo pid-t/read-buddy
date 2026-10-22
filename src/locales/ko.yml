@@ -348,20 +348,14 @@ options:
         enabled: AI 스마트 컨텍스트 번역이 활성화됨
         noProvider: 먼저 LLM 제공업체를 선택하세요
     smartFilter:
-      description: 선택한 내용에서 메뉴와 버튼을 건너뛰고 본문과 댓글을 유지합니다.
+      description: 페이지 번역과 같은 요청에서 메뉴와 버튼을 건너뛰고 본문과 댓글을 유지합니다.
       enable: AI로 메뉴와 버튼 필터링
-      followProvider: 페이지 번역 모델 사용
-      followProviderDescription: 끄면 별도의 필터링 모델을 선택할 수 있습니다.
-      provider: 필터링 모델
-      providerPlaceholder: 활성화된 AI 모델 선택
-      costDescription: 소량의 페이지 내용을 AI에 전송하며 요금이 발생할 수 있습니다.
-      behaviorTitle: 작동 방식
-      behaviorDescription: "AI는 선택한 내용만 필터링합니다. 모델 사용 불가, 요청 실패 또는 시간 초과 시 선택한 범위로 번역합니다. 일부 내용은 이중 언어로 표시될 수 있습니다."
       status:
-        noProvider: AI 필터링을 사용할 수 없습니다. 활성화된 AI 모델을 선택하세요.
+        noProvider: AI 필터링을 사용하려면 페이지 번역에 활성화된 AI 모델이 필요합니다.
       summary:
         main: "현재: 일반 탐색 영역을 건너뛰고 AI 필터링 적용."
         all: "현재: 전체 페이지 번역 및 AI로 메뉴와 버튼 필터링."
+
   system:
     title: 시스템
 

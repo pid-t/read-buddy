@@ -1,7 +1,7 @@
 import { langCodeISO6393Schema } from "@read-frog/definitions"
 import { z } from "zod"
 import { HOTKEYS } from "@/utils/constants/hotkeys"
-import { DEFAULT_SMART_FILTER_TIMEOUT_SECONDS, MAX_PRELOAD_MARGIN, MAX_PRELOAD_THRESHOLD, MAX_SMART_FILTER_TIMEOUT_SECONDS, MIN_BATCH_CHARACTERS, MIN_BATCH_ITEMS, MIN_CHARACTERS_PER_NODE, MIN_PRELOAD_MARGIN, MIN_PRELOAD_THRESHOLD, MIN_SMART_FILTER_TIMEOUT_SECONDS, MIN_TRANSLATE_CAPACITY, MIN_TRANSLATE_RATE, MIN_WORDS_PER_NODE } from "@/utils/constants/translate"
+import { MAX_PRELOAD_MARGIN, MAX_PRELOAD_THRESHOLD, MIN_BATCH_CHARACTERS, MIN_BATCH_ITEMS, MIN_CHARACTERS_PER_NODE, MIN_PRELOAD_MARGIN, MIN_PRELOAD_THRESHOLD, MIN_TRANSLATE_CAPACITY, MIN_TRANSLATE_RATE, MIN_WORDS_PER_NODE } from "@/utils/constants/translate"
 import { TRANSLATION_NODE_STYLE } from "@/utils/constants/translation-node-style"
 import { isPageTranslationShortcutEmpty, isValidConfiguredPageTranslationShortcut } from "@/utils/page-translation-shortcut"
 
@@ -86,8 +86,6 @@ export const pageTranslationShortcutSchema = z.string().superRefine((shortcut, c
 
 export const smartFilterConfigSchema = z.object({
   enableAI: z.boolean(),
-  providerId: z.string().nullable(),
-  timeoutSeconds: z.number().int().min(MIN_SMART_FILTER_TIMEOUT_SECONDS).max(MAX_SMART_FILTER_TIMEOUT_SECONDS).default(DEFAULT_SMART_FILTER_TIMEOUT_SECONDS),
 })
 export type SmartFilterConfig = z.infer<typeof smartFilterConfigSchema>
 

@@ -414,20 +414,14 @@ options:
         enabled: La traducción con contexto inteligente de IA está activada
         noProvider: Selecciona primero un proveedor LLM
     smartFilter:
-      description: Omite menús y botones del contenido seleccionado y conserva artículos y comentarios.
+      description: Filtra menús y botones en la misma solicitud de traducción de la página. Conserva artículos y comentarios.
       enable: Filtrar menús y botones con IA
-      followProvider: Usar el modelo de traducción de páginas
-      followProviderDescription: Desactiva esta opción para elegir otro modelo para el filtro.
-      provider: Modelo para el filtro
-      providerPlaceholder: Selecciona un modelo de IA habilitado
-      costDescription: Envía pequeñas muestras de la página a la IA. Puede generar costes.
-      behaviorTitle: Cómo funciona
-      behaviorDescription: "La IA solo filtra el contenido seleccionado. Si el modelo no está disponible o la solicitud falla o agota el tiempo, se usa el ámbito elegido. Parte del contenido puede mantenerse en ambos idiomas."
       status:
-        noProvider: El filtro con IA no está disponible. Selecciona un modelo de IA habilitado.
+        noProvider: El filtro con IA requiere que la traducción de la página use un modelo de IA habilitado.
       summary:
         main: "Actual: omitir la navegación habitual y aplicar el filtro con IA."
         all: "Actual: traducir toda la página y filtrar menús y botones con IA."
+
   system:
     title: Sistema
 

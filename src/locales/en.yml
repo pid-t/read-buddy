@@ -395,25 +395,14 @@ options:
         enabled: AI Smart Context Translation is enabled
         noProvider: Please select an LLM provider first
     smartFilter:
-      description: Skip menus and buttons within the selected content. Keep articles and comments.
+      description: Filter menus and buttons in the same page translation request. Keep articles and comments.
       enable: Filter menus and buttons with AI
-      waiting: Identifying content
-      translateNow: Skip filtering
-      close: Stop page translation
-      timeoutSeconds: Filter timeout (seconds)
-      timeoutDescription: When time runs out, translation continues with the selected scope.
-      followProvider: Use page translation model
-      followProviderDescription: Turn off to choose a separate filtering model.
-      provider: Filtering model
-      providerPlaceholder: Select an enabled AI model
-      costDescription: Sends small page samples to AI. Usage charges may apply.
-      behaviorTitle: How it works
-      behaviorDescription: "AI filters only the selected content. If the model is unavailable or a request fails or times out, translation uses the selected scope. Some content may remain bilingual."
       status:
-        noProvider: AI filtering is unavailable. Select an enabled AI model.
+        noProvider: AI filtering requires the page translation to use an enabled AI model.
       summary:
         main: "Current: skip common navigation and apply AI filtering."
         all: "Current: translate the entire page, with AI filtering menus and buttons."
+
   system:
     title: System
 

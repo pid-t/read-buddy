@@ -346,20 +346,14 @@ options:
         enabled: AI スマートコンテキスト翻訳は有効です
         noProvider: 先に LLM プロバイダーを選択してください
     smartFilter:
-      description: 選択した内容からメニューとボタンを除外し、本文やコメントを保持します。
+      description: ページ翻訳と同じリクエストでメニューとボタンを除外し、本文やコメントを保持します。
       enable: AI でメニューとボタンを除外
-      followProvider: ページ翻訳モデルを使用
-      followProviderDescription: オフにするとフィルター用のモデルを個別に選べます。
-      provider: フィルター用モデル
-      providerPlaceholder: 有効な AI モデルを選択
-      costDescription: 少量のページ内容を AI に送信します。料金が発生する場合があります。
-      behaviorTitle: 動作の説明
-      behaviorDescription: AI は選択した内容のみを絞り込みます。モデルが利用できない場合やリクエストの失敗・タイムアウト時は、選択範囲で翻訳します。一部の内容は二言語で表示される場合があります。
       status:
-        noProvider: AI フィルターを利用できません。有効な AI モデルを選択してください。
+        noProvider: AI フィルターを使うには、ページ翻訳で有効な AI モデルを選択してください。
       summary:
         main: 現在：一般的なナビゲーションをスキップし、AI フィルターを適用。
         all: 現在：ページ全体を翻訳し、AI でメニューとボタンを除外。
+
   system:
     title: システム
 

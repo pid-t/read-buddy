@@ -2,7 +2,9 @@ import type { Config } from "@/types/config/config"
 import type { LLMProviderConfig, ProviderConfig } from "@/types/config/provider"
 import type { BatchQueueConfig, RequestQueueConfig } from "@/types/config/translate"
 import type { SubtitlePromptContext, WebPagePromptContext } from "@/types/content"
+import type { InlineSmartFilterRequestContext } from "@/types/smart-filter"
 import type { PromptResolver } from "@/utils/host/translate/api/ai"
+import { LANG_CODE_TO_EN_NAME } from "@read-frog/definitions"
 import { isEnabledLLMProviderConfig, isLLMProviderConfig } from "@/types/config/provider"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 import { BATCH_SEPARATOR, BATCH_SEPARATOR_LINE_PATTERN } from "@/utils/constants/prompt"
@@ -10,6 +12,7 @@ import { generateArticleSummary } from "@/utils/content/summary"
 import { cleanText } from "@/utils/content/utils"
 import { db } from "@/utils/db/dexie/db"
 import { Sha256Hex } from "@/utils/hash"
+import { executeInlineSmartFilterTranslation, isInlineSmartFilterResultError } from "@/utils/host/translate/api/inline-smart-filter"
 import { microsoftTranslate } from "@/utils/host/translate/api/microsoft"
 import { executeTranslate } from "@/utils/host/translate/execute-translate"
 import { normalizePromptContextValue } from "@/utils/host/translate/translate-text"
@@ -20,6 +23,7 @@ import { getSubtitlesTranslatePrompt } from "@/utils/prompts/subtitles"
 import { getTranslatePrompt } from "@/utils/prompts/translate"
 import { BatchQueue } from "@/utils/request/batch-queue"
 import { RequestQueue } from "@/utils/request/request-queue"
+import { attachRequestErrorMeta, getRequestErrorMeta } from "@/utils/request/retry-policy"
 import { ensureInitializedConfig } from "./config"
 
 export function parseBatchResult(result: string): string[] {
@@ -40,6 +44,53 @@ export async function executeBatchTranslation<TContext>(
   const batchText = texts.join(`\n\n${BATCH_SEPARATOR}\n\n`)
   const result = await executeTranslate(batchText, langConfig, providerConfig, promptResolver, { isBatch: true, context })
   return parseBatchResult(result)
+}
+
+/**
+ * Merged filtering and translation for one batch. A structural result error
+ * falls back to the normal translation prompt once; the fallback must return
+ * one non-empty translation per unit. Any further failure becomes a
+ * non-retryable error so the batch queue does not retry or fan out again.
+ */
+async function executeInlineBatchTranslation<TContext>(
+  dataList: TranslateBatchData<TContext>[],
+  promptResolver: PromptResolver<TContext>,
+): Promise<string[]> {
+  const { langConfig, providerConfig, context } = dataList[0]
+  if (!isLLMProviderConfig(providerConfig)) {
+    throw new Error("Inline smart filter requires an LLM provider")
+  }
+
+  try {
+    return await executeInlineSmartFilterTranslation(
+      dataList,
+      LANG_CODE_TO_EN_NAME[langConfig.targetCode],
+      providerConfig,
+      promptResolver,
+      context,
+    )
+  }
+  catch (error) {
+    if (!isInlineSmartFilterResultError(error))
+      throw error
+
+    logger.warn("Inline smart filter result was invalid; falling back to normal batch translation", error.message)
+  }
+
+  try {
+    const fallback = await executeBatchTranslation(dataList, promptResolver)
+    if (fallback.length !== dataList.length || fallback.some(text => !text.trim())) {
+      throw new Error(`Fallback returned ${fallback.length} results for ${dataList.length} units`)
+    }
+    return fallback
+  }
+  catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    throw attachRequestErrorMeta(
+      new Error(`Inline smart filter fallback failed: ${message}`),
+      { ...getRequestErrorMeta(error), isRetryable: false },
+    )
+  }
 }
 
 async function getOrGenerateWebPageSummary(
@@ -151,6 +202,7 @@ export interface TranslateBatchData<TContext = unknown> {
   hash: string
   scheduleAt: number
   context?: TContext
+  inlineSmartFilter?: InlineSmartFilterRequestContext
 }
 
 interface TranslationQueueSetupConfig<TContext = unknown> {
@@ -182,6 +234,9 @@ async function createTranslationQueues<TContext>(config: TranslationQueueSetupCo
       return Sha256Hex(
         `${data.langConfig.sourceCode}-${data.langConfig.targetCode}-${data.providerConfig.id}`,
         data.context ? JSON.stringify(data.context) : "",
+        data.inlineSmartFilter
+          ? `inlineSmartFilter:${data.inlineSmartFilter.strategyVersion}`
+          : "plainTranslation",
       )
     },
     getCharacters: data => data.text.length,
@@ -190,14 +245,20 @@ async function createTranslationQueues<TContext>(config: TranslationQueueSetupCo
       const earliestScheduleAt = Math.min(...dataList.map(d => d.scheduleAt))
 
       const batchThunk = async (): Promise<string[]> => {
-        return await executeBatchTranslation(dataList, promptResolver)
+        if (dataList.some(d => d.inlineSmartFilter))
+          return executeInlineBatchTranslation(dataList, promptResolver)
+        return executeBatchTranslation(dataList, promptResolver)
       }
 
       return requestQueue.enqueue(batchThunk, earliestScheduleAt, hash)
     },
     executeIndividual: async (data) => {
-      const { text, langConfig, providerConfig, hash, scheduleAt, context } = data
+      const { text, langConfig, providerConfig, hash, scheduleAt, context, inlineSmartFilter } = data
       const thunk = async () => {
+        if (inlineSmartFilter) {
+          const results = await executeInlineBatchTranslation([data], promptResolver)
+          return results[0]
+        }
         return executeTranslate(text, langConfig, providerConfig, promptResolver, { context })
       }
       return requestQueue.enqueue(thunk, scheduleAt, hash)
@@ -226,7 +287,7 @@ export async function setUpWebPageTranslationQueue() {
   })
 
   onMessage("enqueueTranslateRequest", async (message) => {
-    const { data: { text, langConfig, providerConfig, scheduleAt, hash, webTitle, webDescription, webContent, webSummary } } = message
+    const { data: { text, langConfig, providerConfig, scheduleAt, hash, webTitle, webDescription, webContent, webSummary, inlineSmartFilter } } = message
 
     // Check cache first
     if (hash) {
@@ -245,7 +306,7 @@ export async function setUpWebPageTranslationQueue() {
     }
 
     if (shouldUseBatchQueue(providerConfig)) {
-      const data = { text, langConfig, providerConfig, hash, scheduleAt, context }
+      const data = { text, langConfig, providerConfig, hash, scheduleAt, context, inlineSmartFilter }
       result = await batchQueue.enqueue(data)
     }
     else {
@@ -254,8 +315,8 @@ export async function setUpWebPageTranslationQueue() {
       result = await requestQueue.enqueue(thunk, scheduleAt, hash)
     }
 
-    // Cache the translation result if successful
-    if (result && hash) {
+    // Only the merged branch may cache an empty result (an explicit skip).
+    if (hash && (result || inlineSmartFilter)) {
       result = normalizeTranslationOutput(providerConfig, result)
       await db.translationCache.put({
         key: hash,

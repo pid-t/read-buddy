@@ -5,20 +5,17 @@ import { isEnabledLLMProviderConfig } from "@/types/config/provider"
 import { CONFIG_STORAGE_KEY } from "@/utils/constants/config"
 
 /**
- * Include the complete effective provider config so availability, model and
- * request settings such as base URL or API key changes refresh an active page.
+ * Include the complete effective translation provider config so availability,
+ * model and request settings such as base URL or API key changes refresh an
+ * active page while AI filtering is enabled.
  */
 function getSmartFilterSignature(config: Config): string {
-  const smartFilter = config.translate.page?.smartFilter
-  const providerId = smartFilter?.providerId ?? config.translate.providerId
-  const provider = config.providersConfig?.find(p => p.id === providerId)
+  const provider = config.providersConfig?.find(p => p.id === config.translate.providerId)
   const llmProvider = provider && isEnabledLLMProviderConfig(provider) ? provider : null
 
   return JSON.stringify({
-    enableAI: smartFilter?.enableAI ?? false,
-    selectedProviderId: smartFilter?.providerId ?? null,
-    timeoutSeconds: smartFilter?.timeoutSeconds,
-    providerId,
+    enableAI: config.translate.page.smartFilter.enableAI,
+    providerId: config.translate.providerId,
     providerEnabled: provider?.enabled ?? false,
     provider: llmProvider,
   })
@@ -38,13 +35,13 @@ export function handleTranslationModeChange(
 
   const modeChanged = newConfig.translate.mode !== oldConfig.translate.mode
   const providerChanged = newConfig.translate.providerId !== oldConfig.translate.providerId
-  const smartFilterSettingsChanged = newConfig.translate.page?.smartFilter?.enableAI !== oldConfig.translate.page?.smartFilter?.enableAI
-    || newConfig.translate.page?.smartFilter?.providerId !== oldConfig.translate.page?.smartFilter?.providerId
+  const smartFilterEnabledChanged = newConfig.translate.page.smartFilter.enableAI
+    !== oldConfig.translate.page.smartFilter.enableAI
   // Only provider availability matters while the feature is enabled; changing
   // providers on an inactive feature should not restart normal translation.
-  const smartFilterProviderChanged = (newConfig.translate.page?.smartFilter?.enableAI || oldConfig.translate.page?.smartFilter?.enableAI)
+  const smartFilterProviderChanged = (newConfig.translate.page.smartFilter.enableAI || oldConfig.translate.page.smartFilter.enableAI)
     && getSmartFilterSignature(newConfig) !== getSmartFilterSignature(oldConfig)
-  const smartFilterChanged = smartFilterSettingsChanged || smartFilterProviderChanged
+  const smartFilterChanged = smartFilterEnabledChanged || smartFilterProviderChanged
 
   if ((modeChanged || providerChanged || smartFilterChanged) && manager.isActive) {
     manager.stop()

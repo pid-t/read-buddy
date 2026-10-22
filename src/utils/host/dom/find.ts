@@ -1,4 +1,3 @@
-import type { SmartFilterPageState } from "../smart-filter/page-state"
 import type { Point } from "@/types/dom"
 
 import { getLocalConfig } from "@/utils/config/storage"
@@ -118,18 +117,10 @@ export function deepQueryTopLevelSelector(element: HTMLElement | ShadowRoot | Do
   return result
 }
 
-export async function unwrapDeepestOnlyHTMLChild(element: HTMLElement, smartFilter?: SmartFilterPageState) {
+export async function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
   const config = await getLocalConfig() ?? DEFAULT_CONFIG
   let currentElement = element
   while (currentElement) {
-    if (smartFilter && (
-      smartFilter.isNodeSkipped(currentElement)
-      || smartFilter.containsSkippedNode(currentElement)
-      || smartFilter.containsPendingNode(currentElement)
-    )) {
-      break
-    }
-
     smashTruncationStyle(currentElement)
 
     const shouldKeepNode = (child: ChildNode) => {

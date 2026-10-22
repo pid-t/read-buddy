@@ -24,8 +24,6 @@ vi.mock("wxt/utils/storage", () => ({
 interface MockConfigOptions {
   providerId?: string
   enableAI?: boolean
-  smartFilterProviderId?: string | null
-  smartFilterTimeoutSeconds?: number
   providersConfig?: Config["providersConfig"]
 }
 
@@ -38,12 +36,10 @@ function createMockConfig(mode: "bilingual" | "translationOnly", options: MockCo
       page: {
         smartFilter: {
           enableAI: options.enableAI ?? false,
-          providerId: options.smartFilterProviderId ?? null,
-          timeoutSeconds: options.smartFilterTimeoutSeconds ?? 10,
         },
       },
     },
-  } as Config
+  } as unknown as Config
 }
 
 function createLLMProvider(enabled: boolean, baseURL = "https://api.deepseek.com/v1"): ProviderConfig {
@@ -125,35 +121,17 @@ describe("handleTranslationModeChange", () => {
     expect(manager.start).toHaveBeenCalled()
   })
 
-  it("re-translates when the smart filter settings change", () => {
+  it("re-translates when the AI filtering switch changes", () => {
     const manager = createMockManager(true)
 
     handleTranslationModeChange(
-      createMockConfig("bilingual", { enableAI: true, smartFilterProviderId: "openai-default" }),
+      createMockConfig("bilingual", { enableAI: true }),
       createMockConfig("bilingual", { enableAI: false }),
       manager,
     )
 
     expect(manager.stop).toHaveBeenCalled()
     expect(manager.start).toHaveBeenCalled()
-  })
-
-  it("re-translates for a timeout change only while smart filtering is enabled", () => {
-    const activeManager = createMockManager(true)
-    handleTranslationModeChange(
-      createMockConfig("bilingual", { enableAI: true, smartFilterTimeoutSeconds: 20 }),
-      createMockConfig("bilingual", { enableAI: true, smartFilterTimeoutSeconds: 10 }),
-      activeManager,
-    )
-    expect(activeManager.stop).toHaveBeenCalled()
-
-    const inactiveFeatureManager = createMockManager(true)
-    handleTranslationModeChange(
-      createMockConfig("bilingual", { enableAI: false, smartFilterTimeoutSeconds: 20 }),
-      createMockConfig("bilingual", { enableAI: false, smartFilterTimeoutSeconds: 10 }),
-      inactiveFeatureManager,
-    )
-    expect(inactiveFeatureManager.stop).not.toHaveBeenCalled()
   })
 
   it("re-translates when the effective smart filter provider becomes available", () => {

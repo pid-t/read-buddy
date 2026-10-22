@@ -10,7 +10,6 @@ import { setupContextMenu } from "./context-menu"
 import { cleanupAllAiSegmentationCache, cleanupAllSummaryCache, cleanupAllTranslationCache } from "./db-cleanup"
 import { setupLLMGenerateTextMessageHandlers } from "./llm-generate-text"
 import { proxyFetch } from "./proxy-fetch"
-import { setupSmartFilterMessageHandlers } from "./smart-filter"
 import { setUpSubtitlesTranslationQueue, setUpWebPageTranslationQueue } from "./translation-queues"
 import { translationMessage } from "./translation-signal"
 
@@ -64,6 +63,5 @@ export default defineBackground({
 
     proxyFetch()
     setupLLMGenerateTextMessageHandlers()
-    setupSmartFilterMessageHandlers()
   },
 })

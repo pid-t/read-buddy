@@ -7,7 +7,7 @@ import type { Config } from "@/types/config/config"
 import type { ProviderConfig } from "@/types/config/provider"
 import type { BatchQueueConfig, RequestQueueConfig } from "@/types/config/translate"
 import type { ProxyRequest, ProxyResponse } from "@/types/proxy-fetch"
-import type { SmartFilterCancelRequest, SmartFilterClassifyRequest, SmartFilterClassifyResponse } from "@/types/smart-filter"
+import type { InlineSmartFilterRequestContext } from "@/types/smart-filter"
 import { defineExtensionMessaging } from "@webext-core/messaging"
 
 interface ProtocolMap {
@@ -30,14 +30,11 @@ interface ProtocolMap {
   // ask host to start page translation
   askManagerToTogglePageTranslation: (data: { enabled: boolean }) => void
   // request
-  enqueueTranslateRequest: (data: { text: string, langConfig: Config["language"], providerConfig: ProviderConfig, scheduleAt: number, hash: string, webTitle?: string | null, webDescription?: string | null, webContent?: string | null, webSummary?: string | null }) => Promise<string>
+  enqueueTranslateRequest: (data: { text: string, langConfig: Config["language"], providerConfig: ProviderConfig, scheduleAt: number, hash: string, webTitle?: string | null, webDescription?: string | null, webContent?: string | null, webSummary?: string | null, inlineSmartFilter?: InlineSmartFilterRequestContext }) => Promise<string>
   getOrGenerateWebPageSummary: (data: { webTitle: string, webContent: string, providerConfig: ProviderConfig }) => Promise<string | null>
   enqueueSubtitlesTranslateRequest: (data: { text: string, langConfig: Config["language"], providerConfig: ProviderConfig, scheduleAt: number, hash: string, webTitle?: string | null, webDescription?: string | null, summary?: string | null }) => Promise<string>
   getSubtitlesSummary: (data: { videoTitle: string, subtitlesContext: string, providerConfig: ProviderConfig }) => Promise<string | null>
   backgroundGenerateText: (data: BackgroundGenerateTextPayload) => Promise<BackgroundGenerateTextResponse>
-  // AI page smart filter
-  classifySmartFilterRegions: (data: SmartFilterClassifyRequest) => Promise<SmartFilterClassifyResponse>
-  cancelSmartFilterClassification: (data: SmartFilterCancelRequest) => void
   // AI subtitle segmentation
   aiSegmentSubtitles: (data: { jsonContent: string, providerId: string }) => Promise<string>
   setTranslateRequestQueueConfig: (data: Partial<RequestQueueConfig>) => void

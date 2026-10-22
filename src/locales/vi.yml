@@ -400,20 +400,14 @@ options:
         enabled: Đã bật tính năng dịch ngữ cảnh thông minh AI
         noProvider: Vui lòng chọn nhà cung cấp LLM trước
     smartFilter:
-      description: "Bỏ qua menu và nút trong nội dung đã chọn, giữ lại bài viết và bình luận."
+      description: "Lọc menu và nút trong cùng yêu cầu dịch trang, giữ lại bài viết và bình luận."
       enable: Lọc menu và nút bằng AI
-      followProvider: Dùng mô hình dịch trang
-      followProviderDescription: Tắt để chọn mô hình lọc riêng.
-      provider: Mô hình lọc
-      providerPlaceholder: Chọn mô hình AI đã bật
-      costDescription: "Gửi một ít nội dung trang đến AI, có thể phát sinh phí."
-      behaviorTitle: Cách hoạt động
-      behaviorDescription: "AI chỉ lọc nội dung đã chọn. Khi mô hình không khả dụng, yêu cầu thất bại hoặc hết thời gian chờ, bản dịch dùng phạm vi đã chọn. Một số nội dung có thể giữ dạng song ngữ."
       status:
-        noProvider: Bộ lọc AI không khả dụng. Hãy chọn mô hình AI đã bật.
+        noProvider: Bộ lọc AI yêu cầu bản dịch trang dùng một mô hình AI đã bật.
       summary:
         main: "Hiện tại: bỏ qua điều hướng phổ biến và áp dụng bộ lọc AI."
         all: "Hiện tại: dịch toàn bộ trang và lọc menu, nút bằng AI."
+
   system:
     title: Hệ thống
 
