@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { configSchema } from "@/types/config/config"
 import { CONFIG_SCHEMA_VERSION, DEFAULT_CONFIG } from "@/utils/constants/config"
 import { ConfigVersionTooNewError } from "../errors"
 import { migrateConfig } from "../migration"
@@ -10,7 +11,22 @@ describe("migrateConfig", () => {
     expect(DEFAULT_CONFIG.translate.page.smartFilter).toEqual({
       enableAI: false,
       providerId: null,
+      timeoutSeconds: 10,
     })
+  })
+
+  it("defaults and validates the smart filter timeout for existing configs", () => {
+    const legacyConfig = structuredClone(DEFAULT_CONFIG)
+    delete (legacyConfig.translate.page.smartFilter as { timeoutSeconds?: number }).timeoutSeconds
+
+    expect(configSchema.parse(legacyConfig).translate.page.smartFilter.timeoutSeconds).toBe(10)
+    expect(configSchema.safeParse({ ...legacyConfig, translate: {
+      ...legacyConfig.translate,
+      page: {
+        ...legacyConfig.translate.page,
+        smartFilter: { ...legacyConfig.translate.page.smartFilter, timeoutSeconds: 1.5 },
+      },
+    } }).success).toBe(false)
   })
 
   it("should throw ConfigVersionTooNewError when schema version is newer than current", async () => {

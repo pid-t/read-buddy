@@ -341,6 +341,11 @@ options:
     smartFilter:
       description: 在所選內容中略過選單和按鈕，保留內文、留言。
       enable: AI 過濾選單和按鈕
+      waiting: 正在識別內容
+      translateNow: 略過篩選
+      close: 關閉網頁翻譯
+      timeoutSeconds: 篩選逾時（秒）
+      timeoutDescription: 逾時後依所選範圍繼續翻譯。
       followProvider: 使用網頁翻譯模型
       followProviderDescription: 關閉後可單獨選擇過濾模型。
       provider: 過濾模型

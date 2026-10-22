@@ -397,6 +397,11 @@ options:
     smartFilter:
       description: Skip menus and buttons within the selected content. Keep articles and comments.
       enable: Filter menus and buttons with AI
+      waiting: Identifying content
+      translateNow: Skip filtering
+      close: Stop page translation
+      timeoutSeconds: Filter timeout (seconds)
+      timeoutDescription: When time runs out, translation continues with the selected scope.
       followProvider: Use page translation model
       followProviderDescription: Turn off to choose a separate filtering model.
       provider: Filtering model

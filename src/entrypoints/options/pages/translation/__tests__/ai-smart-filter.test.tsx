@@ -24,6 +24,8 @@ const messages = vi.hoisted((): Record<string, string> => ({
   "options.translation.translateRange.summary.all": "当前：翻译整页内容。",
   "options.translation.smartFilter.description": "在所选内容中跳过菜单和按钮，保留正文、评论。",
   "options.translation.smartFilter.enable": "AI 过滤菜单和按钮",
+  "options.translation.smartFilter.timeoutSeconds": "筛选超时（秒）",
+  "options.translation.smartFilter.timeoutDescription": "超时后按所选范围继续翻译。",
   "options.translation.smartFilter.followProvider": "使用网页翻译模型",
   "options.translation.smartFilter.followProviderDescription": "关闭后可单独选择过滤模型。",
   "options.translation.smartFilter.provider": "过滤模型",
@@ -100,11 +102,13 @@ function createConfig({
   enableAI = false,
   range = DEFAULT_CONFIG.translate.page.range,
   smartFilterProviderId = null,
+  timeoutSeconds = DEFAULT_CONFIG.translate.page.smartFilter.timeoutSeconds,
   providersConfig = DEFAULT_CONFIG.providersConfig,
 }: {
   enableAI?: boolean
   range?: Config["translate"]["page"]["range"]
   smartFilterProviderId?: string | null
+  timeoutSeconds?: number
   providersConfig?: Config["providersConfig"]
 } = {}): Config {
   return {
@@ -118,6 +122,7 @@ function createConfig({
         smartFilter: {
           enableAI,
           providerId: smartFilterProviderId,
+          timeoutSeconds,
         },
       },
     },
@@ -196,6 +201,7 @@ describe("translation scope settings", () => {
       expect(store.get(configAtom).translate.page.smartFilter).toEqual({
         enableAI: true,
         providerId: null,
+        timeoutSeconds: DEFAULT_CONFIG.translate.page.smartFilter.timeoutSeconds,
       })
       expect(storageState.value?.translate.page.smartFilter.enableAI).toBe(true)
       expect(storageState.value?.translate.page.smartFilter.providerId).toBeNull()
@@ -205,6 +211,28 @@ describe("translation scope settings", () => {
       expect(screen.getByText(messages["options.translation.smartFilter.costDescription"])).toBeVisible()
       expect(screen.getByText(DEFAULT_CONFIG.providersConfig.find(p => p.id === DEFAULT_CONFIG.translate.providerId)!.name)).toBeVisible()
     })
+  })
+
+  it("saves an edited integer timeout and rejects out-of-range values", async () => {
+    const store = renderTranslateRange(createConfig({ enableAI: true, timeoutSeconds: 25 }))
+    const input = screen.getByLabelText("筛选超时（秒）")
+    expect(input).toHaveValue(25)
+
+    fireEvent.change(input, { target: { value: "" } })
+    expect((input as HTMLInputElement).value).toBe("")
+    expect(store.get(configAtom).translate.page.smartFilter.timeoutSeconds).toBe(25)
+
+    fireEvent.change(input, { target: { value: "35" } })
+    fireEvent.blur(input)
+    await waitFor(() => {
+      expect(store.get(configAtom).translate.page.smartFilter.timeoutSeconds).toBe(35)
+      expect(storageState.value?.translate.page.smartFilter.timeoutSeconds).toBe(35)
+    })
+
+    fireEvent.change(input, { target: { value: "121" } })
+    fireEvent.blur(input)
+    await waitFor(() => expect(input).toHaveValue(35))
+    expect(store.get(configAtom).translate.page.smartFilter.timeoutSeconds).toBe(35)
   })
 
   it("switches between following and an explicit enabled LLM provider", async () => {

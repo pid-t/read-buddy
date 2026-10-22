@@ -3,6 +3,8 @@ import type { SmartRegion } from "@/utils/host/smart-filter/types"
 export interface SmartFilterClassifyRequest {
   requestId: string
   regions: SmartRegion[]
+  /** Hash of page/config/provider inputs used to scope the per-tab result cache. */
+  cacheKey?: string
   /** Absolute deadline in epoch milliseconds, including network and model time. */
   deadline: number
 }

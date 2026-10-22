@@ -75,7 +75,7 @@ function createDeferred<T>() {
   return { promise, resolve }
 }
 
-function createConfig(enableAI: boolean): Config {
+function createConfig(enableAI: boolean, timeoutSeconds = DEFAULT_CONFIG.translate.page.smartFilter.timeoutSeconds): Config {
   return {
     ...DEFAULT_CONFIG,
     translate: {
@@ -85,6 +85,7 @@ function createConfig(enableAI: boolean): Config {
         smartFilter: {
           enableAI,
           providerId: null,
+          timeoutSeconds,
         },
       },
     },
@@ -212,6 +213,92 @@ describe("page translation smart filter", () => {
     expect(classifyRequests).toHaveLength(2)
   })
 
+  it.each([
+    ["minute", "39 minutes ago", "42 minutes ago"],
+    ["hour", "59 minutes ago", "1 hour ago"],
+  ])("reuses filtering when marked relative-time metadata advances by an %s", async (_unit, initialTime, updatedTime) => {
+    document.body.innerHTML = `
+      <nav><a>Home</a></nav>
+      <main><h2>Story title</h2><span class="age">${initialTime}</span><p>Readable story body.</p></main>
+    `
+    manager = new PageTranslationManager()
+    await manager.start()
+    expect(classifyRequests[0].regions.some(region => region.text.includes(initialTime))).toBe(true)
+    classifyDeferreds[0].resolve({ skipIds: [], status: "success" })
+    await flushDomUpdates()
+    manager.stop()
+
+    document.querySelector(".age")!.textContent = updatedTime
+    await manager.start()
+
+    expect(classifyRequests).toHaveLength(1)
+  })
+
+  it("normalizes marked relative time near the region sample boundary", async () => {
+    document.body.innerHTML = `<main><p>${"x".repeat(145)}</p><span class="age">59 minutes ago</span><p>tail content</p></main>`
+    manager = new PageTranslationManager()
+    await manager.start()
+    classifyDeferreds[0].resolve({ skipIds: [], status: "success" })
+    await flushDomUpdates()
+    manager.stop()
+
+    document.querySelector(".age")!.textContent = "1 hour ago"
+    await manager.start()
+
+    expect(classifyRequests).toHaveLength(1)
+  })
+
+  it("normalizes a sampled region inside a marked relative-time ancestor", async () => {
+    document.body.innerHTML = `<div class="age"><p id="age-child">39 minutes ago</p></div>`
+    manager = new PageTranslationManager()
+    await manager.start()
+    classifyDeferreds[0].resolve({ skipIds: [], status: "success" })
+    await flushDomUpdates()
+    manager.stop()
+
+    document.getElementById("age-child")!.textContent = "42 minutes ago"
+    await manager.start()
+
+    expect(classifyRequests).toHaveLength(1)
+  })
+
+  it("reclassifies when a sampled open-shadow region changes after the region budget is filled", async () => {
+    document.body.innerHTML = `${Array.from({ length: 31 }, (_, index) => `<p>Filler paragraph ${index}</p>`).join("")}<article id="shadow-host"></article>`
+    const shadow = document.getElementById("shadow-host")!.attachShadow({ mode: "open" })
+    shadow.innerHTML = "<code>Shadow article first version</code>"
+
+    manager = new PageTranslationManager()
+    await manager.start()
+    expect(classifyRequests[0].regions).toHaveLength(32)
+    expect(classifyRequests[0].regions.at(-1)?.text).toContain("Shadow article first version")
+    classifyDeferreds[0].resolve({ skipIds: [], status: "success" })
+    await flushDomUpdates()
+    manager.stop()
+
+    shadow.querySelector("code")!.textContent = "Shadow article updated version"
+    await manager.start()
+
+    expect(classifyRequests).toHaveLength(2)
+  })
+
+  it.each([
+    ["ordinary number", "The report lists 39 items.", "The report lists 42 items."],
+    ["relative-time phrase", "The log literally says 39 minutes ago.", "The log literally says 42 minutes ago."],
+    ["plain-text relative-time content", "39 minutes ago", "42 minutes ago"],
+  ])("reclassifies when body text changes by %s", async (_kind, initialText, updatedText) => {
+    document.body.innerHTML = `<p id="body">${initialText}</p>`
+    manager = new PageTranslationManager()
+    await manager.start()
+    classifyDeferreds[0].resolve({ skipIds: [], status: "success" })
+    await flushDomUpdates()
+    manager.stop()
+
+    document.getElementById("body")!.textContent = updatedText
+    await manager.start()
+
+    expect(classifyRequests).toHaveLength(2)
+  })
+
   it("waits for classification, keeps offscreen units on normal translation and applies nav skips", async () => {
     document.body.innerHTML = `
       <main id="content">
@@ -229,20 +316,23 @@ describe("page translation smart filter", () => {
     offscreenSection.getBoundingClientRect = () => createRect(3000, 30)
     offscreen.getBoundingClientRect = () => createRect(3000, 30)
 
-    const config = createConfig(true)
+    const config = createConfig(true, 3)
     mockGetLocalConfig.mockResolvedValue(config)
 
     manager = new PageTranslationManager()
     await manager.start()
     await flushDomUpdates()
+    await new Promise(resolve => setTimeout(resolve, 160))
 
     expect(classifyRequests).toHaveLength(1)
+    expect(document.querySelector("[data-read-frog-smart-filter-indicator]")).toBeTruthy()
     const request = classifyRequests[0]
+    expect(request.cacheKey).toMatch(/^[\da-f]{64}$/)
     expect(request.regions.map(region => region.text)).toContain("Home")
     expect(request.regions.map(region => region.text)).toContain("Readable body text")
     expect(request.regions.map(region => region.text)).not.toContain("Offscreen body text")
     expect(typeof request.requestId).toBe("string")
-    expect(request.deadline).toBeLessThanOrEqual(Date.now() + 2_000)
+    expect(request.deadline).toBeLessThanOrEqual(Date.now() + 3_000)
 
     const extractionCollection = collectSmartRegions(document.body, config, {
       shouldCollect: element => element.getBoundingClientRect().top < 3000,
@@ -273,6 +363,47 @@ describe("page translation smart filter", () => {
 
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
     expect(nav.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
+    await new Promise(resolve => setTimeout(resolve, 650))
+    expect(document.querySelector("[data-read-frog-smart-filter-indicator]")).toBeNull()
+  })
+
+  it("lets the user skip the pending filter and translate pending text", async () => {
+    document.body.innerHTML = `<p id="body">Readable body text</p>`
+    manager = new PageTranslationManager()
+    await manager.start()
+    await new Promise(resolve => setTimeout(resolve, 160))
+    const host = document.querySelector<HTMLElement>("[data-read-frog-smart-filter-indicator]")!
+    expect(host).toBeTruthy()
+    const sampledRegionTexts = collectSmartRegions(document.body, createConfig(true)).regions.map(region => region.text)
+    expect(sampledRegionTexts).not.toContain("Identifying content")
+    const body = document.getElementById("body")!
+    await intersectionObservers[0].triggerIntersect(body)
+    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
+
+    host.shadowRoot!.querySelector("button")!.click()
+    await flushDomUpdates()
+    flushBatchedOperations()
+
+    expect(cancelRequests).toEqual([{ requestId: classifyRequests[0].requestId }])
+    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
+
+    classifyDeferreds[0].resolve({ skipIds: [classifyRequests[0].regions[0].id], status: "success" })
+    await flushDomUpdates()
+    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()
+  })
+
+  it("clears the pending filter indicator and cancels classification when page translation stops", async () => {
+    document.body.innerHTML = `<p>Readable body text</p>`
+    manager = new PageTranslationManager()
+    await manager.start()
+    await new Promise(resolve => setTimeout(resolve, 160))
+    expect(document.querySelector("[data-read-frog-smart-filter-indicator]")).toBeTruthy()
+
+    manager.stop()
+    expect(cancelRequests).toEqual([{ requestId: classifyRequests[0].requestId }])
+    expect(document.querySelector("[data-read-frog-smart-filter-indicator]")).toBeTruthy()
+    await new Promise(resolve => setTimeout(resolve, 650))
+    expect(document.querySelector("[data-read-frog-smart-filter-indicator]")).toBeNull()
   })
 
   it("keeps a nav region pending and skipped when unrelated siblings are added to body", async () => {
@@ -500,7 +631,7 @@ describe("page translation smart filter", () => {
     vi.setSystemTime(10_000)
     document.body.innerHTML = "<p id=\"body\">Readable body text</p>"
     const body = document.getElementById("body")!
-    mockGetLocalConfig.mockResolvedValue(createConfig(true))
+    mockGetLocalConfig.mockResolvedValue(createConfig(true, 3))
 
     manager = new PageTranslationManager()
     await manager.start()
@@ -513,6 +644,8 @@ describe("page translation smart filter", () => {
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
 
     await vi.advanceTimersByTimeAsync(2_000)
+    expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeNull()
+    await vi.advanceTimersByTimeAsync(1_000)
     await vi.advanceTimersByTimeAsync(0)
     flushBatchedOperations()
     expect(body.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeTruthy()

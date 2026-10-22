@@ -1,8 +1,11 @@
 import type { SmartFilterClassifyRequest, SmartFilterClassifyResponse, SmartFilterClassifyStatus } from "@/types/smart-filter"
 import type { SmartRegion } from "@/utils/host/smart-filter/types"
 import { generateText, Output } from "ai"
+import { browser, storage } from "#imports"
 import { isEnabledLLMProviderConfig } from "@/types/config/provider"
 import { getProviderConfigById } from "@/utils/config/helpers"
+import { getSmartFilterCacheKey } from "@/utils/constants/storage-keys"
+import { MAX_SMART_FILTER_TIMEOUT_SECONDS } from "@/utils/constants/translate"
 import { parseSmartFilterResult, smartFilterResultSchema } from "@/utils/host/smart-filter/result"
 import { MAX_REGION_COUNT, MAX_REGION_TEXT_LENGTH, MAX_TOTAL_INPUT_LENGTH } from "@/utils/host/smart-filter/types"
 import { logger } from "@/utils/logger"
@@ -12,7 +15,7 @@ import { resolveModelId } from "@/utils/providers/model-id"
 import { getProviderOptionsWithOverride } from "@/utils/providers/options"
 import { ensureInitializedConfig } from "./config"
 
-const MAX_CLASSIFICATION_DURATION_MS = 2_000
+const MAX_CLASSIFICATION_DURATION_MS = MAX_SMART_FILTER_TIMEOUT_SECONDS * 1_000
 
 const SMART_FILTER_SYSTEM_PROMPT = `You identify which regions of a web page should be skipped by a translation extension.
 
@@ -30,6 +33,11 @@ interface PendingClassification {
 }
 
 const pendingClassifications = new Map<string, PendingClassification>()
+
+interface SmartFilterResultCache {
+  key: string
+  skipIds: string[]
+}
 
 function emptyResponse(
   status: SmartFilterClassifyStatus = "success",
@@ -89,6 +97,8 @@ ${serializedRegions}`
 async function classifyRegions(
   regions: SmartRegion[],
   signal: AbortSignal,
+  tabId: number,
+  cacheKey?: string,
 ): Promise<SmartFilterClassifyResponse> {
   const config = await ensureInitializedConfig()
   if (!config || signal.aborted)
@@ -112,6 +122,24 @@ async function classifyRegions(
   if (serializedRegions.length > MAX_TOTAL_INPUT_LENGTH)
     return emptyResponse()
 
+  const regionIds = new Set(regions.map(region => region.id))
+  if (cacheKey) {
+    try {
+      const cached = await storage.getItem<SmartFilterResultCache>(getSmartFilterCacheKey(tabId))
+      if (signal.aborted)
+        return emptyResponse()
+      if (cached?.key === cacheKey && Array.isArray(cached.skipIds) && cached.skipIds.every(id => typeof id === "string")) {
+        return {
+          skipIds: parseSmartFilterResult({ skipIds: cached.skipIds }, regionIds).skipIds,
+          status: "success",
+        }
+      }
+    }
+    catch (error) {
+      logger.warn("[Background] Failed to read smart filter cache", error)
+    }
+  }
+
   const model = await getModelById(providerId)
   if (signal.aborted)
     return emptyResponse()
@@ -134,8 +162,25 @@ async function classifyRegions(
   if (signal.aborted)
     return emptyResponse()
 
-  const regionIds = new Set(regions.map(region => region.id))
-  return { skipIds: parseSmartFilterResult(output, regionIds).skipIds, status: "success" }
+  const result = { skipIds: parseSmartFilterResult(output, regionIds).skipIds, status: "success" as const }
+  if (cacheKey && !signal.aborted) {
+    const cached: SmartFilterResultCache = { key: cacheKey, skipIds: result.skipIds }
+    const storageKey = getSmartFilterCacheKey(tabId)
+    try {
+      await storage.setItem(storageKey, cached)
+      if (signal.aborted) {
+        const stored = await storage.getItem<SmartFilterResultCache>(storageKey)
+        if (stored?.key === cached.key && JSON.stringify(stored.skipIds) === JSON.stringify(cached.skipIds))
+          await storage.removeItem(storageKey)
+        return emptyResponse()
+      }
+    }
+    catch (error) {
+      if (!signal.aborted)
+        logger.warn("[Background] Failed to write smart filter cache", error)
+    }
+  }
+  return signal.aborted ? emptyResponse() : result
 }
 
 export function setupSmartFilterMessageHandlers() {
@@ -145,7 +190,7 @@ export function setupSmartFilterMessageHandlers() {
       return emptyResponse()
 
     const request: SmartFilterClassifyRequest = message.data
-    const { deadline, regions, requestId } = request
+    const { cacheKey, deadline, regions, requestId } = request
     if (typeof deadline !== "number" || !Number.isFinite(deadline))
       return emptyResponse()
     if (typeof requestId !== "string" || !Array.isArray(regions) || regions.length === 0)
@@ -169,7 +214,14 @@ export function setupSmartFilterMessageHandlers() {
 
     try {
       const result = await raceWithAbort(
-        classifyRegions(regions, controller.signal),
+        classifyRegions(
+          regions,
+          controller.signal,
+          tabId,
+          message.sender?.frameId === undefined || message.sender.frameId === 0
+            ? typeof cacheKey === "string" && /^[\da-f]{64}$/i.test(cacheKey) ? cacheKey : undefined
+            : undefined,
+        ),
         controller.signal,
         emptyResponse(),
       )
@@ -201,5 +253,17 @@ export function setupSmartFilterMessageHandlers() {
     pending.controller.abort("cancel")
     clearTimeout(pending.timer)
     pendingClassifications.delete(key)
+  })
+
+  browser.tabs.onRemoved.addListener((tabId) => {
+    for (const [key, pending] of pendingClassifications) {
+      if (!key.startsWith(`${tabId}:`))
+        continue
+      clearTimeout(pending.timer)
+      pending.controller.abort("cancel")
+      pendingClassifications.delete(key)
+    }
+    void storage.removeItem(getSmartFilterCacheKey(tabId))
+      .catch(error => logger.warn("[Background] Failed to clear smart filter cache", error))
   })
 }

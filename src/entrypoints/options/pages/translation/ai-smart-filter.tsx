@@ -1,19 +1,22 @@
 import { deepmerge } from "deepmerge-ts"
 import { useAtom, useAtomValue } from "jotai"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { HelpTooltip } from "@/components/help-tooltip"
 import ProviderSelector from "@/components/llm-providers/provider-selector"
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/base-ui/field"
+import { Input } from "@/components/ui/base-ui/input"
 import { Switch } from "@/components/ui/base-ui/switch"
 import { isEnabledLLMProviderConfig } from "@/types/config/provider"
 import { configFieldsAtomMap } from "@/utils/atoms/config"
 import { getEnabledLLMProvidersConfig, getProviderConfigById } from "@/utils/config/helpers"
+import { MAX_SMART_FILTER_TIMEOUT_SECONDS, MIN_SMART_FILTER_TIMEOUT_SECONDS } from "@/utils/constants/translate"
 import { i18n } from "@/utils/i18n"
 
 export function AISmartFilter() {
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
   const smartFilter = translateConfig.page.smartFilter
+  const [timeoutDraft, setTimeoutDraft] = useState<string | null>(null)
 
   const enabledLLMProviders = useMemo(
     () => getEnabledLLMProvidersConfig(providersConfig),
@@ -60,6 +63,36 @@ export function AISmartFilter() {
 
       {smartFilter.enableAI && (
         <FieldGroup>
+          <Field orientation="responsive">
+            <FieldContent>
+              <FieldLabel htmlFor="ai-smart-filter-timeout">
+                {i18n.t("options.translation.smartFilter.timeoutSeconds")}
+              </FieldLabel>
+              <FieldDescription>
+                {i18n.t("options.translation.smartFilter.timeoutDescription")}
+              </FieldDescription>
+            </FieldContent>
+            <Input
+              id="ai-smart-filter-timeout"
+              className="w-24 shrink-0"
+              type="number"
+              min={MIN_SMART_FILTER_TIMEOUT_SECONDS}
+              max={MAX_SMART_FILTER_TIMEOUT_SECONDS}
+              step={1}
+              value={timeoutDraft ?? String(smartFilter.timeoutSeconds)}
+              onChange={event => setTimeoutDraft(event.target.value)}
+              onBlur={() => {
+                const valueDraft = timeoutDraft ?? String(smartFilter.timeoutSeconds)
+                const value = Number(valueDraft)
+                if (/^\d+$/.test(valueDraft) && Number.isInteger(value) && value >= MIN_SMART_FILTER_TIMEOUT_SECONDS && value <= MAX_SMART_FILTER_TIMEOUT_SECONDS) {
+                  if (value !== smartFilter.timeoutSeconds)
+                    updateSmartFilter({ timeoutSeconds: value })
+                }
+                setTimeoutDraft(null)
+              }}
+            />
+          </Field>
+
           <Field orientation="horizontal">
             <FieldContent className="min-w-0 self-center">
               <FieldLabel htmlFor="ai-smart-filter-follow-provider">

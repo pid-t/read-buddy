@@ -17,6 +17,7 @@ function getSmartFilterSignature(config: Config): string {
   return JSON.stringify({
     enableAI: smartFilter?.enableAI ?? false,
     selectedProviderId: smartFilter?.providerId ?? null,
+    timeoutSeconds: smartFilter?.timeoutSeconds,
     providerId,
     providerEnabled: provider?.enabled ?? false,
     provider: llmProvider,

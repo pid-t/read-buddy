@@ -5,11 +5,13 @@ import type { SmartRegionCollection } from "@/utils/host/smart-filter/types"
 import { isEnabledLLMProviderConfig } from "@/types/config/provider"
 import { getProviderConfigById } from "@/utils/config/helpers"
 import { getLocalConfig } from "@/utils/config/storage"
-import { CONTENT_WRAPPER_CLASS } from "@/utils/constants/dom-labels"
+import { CONTENT_WRAPPER_CLASS, NOTRANSLATE_CLASS, REACT_SHADOW_HOST_CLASS } from "@/utils/constants/dom-labels"
 import { resolveProviderConfig } from "@/utils/constants/feature-providers"
+import { DEFAULT_SMART_FILTER_TIMEOUT_SECONDS } from "@/utils/constants/translate"
 import { getRandomUUID } from "@/utils/crypto-polyfill"
+import { Sha256Hex } from "@/utils/hash"
 import { flushBatchedOperations } from "@/utils/host/dom/batch-dom"
-import { hasNoWalkAncestor, isDontWalkIntoAndDontTranslateAsChildElement, isDontWalkIntoButTranslateAsChildElement, isHTMLElement } from "@/utils/host/dom/filter"
+import { hasNoWalkAncestor, isDontWalkIntoAndDontTranslateAsChildElement, isDontWalkIntoButTranslateAsChildElement, isEditable, isHTMLElement, isTranslatedContentNode, isTranslatedWrapperNode } from "@/utils/host/dom/filter"
 import { deepQueryTopLevelSelector } from "@/utils/host/dom/find"
 import { walkAndLabelElement } from "@/utils/host/dom/traversal"
 import { collectSmartRegions, createSmartFilterDecision, createSmartFilterPageState, isComposedDescendant } from "@/utils/host/smart-filter"
@@ -19,9 +21,56 @@ import { translateTextForPageTitle } from "@/utils/host/translate/translate-vari
 import { getOrCreateWebPageContext } from "@/utils/host/translate/webpage-context"
 import { logger } from "@/utils/logger"
 import { sendMessage } from "@/utils/message"
+import { mountSmartFilterIndicator } from "./smart-filter-indicator"
 
 type SimpleIntersectionOptions = Omit<IntersectionObserverInit, "threshold"> & {
   threshold?: number
+}
+
+const SMART_FILTER_RELATIVE_TIME_SELECTOR = "time, .age, .timeago, relative-time, time-ago, [data-relative-time]"
+const RELATIVE_TIME_SOURCE = String.raw`just now|moments ago|a few seconds ago|(?:a|an|\d+)\s+(?:seconds?|minutes?|hours?|days?|weeks?|months?|years?)\s+ago|\d+\s*(?:秒|分钟|分鐘|小时|小時|天)前|刚刚|剛剛`
+const RELATIVE_TIME_TOKEN = new RegExp(RELATIVE_TIME_SOURCE, "giu")
+const RELATIVE_TIME_ONLY = new RegExp(`^(?:${RELATIVE_TIME_SOURCE})$`, "iu")
+
+function normalizeRelativeTimeSample(text: string | null): string | null {
+  return text?.replace(RELATIVE_TIME_TOKEN, "[relative-time]") ?? null
+}
+
+function getSmartFilterFingerprintText(node: HTMLElement, config: Config): string {
+  const relativeTimeAncestor = node.closest(SMART_FILTER_RELATIVE_TIME_SELECTOR)
+  const ancestorText = relativeTimeAncestor?.textContent?.trim() ?? ""
+  if (relativeTimeAncestor !== node && RELATIVE_TIME_ONLY.test(ancestorText))
+    return "[relative-time]"
+
+  const visit = (current: Node, insideShadowRoot = false): string => {
+    if (current.nodeType === Node.TEXT_NODE)
+      return current.textContent ?? ""
+    if (current.nodeType !== Node.ELEMENT_NODE)
+      return ""
+
+    const element = current as Element
+    const htmlElement = isHTMLElement(element) ? element : null
+    if (insideShadowRoot && htmlElement && (
+      htmlElement.classList.contains(NOTRANSLATE_CLASS)
+      || isDontWalkIntoAndDontTranslateAsChildElement(htmlElement, config)
+      || isEditable(htmlElement)
+      || (htmlElement.hasAttribute("contenteditable") && htmlElement.getAttribute("contenteditable") !== "false")
+      || isTranslatedWrapperNode(htmlElement)
+      || isTranslatedContentNode(htmlElement)
+    )) {
+      return ""
+    }
+
+    if (element.matches(SMART_FILTER_RELATIVE_TIME_SELECTOR) && RELATIVE_TIME_ONLY.test(element.textContent?.trim() ?? ""))
+      return "[relative-time]"
+
+    const shadowText = htmlElement?.shadowRoot && !htmlElement.classList.contains(REACT_SHADOW_HOST_CLASS)
+      ? [...htmlElement.shadowRoot.childNodes].map(child => visit(child, true)).join("")
+      : ""
+    return shadowText + [...element.childNodes].map(child => visit(child, insideShadowRoot)).join("")
+  }
+
+  return visit(node)
 }
 
 interface IPageTranslationManager {
@@ -57,7 +106,6 @@ interface IPageTranslationManager {
 export class PageTranslationManager implements IPageTranslationManager {
   private static readonly MAX_DURATION = 500
   private static readonly MOVE_THRESHOLD = 30 * 30
-  private static readonly SMART_FILTER_DURATION_MS = 2_000
   private static readonly DEFAULT_INTERSECTION_OPTIONS: SimpleIntersectionOptions = {
     root: null,
     rootMargin: "600px",
@@ -79,6 +127,8 @@ export class PageTranslationManager implements IPageTranslationManager {
   private smartFilterRequestId: string | null = null
   private smartFilterVersion = 0
   private smartFilterDeadlineTimer: ReturnType<typeof setTimeout> | null = null
+  private smartFilterIndicatorTimer: ReturnType<typeof setTimeout> | null = null
+  private smartFilterIndicatorCleanup: (() => void) | null = null
   private smartFilterPendingTargets = new Set<HTMLElement>()
   private smartFilterPreloadMargin = 0
   private smartFilterSkipIds: string[] = []
@@ -618,7 +668,8 @@ export class PageTranslationManager implements IPageTranslationManager {
       return
     }
 
-    const deadline = Date.now() + PageTranslationManager.SMART_FILTER_DURATION_MS
+    const timeoutSeconds = smartFilter.timeoutSeconds ?? DEFAULT_SMART_FILTER_TIMEOUT_SECONDS
+    const deadline = Date.now() + timeoutSeconds * 1_000
     const collection = collectSmartRegions(document.body, config, {
       shouldCollect: element => this.isElementInPreloadRange(element),
     })
@@ -629,7 +680,14 @@ export class PageTranslationManager implements IPageTranslationManager {
 
     const cacheKey = JSON.stringify([
       window.location.href, config.translate, config.language, providerConfig,
-      collection.regions, [...collection.nodeById.values()].map(node => node.textContent),
+      collection.regions.map(({ id, parentId, tag, role, heading }) => ({
+        id,
+        parentId,
+        tag,
+        role,
+        heading: normalizeRelativeTimeSample(heading),
+      })),
+      [...collection.nodeById.values()].map(node => getSmartFilterFingerprintText(node, config)),
     ])
     if (this.smartFilterCache?.key === cacheKey) {
       this.smartFilterCollection = collection
@@ -655,6 +713,21 @@ export class PageTranslationManager implements IPageTranslationManager {
     this.smartFilterDeadlineTimer = setTimeout(() => {
       this.finishSmartFilter(version, [], "timeout")
     }, Math.max(0, deadline - Date.now()))
+    this.smartFilterIndicatorTimer = setTimeout(() => {
+      this.smartFilterIndicatorTimer = null
+      if (version !== this.smartFilterVersion || this.smartFilterRequestId !== requestId)
+        return
+      this.smartFilterIndicatorCleanup = mountSmartFilterIndicator({
+        onSkip: () => {
+          if (version !== this.smartFilterVersion)
+            return
+          void sendMessage("cancelSmartFilterClassification", { requestId })
+            .catch(error => logger.warn("Failed to cancel smart filter classification", error))
+          this.finishSmartFilter(version, [], "cancel")
+        },
+        onCancel: () => this.stop(),
+      })
+    }, 150)
 
     void this.requestSmartFilter(collection.regions, requestId, deadline, version, cacheKey)
   }
@@ -670,6 +743,7 @@ export class PageTranslationManager implements IPageTranslationManager {
       const result = await sendMessage("classifySmartFilterRegions", {
         requestId,
         regions,
+        cacheKey: Sha256Hex(cacheKey),
         deadline,
       })
       this.finishSmartFilter(
@@ -700,6 +774,12 @@ export class PageTranslationManager implements IPageTranslationManager {
       clearTimeout(this.smartFilterDeadlineTimer)
       this.smartFilterDeadlineTimer = null
     }
+    if (this.smartFilterIndicatorTimer) {
+      clearTimeout(this.smartFilterIndicatorTimer)
+      this.smartFilterIndicatorTimer = null
+    }
+    this.smartFilterIndicatorCleanup?.()
+    this.smartFilterIndicatorCleanup = null
 
     // A sampled region may change before the observer callback runs.
     this.markChangedSampledRegions()
@@ -736,6 +816,12 @@ export class PageTranslationManager implements IPageTranslationManager {
       clearTimeout(this.smartFilterDeadlineTimer)
       this.smartFilterDeadlineTimer = null
     }
+    if (this.smartFilterIndicatorTimer) {
+      clearTimeout(this.smartFilterIndicatorTimer)
+      this.smartFilterIndicatorTimer = null
+    }
+    this.smartFilterIndicatorCleanup?.()
+    this.smartFilterIndicatorCleanup = null
 
     const requestId = this.smartFilterRequestId
     this.smartFilterRequestId = null

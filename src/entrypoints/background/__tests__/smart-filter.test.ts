@@ -1,5 +1,6 @@
 import type { SmartRegion } from "@/utils/host/smart-filter/types"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { browser } from "#imports"
 import { DEFAULT_CONFIG } from "@/utils/constants/config"
 
 const onMessageMock = vi.fn()
@@ -8,8 +9,20 @@ const getModelByIdMock = vi.fn()
 const generateTextMock = vi.fn()
 const outputObjectMock = vi.fn()
 const loggerWarnMock = vi.fn()
+const storageGetItemMock = vi.fn()
+const storageSetItemMock = vi.fn()
+const storageRemoveItemMock = vi.fn()
+const tabsOnRemovedAddListenerMock = vi.fn()
 
 const messageHandlers = new Map<string, (message: any) => any>()
+
+vi.mock("wxt/utils/storage", () => ({
+  storage: {
+    getItem: storageGetItemMock,
+    setItem: storageSetItemMock,
+    removeItem: storageRemoveItemMock,
+  },
+}))
 
 vi.mock("@/utils/message", () => ({
   onMessage: onMessageMock,
@@ -40,6 +53,7 @@ function createConfig(options: {
   enableAI?: boolean
   providerId?: string | null
   translateProviderId?: string
+  timeoutSeconds?: number
   providersConfig?: typeof DEFAULT_CONFIG.providersConfig
 } = {}) {
   return {
@@ -53,6 +67,7 @@ function createConfig(options: {
         smartFilter: {
           enableAI: options.enableAI ?? true,
           providerId: options.providerId ?? null,
+          timeoutSeconds: options.timeoutSeconds ?? DEFAULT_CONFIG.translate.page.smartFilter.timeoutSeconds,
         },
       },
     },
@@ -70,7 +85,7 @@ function createRegions(count = 2): SmartRegion[] {
   }))
 }
 
-function classifyMessage(requestId: string, regions: SmartRegion[] = createRegions(), deadline = Date.now() + 2_000) {
+function classifyMessage(requestId: string, regions: SmartRegion[] = createRegions(), deadline = Date.now() + DEFAULT_CONFIG.translate.page.smartFilter.timeoutSeconds * 1_000) {
   return {
     data: { requestId, regions, deadline },
     sender: { tab: { id: 42 } },
@@ -105,6 +120,10 @@ describe("smart filter background classification", () => {
     ensureInitializedConfigMock.mockResolvedValue(createConfig())
     getModelByIdMock.mockResolvedValue("mock-model")
     generateTextMock.mockResolvedValue({ output: { skipIds: ["r1"] } })
+    storageGetItemMock.mockResolvedValue(null)
+    storageSetItemMock.mockResolvedValue(undefined)
+    storageRemoveItemMock.mockResolvedValue(undefined)
+    browser.tabs.onRemoved.addListener = tabsOnRemovedAddListenerMock
   })
 
   afterEach(() => {
@@ -142,6 +161,34 @@ describe("smart filter background classification", () => {
     generateTextMock.mockRejectedValueOnce(new Error("network error"))
     await expect(handler(classifyMessage("model-error"))).resolves.toEqual({ skipIds: [], status: "error", errorCode: "model_error" })
     expect(loggerWarnMock).toHaveBeenCalled()
+  })
+
+  it("reuses successful main-frame results by hashed key and reclassifies changed keys", async () => {
+    await setupSubject()
+    const handler = getHandler("classifySmartFilterRegions")
+    const cache = new Map<string, { key: string, skipIds: string[] }>()
+    storageGetItemMock.mockImplementation(async (key: string) => cache.get(key) ?? null)
+    storageSetItemMock.mockImplementation(async (key: string, value: { key: string, skipIds: string[] }) => {
+      cache.set(key, value)
+    })
+    const message = (requestId: string, key: string, frameId = 0) => ({
+      ...classifyMessage(requestId),
+      data: { ...classifyMessage(requestId).data, cacheKey: key },
+      sender: { tab: { id: 42 }, frameId },
+    })
+
+    await expect(handler(message("first", "a".repeat(64)))).resolves.toEqual({ skipIds: ["r1"], status: "success" })
+    expect(storageSetItemMock).toHaveBeenCalledWith("session:smartFilterCache.42", { key: "a".repeat(64), skipIds: ["r1"] })
+    expect(Object.keys(cache.get("session:smartFilterCache.42") ?? {}).sort()).toEqual(["key", "skipIds"])
+
+    await expect(handler(message("cached", "a".repeat(64)))).resolves.toEqual({ skipIds: ["r1"], status: "success" })
+    expect(generateTextMock).toHaveBeenCalledTimes(1)
+
+    await expect(handler(message("changed", "b".repeat(64)))).resolves.toEqual({ skipIds: ["r1"], status: "success" })
+    expect(generateTextMock).toHaveBeenCalledTimes(2)
+
+    await expect(handler(message("iframe", "c".repeat(64), 1))).resolves.toEqual({ skipIds: ["r1"], status: "success" })
+    expect(generateTextMock).toHaveBeenCalledTimes(3)
   })
 
   it("skips the model when disabled, unavailable, expired, or without regions", async () => {
@@ -184,11 +231,15 @@ describe("smart filter background classification", () => {
 
     const requestId = "timeout-request"
     const requestPromise = handler(classifyMessage(requestId))
+    let settled = false
+    void requestPromise.then(() => settled = true)
 
     await vi.advanceTimersByTimeAsync(0)
     expect(generateTextMock).toHaveBeenCalledTimes(1)
 
     await vi.advanceTimersByTimeAsync(2_000)
+    expect(settled).toBe(false)
+    await vi.advanceTimersByTimeAsync(8_000)
     await expect(requestPromise).resolves.toEqual({ skipIds: [], status: "timeout" })
 
     generateTextMock.mockResolvedValueOnce({ output: { skipIds: ["r2"] } })
@@ -208,7 +259,12 @@ describe("smart filter background classification", () => {
     }))
 
     const requestId = "cancel-request"
-    const requestPromise = classify(classifyMessage(requestId))
+    const baseRequest = classifyMessage(requestId)
+    const request = {
+      ...baseRequest,
+      data: { ...baseRequest.data, cacheKey: "d".repeat(64) },
+    }
+    const requestPromise = classify(request)
     await vi.advanceTimersByTimeAsync(0)
 
     const abortSignal = generateTextMock.mock.calls[0][0].abortSignal as AbortSignal
@@ -223,7 +279,40 @@ describe("smart filter background classification", () => {
 
     // A late model result is ignored and the request slot can be reused.
     resolveModel?.({ output: { skipIds: ["r1"] } })
+    await Promise.resolve()
+    expect(storageSetItemMock).not.toHaveBeenCalled()
     generateTextMock.mockResolvedValueOnce({ output: { skipIds: ["r2"] } })
     await expect(classify(classifyMessage(requestId))).resolves.toEqual({ skipIds: ["r2"], status: "success" })
+  })
+
+  it("cancels pending classifications and clears the session result when a tab closes", async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(3_000_000)
+    await setupSubject()
+    const classify = getHandler("classifySmartFilterRegions")
+
+    let resolveModel: ((value: { output: { skipIds: string[] } }) => void) | undefined
+    generateTextMock.mockImplementation(() => new Promise((resolve) => {
+      resolveModel = resolve
+    }))
+
+    const baseRequest = classifyMessage("closed-tab")
+    const request = {
+      ...baseRequest,
+      data: { ...baseRequest.data, cacheKey: "e".repeat(64) },
+    }
+    const requestPromise = classify(request)
+    await vi.advanceTimersByTimeAsync(0)
+    const abortSignal = generateTextMock.mock.calls[0][0].abortSignal as AbortSignal
+
+    const onRemoved = tabsOnRemovedAddListenerMock.mock.calls.at(-1)?.[0] as ((tabId: number) => void)
+    onRemoved(42)
+
+    expect(abortSignal.aborted).toBe(true)
+    expect(storageRemoveItemMock).toHaveBeenCalledWith("session:smartFilterCache.42")
+    await expect(requestPromise).resolves.toEqual({ skipIds: [], status: "cancel" })
+    resolveModel?.({ output: { skipIds: ["r1"] } })
+    await Promise.resolve()
+    expect(storageSetItemMock).not.toHaveBeenCalled()
   })
 })
