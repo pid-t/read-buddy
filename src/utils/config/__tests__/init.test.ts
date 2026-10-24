@@ -68,8 +68,11 @@ describe("initializeConfig", () => {
     runMigrationMock.mockImplementation(async (_nextVersion: number, config: Config) => config)
   })
 
-  it("does not write when config and meta are already up to date", async () => {
+  it.each(["deepseek-default", "microsoft-translate-default", "openai-default"])("preserves existing %s selections when config and meta are up to date", async (providerId) => {
     const config = buildStableConfig()
+    config.translate.providerId = providerId
+    config.selectionTranslation.providerId = providerId
+    config.videoSubtitles.providerId = providerId
     getItemMock.mockResolvedValueOnce(config)
     getMetaMock.mockResolvedValueOnce({
       schemaVersion: CONFIG_SCHEMA_VERSION,
@@ -82,6 +85,9 @@ describe("initializeConfig", () => {
     expect(runMigrationMock).not.toHaveBeenCalled()
     expect(setItemMock).not.toHaveBeenCalled()
     expect(setMetaMock).not.toHaveBeenCalled()
+    expect(config.translate.providerId).toBe(providerId)
+    expect(config.selectionTranslation.providerId).toBe(providerId)
+    expect(config.videoSubtitles.providerId).toBe(providerId)
   })
 
   it("writes config and meta when config is missing", async () => {
@@ -92,7 +98,11 @@ describe("initializeConfig", () => {
     await initializeConfig()
 
     expect(setItemMock).toHaveBeenCalledTimes(1)
-    expect(setItemMock).toHaveBeenCalledWith("local:config", expect.any(Object))
+    expect(setItemMock).toHaveBeenCalledWith("local:config", expect.objectContaining({
+      translate: expect.objectContaining({ providerId: "google-translate-default" }),
+      selectionTranslation: expect.objectContaining({ providerId: "google-translate-default" }),
+      videoSubtitles: expect.objectContaining({ providerId: "google-translate-default" }),
+    }))
     expect(setMetaMock).toHaveBeenCalledTimes(1)
     expect(setMetaMock).toHaveBeenCalledWith("local:config", expect.objectContaining({
       schemaVersion: CONFIG_SCHEMA_VERSION,

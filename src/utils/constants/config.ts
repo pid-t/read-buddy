@@ -21,7 +21,7 @@ export const DEFAULT_CONFIG: Config = {
   },
   providersConfig: DEFAULT_PROVIDER_CONFIG_LIST,
   translate: {
-    providerId: "deepseek-default",
+    providerId: "google-translate-default",
     mode: "bilingual",
     node: {
       enabled: false,
@@ -64,7 +64,7 @@ export const DEFAULT_CONFIG: Config = {
   selectionTranslation: {
     enabled: true,
     targetCode: "cmn",
-    providerId: "deepseek-default",
+    providerId: "google-translate-default",
   },
   languageDetection: {
     mode: "basic",
@@ -72,7 +72,7 @@ export const DEFAULT_CONFIG: Config = {
   videoSubtitles: {
     enabled: true,
     autoStart: false,
-    providerId: "deepseek-default",
+    providerId: "google-translate-default",
     style: {
       displayMode: DEFAULT_DISPLAY_MODE,
       translationPosition: DEFAULT_TRANSLATION_POSITION,
