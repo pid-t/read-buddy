@@ -59,7 +59,7 @@ function renderTranslateRange(initialConfig: Config = DEFAULT_CONFIG) {
 
 function createConfig({
   enableAI = false,
-  providerId = DEFAULT_CONFIG.translate.providerId,
+  providerId = "deepseek-default",
 }: {
   enableAI?: boolean
   providerId?: string
@@ -82,7 +82,7 @@ describe("aI filtering settings", () => {
     const store = renderTranslateRange(createConfig())
     const enableSwitch = screen.getByRole("switch", { name: "AI 过滤菜单和按钮" })
 
-    expect(enableSwitch).toBeEnabled()
+    expect(enableSwitch).not.toHaveAttribute("aria-disabled", "true")
     fireEvent.click(enableSwitch)
 
     await waitFor(() => {

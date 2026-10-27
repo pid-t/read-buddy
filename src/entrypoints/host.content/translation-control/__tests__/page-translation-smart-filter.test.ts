@@ -63,7 +63,7 @@ class MockIntersectionObserver {
   }
 }
 
-function createConfig(enableAI: boolean, providerId = DEFAULT_CONFIG.translate.providerId): Config {
+function createConfig(enableAI: boolean, providerId = "deepseek-default"): Config {
   return {
     ...DEFAULT_CONFIG,
     translate: {

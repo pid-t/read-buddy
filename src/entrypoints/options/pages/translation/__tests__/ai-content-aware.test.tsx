@@ -32,7 +32,7 @@ vi.mock("@/utils/i18n", () => ({
 describe("ai content-aware translation", () => {
   function renderAIContentAware({
     enabled = false,
-    providerId = DEFAULT_CONFIG.translate.providerId,
+    providerId = "deepseek-default",
     providersConfig = DEFAULT_CONFIG.providersConfig,
   }: {
     enabled?: boolean
@@ -61,14 +61,14 @@ describe("ai content-aware translation", () => {
     return store
   }
 
-  const disabledLLMProviders = DEFAULT_CONFIG.providersConfig.map(provider => provider.id === DEFAULT_CONFIG.translate.providerId
+  const disabledLLMProviders = DEFAULT_CONFIG.providersConfig.map(provider => provider.id === "deepseek-default"
     ? { ...provider, enabled: false }
     : provider)
 
   it.each([
     ["feature off and missing provider", false, "missing-provider", "AI 智能上下文翻译已关闭", "bg-gray-400", DEFAULT_CONFIG.providersConfig],
-    ["enabled with an enabled LLM provider", true, DEFAULT_CONFIG.translate.providerId, "AI 智能上下文翻译已启用", "bg-green-500", DEFAULT_CONFIG.providersConfig],
-    ["enabled with a disabled LLM provider", true, DEFAULT_CONFIG.translate.providerId, "请先选择 LLM Provider", "bg-orange-400", disabledLLMProviders],
+    ["enabled with an enabled LLM provider", true, "deepseek-default", "AI 智能上下文翻译已启用", "bg-green-500", DEFAULT_CONFIG.providersConfig],
+    ["enabled with a disabled LLM provider", true, "deepseek-default", "请先选择 LLM Provider", "bg-orange-400", disabledLLMProviders],
     ["enabled with an enabled non-LLM provider", true, "google-translate-default", "请先选择 LLM Provider", "bg-orange-400", DEFAULT_CONFIG.providersConfig],
   ] as const)("shows the %s status", (_name, enabled, providerId, text, color, providersConfig) => {
     renderAIContentAware({ enabled, providerId, providersConfig })
