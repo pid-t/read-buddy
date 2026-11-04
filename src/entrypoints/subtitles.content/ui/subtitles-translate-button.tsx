@@ -26,7 +26,7 @@ export function SubtitlesTranslateButton() {
         setPanelOpen(prev => !prev)
       }}
       className={cn(
-        `${TRANSLATE_BUTTON_CLASS} w-12 h-full flex items-center justify-center relative border-none p-0 m-0 cursor-pointer rounded-[14px] transition-all duration-200`,
+        `${TRANSLATE_BUTTON_CLASS} w-12 h-full flex items-center justify-center relative border-none p-0 m-0 cursor-pointer select-none rounded-[14px] transition-all duration-200`,
         panelOpen
           ? "bg-accent shadow-inner"
           : "bg-transparent",
@@ -35,6 +35,7 @@ export function SubtitlesTranslateButton() {
       <img
         src={logo}
         alt="Subtitle Toggle"
+        draggable={false}
         className={cn(
           "w-7 h-7 p-1 rounded-[9px] bg-white/85 ring-1 ring-black/5 shadow-sm transition-all duration-200 object-contain block",
           isVisible ? "opacity-100 saturate-110" : "opacity-75 saturate-90",
