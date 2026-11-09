@@ -41,7 +41,8 @@ export function SubtitlesTextStyleForm({ type }: SubtitlesTextStyleFormProps) {
   }, [textStyle.fontWeight])
 
   const handleChange = (style: Partial<SubtitleTextStyle>) => {
-    void setVideoSubtitlesConfig(deepmerge(videoSubtitlesConfig, { style: { [type]: style } }))
+    const stylePatch: Partial<Record<typeof type, Partial<SubtitleTextStyle>>> = { [type]: style }
+    void setVideoSubtitlesConfig(deepmerge(videoSubtitlesConfig, { style: stylePatch }))
   }
 
   return (

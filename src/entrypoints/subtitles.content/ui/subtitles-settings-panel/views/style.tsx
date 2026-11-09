@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
-import type { SubtitlesDisplayMode, SubtitlesFontFamily, SubtitlesTranslationPosition, SubtitleTextStyle } from "@/types/config/subtitles"
+import type { PartialDeep } from "type-fest"
+import type { SubtitlesDisplayMode, SubtitlesFontFamily, SubtitlesStyle, SubtitlesTranslationPosition, SubtitleTextStyle } from "@/types/config/subtitles"
 import { IconLanguage, IconRefresh, IconSettings, IconSubtitles } from "@tabler/icons-react"
 import { deepmerge } from "deepmerge-ts"
 import { useAtom } from "jotai"
@@ -169,7 +170,7 @@ export function StyleView() {
   const portalContainer = use(ShadowWrapperContext)
   const { displayMode, translationPosition, container } = config.style
 
-  const updateStyle = (patch: Record<string, unknown>) => {
+  const updateStyle = (patch: PartialDeep<SubtitlesStyle>) => {
     void setConfig(deepmerge(config, { style: patch }))
   }
 
