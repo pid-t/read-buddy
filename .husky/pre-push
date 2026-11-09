@@ -7,14 +7,23 @@ else
   echo "✅ No uncommented eruda imports found."
 fi
 
-echo "🔍 Checking for pnpm-lock.yaml overrides..."
-if grep -r "overrides:" pnpm-lock.yaml; then
-  echo "❌ Found pnpm-lock.yaml overrides!"
-  echo "Please remove pnpm-lock.yaml overrides before pushing. Use pnpm unlink:local"
-  exit 1
-else
-  echo "✅ No pnpm-lock.yaml overrides found."
-fi
+echo "🔍 Checking for local dependency paths..."
+pnpm exec node --input-type=module <<'NODE' || exit 1
+import { readFileSync } from "node:fs"
+
+const localReference = /:[ \t]+["']?(?:(?:file|link):|[\\/]|~[\\/]|\.{1,2}[\\/]|[A-Za-z]:[\\/])/
+const matches = readFileSync("pnpm-lock.yaml", "utf8")
+  .split("\n")
+  .flatMap((line, index) => localReference.test(line) ? [String(index + 1) + ":" + line] : [])
+
+if (matches.length > 0) {
+  console.error("❌ Found local dependency paths in pnpm-lock.yaml:\n" + matches.join("\n"))
+  console.error("Replace local links with published versions, then run pnpm install.")
+  process.exit(1)
+}
+
+console.log("✅ No local dependency paths found.")
+NODE
 
 pnpm exec nx lint
 pnpm exec nx type-check
