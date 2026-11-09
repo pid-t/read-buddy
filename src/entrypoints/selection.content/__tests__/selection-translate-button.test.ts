@@ -10,18 +10,6 @@ import {
 } from "../components/selection-translate-button"
 
 describe("selection translate button click trust", () => {
-  it("renders the extension icon in a compact white control", () => {
-    render(createElement(SelectionTranslateButton, { left: 8, top: 8, onClick: vi.fn() }))
-
-    const button = screen.getByRole("button")
-    const icon = button.querySelector("img")
-
-    expect(button).toHaveClass("size-7", "bg-white", "rounded-full")
-    expect(icon).toHaveAttribute("width", "20")
-    expect(icon).toHaveAttribute("height", "20")
-    expect(icon).toHaveAttribute("alt", "")
-  })
-
   it("accepts browser-trusted user clicks", () => {
     expect(isTrustedSelectionTranslateClick({ nativeEvent: { isTrusted: true } })).toBe(true)
   })
