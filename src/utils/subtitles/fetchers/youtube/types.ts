@@ -25,6 +25,8 @@ export interface PlayerData {
   playerState: number
   selectedTrackLanguageCode: string | null
   selectedTrackVssId: string | null
+  currentAudioTrackDefaultCaptionIndex?: number | null
+  defaultAudioTrackDefaultCaptionIndex?: number | null
   cachedTimedtextUrl: string | null
 }
 

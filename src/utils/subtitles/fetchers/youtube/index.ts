@@ -333,10 +333,12 @@ export class YoutubeSubtitlesFetcher implements SubtitlesFetcher {
    *
    * Priority order:
    * 1. User's currently selected track in YouTube player (if available)
-   * 2. Human-created subtitles without name (original language, highest quality)
-   * 3. Human-created subtitles with name (may be translated versions)
-   * 4. Auto-generated ASR subtitles (lower quality but better than nothing)
-   * 5. First available track as fallback
+   * 2. Current audio track's default subtitles
+   * 3. Default audio track's default subtitles
+   * 4. Human-created subtitles without name
+   * 5. Human-created subtitles with name
+   * 6. Auto-generated ASR subtitles
+   * 7. First available track as fallback
    */
   private selectTrack(
     playerData: PlayerData,
@@ -345,6 +347,8 @@ export class YoutubeSubtitlesFetcher implements SubtitlesFetcher {
       captionTracks: tracks,
       selectedTrackLanguageCode,
       selectedTrackVssId,
+      currentAudioTrackDefaultCaptionIndex,
+      defaultAudioTrackDefaultCaptionIndex,
     } = playerData
 
     if (tracks.length === 0)
@@ -363,18 +367,22 @@ export class YoutubeSubtitlesFetcher implements SubtitlesFetcher {
         return selectedTrack
     }
 
-    // Priority 2: Human subtitles without name - these are typically the original
-    // language subtitles uploaded by the video creator
+    for (const index of [currentAudioTrackDefaultCaptionIndex, defaultAudioTrackDefaultCaptionIndex]) {
+      if (index != null && Number.isInteger(index) && index >= 0 && index < tracks.length)
+        return tracks[index]
+    }
+
+    // Keep the existing quality-based fallback when audio defaults are unavailable.
     const humanExact = tracks.find(t => t.kind !== "asr" && !t.name)
     if (humanExact)
       return humanExact
 
-    // Priority 3: Human subtitles with name - may be translated or have additional metadata
+    // Human subtitles with name - may be translated or have additional metadata
     const humanWithName = tracks.find(t => t.kind !== "asr")
     if (humanWithName)
       return humanWithName
 
-    // Priority 4: Auto-generated speech recognition subtitles
+    // Auto-generated speech recognition subtitles
     const asr = tracks.find(t => t.kind === "asr")
     if (asr)
       return asr

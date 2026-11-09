@@ -97,9 +97,15 @@ function getPlayerData(request: PlayerDataRequest): PlayerDataResponse {
 
     const playerResponse = player.getPlayerResponse?.()
     const videoId = playerResponse?.videoDetails?.videoId
-    const tracks = playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks ?? []
+    const captionTracklist = playerResponse?.captions?.playerCaptionsTracklistRenderer
+    const tracks = captionTracklist?.captionTracks ?? []
     const captionTracks = normalizeTracks(tracks)
     const selectedTrack = getSelectedTrackSnapshot(player, captionTracks)
+    const audioTrack = player.getAudioTrack?.()
+    const audioTrackId = audioTrack?.getLanguageInfo?.()?.id ?? audioTrack?.id
+    const audioTracks: { audioTrackId?: string, defaultCaptionTrackIndex?: number }[] = captionTracklist?.audioTracks ?? []
+    const currentAudioTrack = audioTrackId ? audioTracks.find(track => track.audioTrackId === audioTrackId) : undefined
+    const defaultAudioTrack = audioTracks[captionTracklist?.defaultAudioTrackIndex]
 
     if (!videoId || videoId !== expectedVideoId)
       return errorResponse(requestId, "VIDEO_ID_MISMATCH")
@@ -111,12 +117,14 @@ function getPlayerData(request: PlayerDataRequest): PlayerDataResponse {
       data: {
         videoId,
         captionTracks,
-        audioCaptionTracks: parseAudioTracks(player.getAudioTrack?.()?.captionTracks),
+        audioCaptionTracks: parseAudioTracks(audioTrack?.captionTracks),
         device: window.ytcfg?.get?.("DEVICE") ?? null,
         cver: player.getWebPlayerContextConfig?.()?.innertubeContextClientVersion ?? null,
         playerState: player.getPlayerState?.() ?? -1,
         selectedTrackLanguageCode: selectedTrack.languageCode,
         selectedTrackVssId: selectedTrack.vssId,
+        currentAudioTrackDefaultCaptionIndex: currentAudioTrack?.defaultCaptionTrackIndex ?? null,
+        defaultAudioTrackDefaultCaptionIndex: defaultAudioTrack?.defaultCaptionTrackIndex ?? null,
         cachedTimedtextUrl: getCachedTimedtextUrl(videoId),
       },
     }
